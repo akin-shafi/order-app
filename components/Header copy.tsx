@@ -23,7 +23,7 @@ export default function HeroSection() {
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 md:gap-8 items-center md:h-auto mt-0 md:mt-20 lg:mt-0">
         <div className="order-2 md:order-1 text-center md:text-left">
           {/* Animated Text Container */}
-          <div className="relative h-[100px] md:h-[200px] overflow-hidden">
+          <div className="relative h-[160px] md:h-[200px] overflow-hidden">
             {textGroups.map((group, index) => (
               <div
                 key={index}
@@ -33,7 +33,7 @@ export default function HeroSection() {
                     : "opacity-0 translate-y-4"
                 }`}
               >
-                <h1 className="text-[#210603] text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-snug">
+                <h1 className="text-[#210603] text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-snug">
                   <span className="animate-fadeIn">{group.headline}</span>
                   <br />
                   <span className="text-[#f15736] animate-fadeInDelay">
@@ -41,9 +41,9 @@ export default function HeroSection() {
                   </span>
                 </h1>
 
-                {/* <p className="text-[#461914] mt-3 md:mt-4 text-sm md:text-base max-w-md mx-auto md:mx-0 animate-slideIn">
+                <p className="text-[#461914] mt-3 md:mt-4 text-sm md:text-base max-w-md mx-auto md:mx-0 animate-slideIn">
                   {group.description}
-                </p> */}
+                </p>
               </div>
             ))}
           </div>
@@ -54,7 +54,7 @@ export default function HeroSection() {
         </div>
 
         {/* Image Section */}
-        <div className="hidden md:block order-1 md:order-2 relative h-48 sm:h-64 md:h-auto md:mt-10 mt-0">
+        <div className="hidden md:block order-1 md:order-2 relative h-48 sm:h-64 ">
           <Image
             src="/images/beatsnoop.png"
             alt="Food Delivery"

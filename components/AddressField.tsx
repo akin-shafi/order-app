@@ -3,8 +3,8 @@ import { MapPin, Navigation } from "lucide-react";
 
 export default function AddressField() {
   return (
-    <div className=" mt-8 flex flex-col sm:flex-row gap-2 bg-white p-1 rounded-full max-w-md mx-auto md:mx-0 animate-fadeInUp">
-      <div className="flex-1 flex items-center bg-white rounded-full pl-2">
+    <div className="mt-2 flex flex-col sm:flex-row gap-2 sm:bg-white p-1 rounded-full max-w-md mx-auto md:mx-0 animate-fadeInUp">
+      <div className="flex-1 flex items-center bg-white rounded-full pl-2 ">
         <MapPin className="text-[#f15736] h-5 w-5 mr-2" />
         <input
           type="text"
