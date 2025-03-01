@@ -5,14 +5,14 @@ import Image from "next/image";
 import { GooglePlayIcon, AppStoreIcon } from "./icons";
 const textGroups = [
   {
-    headline: "Are you starving?",
+    headline: "Are you hungry?",
     subline: "BetaDay is here",
     description:
       "Craving restaurant-quality meals? Get chef-crafted dishes delivered faster than you can set the table!",
   },
   {
     headline: "Midnight munchies?",
-    subline: "We've got you covered",
+    subline: "Beta got you covered",
     description:
       "Late-night cravings solved! Our 24/7 delivery brings your favorite meals anytime, anywhere.",
   },
