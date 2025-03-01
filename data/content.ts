@@ -22,13 +22,16 @@
   ];
 
 
-  export const categories = [
-    { name: "Beans Combo", image: "/images/beans.png" },
-    { name: "Rice Dishes", image: "/images/rice.png" },
-    { name: "Swallows", image: "/images/swallow.png" },
-    { name: "Small Chops", image: "/images/small_chops.png" },
-    { name: "Fast Meals", image: "/images/fast_meal.png" },
-  ];
+export const categories = [
+  { name: "Beans Combo", image: "/images/beans.png" },
+  { name: "Rice Dishes", image: "/images/rice.png" },
+  { name: "Swallows", image: "/images/swallow.png" },
+  { name: "Small Chops", image: "/images/small_chops.png" },
+  { name: "Fast Meals", image: "/images/fast_meal.png" },
+  { name: "Desserts", image: "/images/delicacy.png" },
+  { name: "Drinks", image: "/images/drink.png" },
+  { name: "Soups", image: "/images/swallow.png" },
+];
 
   export const features = [
   {

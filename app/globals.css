@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import 'swiper/css';
+@import 'swiper/css/autoplay';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
 
 @theme {
   --font-sans: var(--font-geist-sans);
@@ -142,15 +146,33 @@ body {
   animation: marquee 20s linear infinite;
 }
 
-/* Ensure dropdown stays visible when hovering */
-/* .group:hover .group-hover\:visible {
-  visibility: visible;
-} */
+/* Add these styles to your globals.css */
+.swiper-button-prev,
+.swiper-button-next {
+  &::after {
+    display: none;
+  }
+}
 
-/* Dropdown transition */
-/* .group-hover\:opacity-100 {
-  transition: opacity 0.2s ease-in-out;
-} */
+.swiper-pagination {
+  position: relative !important;
+  bottom: 0 !important;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
 
 
 
