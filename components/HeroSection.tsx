@@ -7,6 +7,7 @@ import Image from "next/image";
 import { textGroups } from "@/data/content";
 // import OrderDirectly from "./OrderDirectly";
 import AddressField from "./AddressField";
+// import CurvedDivider from "./curved-divider";
 
 export default function HeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -69,6 +70,7 @@ export default function HeroSection() {
 
       {/* Wave shape */}
       <div className="absolute bottom-0 left-0 right-0 h-12 bg-white curved-divider"></div>
+      {/* <CurvedDivider /> */}
     </section>
   );
 }

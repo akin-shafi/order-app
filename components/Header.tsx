@@ -24,12 +24,33 @@ export default function Header() {
       name: "Products",
       icon: <Home size={20} />,
       dropdown: ["BetaSpoon", "ShipazDay"],
+      href: "/products",
     },
-    { name: "Know Us", icon: <Info size={20} /> },
-    { name: "FAQs", icon: <HelpCircle size={20} /> },
-    { name: "Contact", icon: <Phone size={20} /> },
-    { name: "Vendors", icon: <Utensils size={20} /> },
-    { name: "Become a Rider", icon: <User size={20} /> },
+    {
+      name: "Know Us",
+      icon: <Info size={20} />,
+      href: "/know-us",
+    },
+    {
+      name: "FAQs",
+      icon: <HelpCircle size={20} />,
+      href: "/faqs",
+    },
+    {
+      name: "Contact",
+      icon: <Phone size={20} />,
+      href: "/contact",
+    },
+    {
+      name: "Become a vendor",
+      icon: <Utensils size={20} />,
+      href: "/become-a-vendor",
+    },
+    {
+      name: "Become a Rider",
+      icon: <User size={20} />,
+      href: "/become-a-rider",
+    },
   ];
 
   return (
@@ -72,13 +93,13 @@ export default function Header() {
           {/* <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100"></div> */}
           <div className="absolute top-full left-0 mt-5 w-40 bg-white shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100">
             <Link
-              href="#"
+              href="/betaspoon"
               className="block px-4 py-2 text-sm text-[#461914] hover:bg-[#fff2f1] hover:text-[#f15736] "
             >
               BetaSpoon
             </Link>
             <Link
-              href="#"
+              href="/shipazday"
               className="block px-4 py-2 text-sm text-[#461914] hover:bg-[#fff2f1] hover:text-[#f15736] "
             >
               ShipazDay
@@ -86,23 +107,26 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Other Menu Items */}
-        {["Know Us", "FAQs", "Contact"].map((item) => (
+        {[
+          { name: "Know Us", href: "/know-us" },
+          { name: "FAQs", href: "/faqs" },
+          { name: "Contact Us", href: "/contact" },
+        ].map((item) => (
           <Link
-            key={item}
-            href="#"
+            key={item.name}
+            href={item.href}
             className="text-[#461914] hover:text-[#f15736]  text-sm font-medium transition-colors"
           >
-            {item}
+            {item.name}
           </Link>
         ))}
       </nav>
 
-      <div className="hidden md:flex flex items-center gap-4">
-        {/* Customers Dropdown */}
+      <div className="hidden md:flex items-center gap-4">
+        {/* Partners Dropdown */}
         <div className="relative group">
-          <button className="bg-white text-[#461914] hover:text-[#f15736]  px-4 py-4 text-sm font-medium rounded-full flex items-center gap-1 transition-colors">
-            Customers
+          <button className="bg-white text-[#461914] hover:text-[#f15736] px-4 py-4 text-sm font-medium rounded-full flex items-center gap-1 transition-colors">
+            Partners
             <svg
               className="w-4 h-4 transition-transform group-hover:rotate-180"
               fill="none"
@@ -121,16 +145,16 @@ export default function Header() {
           {/* Dropdown Menu */}
           <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100">
             <Link
-              href="#"
-              className="block px-4 py-2 text-sm text-[#461914] hover:bg-[#fff2f1] hover:text-[#f15736] "
+              href="/vendor"
+              className="block px-4 py-2 text-sm text-[#461914] hover:bg-[#fff2f1] hover:text-[#f15736]"
             >
-              Vendors
+              Become a vendor
             </Link>
             <Link
-              href="#"
-              className="block px-4 py-2 text-sm text-[#461914] hover:bg-[#fff2f1] hover:text-[#f15736] "
+              href="/rider"
+              className="block px-4 py-2 text-sm text-[#461914] hover:bg-[#fff2f1] hover:text-[#f15736]"
             >
-              Riders
+              Become a Rider
             </Link>
           </div>
         </div>
@@ -138,7 +162,7 @@ export default function Header() {
         {/* Cart Icon */}
         <Link
           href="/cart"
-          className="bg-white p-3 rounded-full text-[#461914] hover:text-[#f15736] "
+          className="bg-white p-3 rounded-full text-[#461914] hover:text-[#f15736]"
         >
           <svg
             className="w-6 h-6"
@@ -208,7 +232,7 @@ export default function Header() {
                       </button>
                     ) : (
                       <Link
-                        href="#"
+                        href={item.href}
                         className="text-[#461914] hover:text-[#f15736]"
                       >
                         {item.name}
