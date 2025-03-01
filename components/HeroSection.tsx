@@ -6,7 +6,7 @@ import { GooglePlayIcon, AppStoreIcon } from "./icons";
 const textGroups = [
   {
     headline: "Are you starving?",
-    subline: "Palapolo is here",
+    subline: "BetaDay is here",
     description:
       "Craving restaurant-quality meals? Get chef-crafted dishes delivered faster than you can set the table!",
   },
