@@ -1,26 +1,6 @@
 // components/FeaturesSection.tsx
 import Image from "next/image";
-
-const features = [
-  {
-    image: "location-1.png",
-    title: "Wide selection of restaurants",
-    description:
-      "Explore diverse cuisines from over 200 top-rated local restaurants, all at your fingertips. From sizzling grills to vegan delights - satisfy every craving!",
-  },
-  {
-    image: "cup-1.png",
-    title: "Easy ordering process",
-    description:
-      "Order in three taps - browse mouthwatering menus, customize meals to your taste, and checkout securely in under a minute. Food freedom made simple!",
-  },
-  {
-    image: "fast-delivery.png",
-    title: "Fast delivery within 20 min",
-    description:
-      "Your food arrives piping hot with our priority delivery network. Guaranteed within 20 minutes or your next meal is on us! Clock's ticking...",
-  },
-];
+import { features } from "@/data/content";
 
 export default function FeaturesSection() {
   return (

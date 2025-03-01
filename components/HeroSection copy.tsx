@@ -2,11 +2,28 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-// import Link from "next/link";
-
-import { textGroups } from "@/data/content";
-// import OrderDirectly from "./OrderDirectly";
 import AddressField from "./AddressField";
+
+const textGroups = [
+  {
+    headline: "Are you starving?",
+    subline: "Palapolo is here",
+    description:
+      "Craving restaurant-quality meals? Get chef-crafted dishes delivered faster than you can set the table!",
+  },
+  {
+    headline: "Midnight munchies?",
+    subline: "We've got you covered",
+    description:
+      "Late-night cravings solved! Our 24/7 delivery brings your favorite meals anytime, anywhere.",
+  },
+  {
+    headline: "Taste the difference",
+    subline: "Freshness delivered",
+    description:
+      "Straight from our partner kitchens to your door - meals so fresh, you'll think you cooked them yourself!",
+  },
+];
 
 export default function HeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,8 +65,7 @@ export default function HeroSection() {
             ))}
           </div>
 
-          {/* CTA Section */}
-          {/* <OrderDirectly /> */}
+          {/* Static Address Field */}
           <AddressField />
         </div>
 
@@ -62,7 +78,6 @@ export default function HeroSection() {
             width={400}
             height={300}
             className="object-contain"
-            priority
           />
         </div>
       </div>

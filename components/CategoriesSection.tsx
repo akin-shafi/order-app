@@ -1,14 +1,8 @@
 // components/CategoriesSection.tsx
 import Image from "next/image";
 import Link from "next/link";
+import { categories } from "@/data/content";
 
-const categories = [
-  { name: "Beans Combo", image: "/images/beans.png" },
-  { name: "Rice Dishes", image: "/images/rice.png" },
-  { name: "Swallows", image: "/images/swallow.png" },
-  { name: "Small Chops", image: "/images/small_chops.png" },
-  { name: "Fast Meals", image: "/images/fast_meal.png" },
-];
 export default function CategoriesSection() {
   return (
     <section className="py-12 px-4 sm:px-6 md:px-12 bg-[#fafafa]">
