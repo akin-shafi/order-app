@@ -119,14 +119,6 @@ export default function Header() {
           </div>
         </div>
       </header>
-      {/* <SignupModal
-        isOpen={isSignupModalOpen}
-        onClose={() => setIsSignupModalOpen(false)}
-        onSuccess={() => {
-          // Handle successful signup (e.g., show toast, redirect, etc.)
-          console.log("Signup successful!");
-        }}
-      /> */}
 
       <SignupModal
         isOpen={isSignupModalOpen}
