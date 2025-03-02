@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Azeret_Mono as Geist_Mono } from 'next/font/google';
-import { CartProvider } from '@/contexts/cart-context'
+import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
+import { CartProvider } from "@/contexts/cart-context";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     "zobo drink delivery",
     "chin chin snacks",
   ],
-  authors: [{ name: "BetaDay", url: "https://betaday.org" }],
+  authors: [{ name: "BetaDay", url: "https://BetaDay.org" }],
   creator: "BetaDay Foods",
   applicationName: "BetaDay Naija Kitchen",
   category: "Nigerian Food Delivery",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     title: "Hot Nigerian Food Delivery - Same Day Swallow & Soup | BetaDay",
     description:
       "From Mama Put to your table! Order authentic Efo Riro, Ofada Stew, Fresh Fufu, and Nigerian party dishes with free delivery in Lagos & Abuja.",
-    url: "https://betaday.ng",
+    url: "https://BetaDay.ng",
     siteName: "BetaDay Nigerian Foods",
     images: [
       {
@@ -85,7 +85,7 @@ export const metadata: Metadata = {
     creator: "@BetaDayNaija",
     images: ["/twitter-naija-food.jpg"],
   },
-  metadataBase: new URL("https://betaday.ng"),
+  metadataBase: new URL("https://BetaDay.ng"),
 };
 
 export default function RootLayout({
@@ -107,9 +107,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );

@@ -60,7 +60,7 @@ export default function Header() {
         <Link href="/" className="flex items-center">
           <Image
             src="/logo.png"
-            alt="Palapolo Logo"
+            alt="BetaDay Logo"
             width={70}
             height={70}
             className="filter brightness-0 invert"
