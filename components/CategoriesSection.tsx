@@ -13,7 +13,7 @@ export default function CategoriesSection() {
           </h2>
           <Link
             href="#"
-            className="bg-[#210603] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#6C2E23] transition-colors duration-300"
+            className="bg-[#210603] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
           >
             Store front..
           </Link>
