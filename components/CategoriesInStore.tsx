@@ -3,12 +3,20 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation"; // Import usePathname
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y } from "swiper/modules";
-
-// Sample categories data (replace with your actual data)
 import { categories } from "@/data/content";
+
+// Array of background colors for each slide
+const backgroundColors = [
+  "#FFF0F5",
+  "#FFF3ED",
+  "#EBF4FF",
+  "#DCF7ED",
+  "#FFF8E4",
+  "#DAEFE3",
+  "#FFF8E4",
+];
 
 export default function CategoriesInStore() {
   const [mounted, setMounted] = useState(false);
@@ -25,13 +33,13 @@ export default function CategoriesInStore() {
   const sectionClassName =
     pathname === "/store"
       ? "mb-2" // If the route is /store
-      : "py-12 px-4 sm:px-6 md:px-12 bg-[#fafafa]"; // Default className
+      : "py-12 px-4 sm:px-6 md:px-12 bg-[#fafafa] mb-2"; // Default className
 
   return (
     <section className={sectionClassName}>
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-[#292d32]">
+        <div className="flex flex-col sm:flex-row justify-between lg:items-center gap-4 mb-6">
+          <h2 className="text-2xl font-medium  text-[#292d32]">
             Explore Categories
           </h2>
 
@@ -47,8 +55,8 @@ export default function CategoriesInStore() {
         <div className="md:hidden relative group">
           <Swiper
             modules={[Navigation, A11y]}
-            spaceBetween={16}
-            slidesPerView={2.5}
+            spaceBetween={18}
+            slidesPerView={2.6}
             navigation={{
               prevEl: ".swiper-button-prev",
               nextEl: ".swiper-button-next",
@@ -58,16 +66,19 @@ export default function CategoriesInStore() {
             {categories.map((category, index) => (
               <SwiperSlide key={index}>
                 <div
-                  className={`bg-gray-50 p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md
-                    ${index === 2 ? "ring-1 ring-[#461914]" : ""}
-                `}
+                  style={{
+                    backgroundColor:
+                      backgroundColors[index % backgroundColors.length],
+                    border: index === 0 ? "2px solid #FF97B9" : "none", // Add border to the first item
+                  }}
+                  className={`p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md`}
                 >
-                  <div className="w-16 h-16 mb-2">
+                  <div className="w-16 h-16 mb-0">
                     <Image
                       src={category.image || "/placeholder.svg"}
                       alt={category.name}
-                      width={64}
-                      height={64}
+                      width={60}
+                      height={60}
                       className="object-contain"
                     />
                   </div>
@@ -78,14 +89,6 @@ export default function CategoriesInStore() {
               </SwiperSlide>
             ))}
           </Swiper>
-
-          {/* Custom navigation buttons */}
-          <button className="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-lg text-[#292d32] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -translate-x-4">
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button className="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-lg text-[#292d32] opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-x-4">
-            <ChevronRight className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Desktop view with grid */}
@@ -93,9 +96,12 @@ export default function CategoriesInStore() {
           {categories.map((category, index) => (
             <div
               key={index}
-              className={`bg-gray-50 p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md hover:ring-2 ring-[#461914]
-                ${index === 2 ? "ring-1 ring-[#461914]" : ""}
-            `}
+              style={{
+                backgroundColor:
+                  backgroundColors[index % backgroundColors.length],
+                border: index === 0 ? "2px solid #FF97B9" : "none", // Add border to the first item
+              }}
+              className={`p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md hover:ring-2 ring-[#461914]`}
             >
               <div className="w-16 h-16 mb-2">
                 <Image
@@ -112,11 +118,6 @@ export default function CategoriesInStore() {
             </div>
           ))}
         </div>
-
-        {/* Mobile scroll indicator */}
-        {/* <div className="mt-4 text-center text-xs text-gray-500 md:hidden">
-          Swipe to see more categories
-        </div> */}
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import CategoriesInStore from "@/components/CategoriesInStore";
+import { ClockIcon, StarIcon } from "@/components/icons";
 
 // Sample data for restaurants
 const restaurants = Array(6).fill({
@@ -12,7 +13,7 @@ const restaurants = Array(6).fill({
   deliveryTime: "11min - 20min",
   rating: "4.5",
   reviews: "62",
-  tags: ["BEAN COMBO", "BEAN COMBO"],
+  tags: ["RESTAURANT", "BETA MART"],
 });
 
 export default function StorePage() {
@@ -27,8 +28,8 @@ export default function StorePage() {
 
         {/* Restaurants Section */}
         <section>
-          <h2 className="text-2xl font-bold text-[#292d32] mb-6">
-            All Restaurants
+          <h2 className="text-2xl font-medium text-[#292d32] mb-6 mt-6">
+            Featured Restaurants
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -47,53 +48,37 @@ export default function StorePage() {
                   />
                   <div className="absolute inset-0 bg-black opacity-50 overlay"></div>
                   <button className="absolute top-3 right-3 bg-white hover:bg-gray-200 cursor-pointer p-1.5 rounded-full">
-                    <Heart className="h-5 w-5 text-gray-400 hover:text-red-500" />
+                    <Heart className="h-5 w-5 text-red-400 hover:text-gray-500" />
                   </button>
                 </div>
 
                 <div className="p-4">
                   <Link href={`/store/id=${index + 1}`}>
-                    <h3 className="font-bold text-lg mb-2 text-truncate hover:underline">
+                    <h3 className="font-medium text-lg mb-2 text-truncate hover:underline">
                       {restaurant.name}
                     </h3>
                   </Link>
 
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center text-gray-500 text-sm">
-                      <svg
-                        className="w-4 h-4 mr-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                      </svg>
+                      <ClockIcon className="text-orange-600 mr-1" />
+
                       {restaurant.deliveryTime}
                     </div>
 
                     <div className="flex items-center">
-                      <svg
-                        className="w-4 h-4 text-yellow-400 fill-current"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                      <span className="text-sm ml-1">
+                      <span className="text-sm mr-1">
                         {restaurant.rating}({restaurant.reviews})
                       </span>
+                      <StarIcon className="text-yellow-400" />
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-4">
                     {restaurant.tags.map((tag: string, tagIndex: number) => (
                       <span
                         key={tagIndex}
-                        className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
+                        className="text-orange-600 text-xs  py-1 rounded"
                       >
                         {tag}
                       </span>

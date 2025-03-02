@@ -161,7 +161,7 @@ export default function Header() {
 
         {/* Cart Icon */}
         <Link
-          href="/cart"
+          href="/store"
           className="bg-white p-3 rounded-full text-[#461914] hover:text-[#f15736]"
         >
           <svg
