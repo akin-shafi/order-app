@@ -10,6 +10,16 @@ import FooterStore from "@/components/FooterStore";
 import { useCart } from "@/contexts/cart-context";
 import Cart from "@/components/cart/cart";
 
+// Define the MenuItem type
+type MenuItem = {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string;
+  popular?: boolean; // Optional property
+};
+
 // Sample restaurant data
 const restaurant = {
   id: "iya-sharafa",
@@ -124,7 +134,7 @@ export default function RestaurantPage() {
   const { dispatch } = useCart();
 
   // Get all menu items for "All" category or filter by selected category
-  const getMenuItems = () => {
+  const getMenuItems = (): MenuItem[] => {
     if (activeCategory === "all") {
       return Object.values(menuItemsByCategory).flat();
     }
