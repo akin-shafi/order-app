@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function FeaturesStoreSection() {
+export default function FooterStore() {
   return (
     <footer className="border-t border-gray-200 mt-16 py-8">
       <div className="max-w-6xl mx-auto px-4">

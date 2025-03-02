@@ -240,6 +240,20 @@ img.filter {
   }
 }
 
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* Adjust the max-width value as needed */
+}
+
+.overlay {
+  transition: opacity 0.3s ease;
+}
+.hover-container:hover .overlay {
+  opacity: 0.2; /* Adjust the opacity value as needed */
+}
+
 @media (max-width: 767px) {
   .hide-on-small {
     display: none;

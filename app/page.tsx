@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import DealsSection from "@/components/DealsSection";
 import CategoriesSection from "@/components/CategoriesSection";
+// import CategoriesInStore from "@/components/CategoriesInStore";
 import FeaturesSection from "@/components/FeaturesSection";
 import AppShowCaseSection from "@/components/AppShowCaseSection";
 import CTASection from "@/components/CTASection";
@@ -18,6 +19,8 @@ export default function Home() {
       <HeroSection />
       <DealsSection />
       <CategoriesSection />
+      {/* <CategoriesInStore /> */}
+
       <FeaturesSection />
       <AppShowCaseSection />
       <CTASection />

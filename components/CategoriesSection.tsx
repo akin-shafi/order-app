@@ -52,5 +52,43 @@ export default function CategoriesSection() {
         </div>
       </div>
     </section>
+
+    // <section className="mb-12">
+    //   <div className="flex justify-between items-center mb-6">
+    //     <h2 className="text-2xl font-bold text-[#292d32]">
+    //       Explore Categories
+    //     </h2>
+    //     <Link
+    //       href="#"
+    //       className="bg-[#210603] text-white px-4 py-2 rounded text-sm"
+    //     >
+    //       See more
+    //     </Link>
+    //   </div>
+
+    //   <div className="grid grid-cols-3 md:grid-cols-7 gap-4">
+    //     {categories.map((category, index) => (
+    //       <div
+    //         key={index}
+    //         className={`bg-gray-50 p-4 rounded-lg flex flex-col items-center cursor-pointer hover:ring-2 ring-[#461914] transition-all hover:shadow-md
+    //         ${index === 2 ? "ring-2 ring-[#461914]" : ""}
+    //       `}
+    //       >
+    //         <div className="w-16 h-16 mb-2">
+    //           <Image
+    //             src={category.image || "/placeholder.svg"}
+    //             alt={category.name}
+    //             width={64}
+    //             height={64}
+    //             className="object-contain"
+    //           />
+    //         </div>
+    //         <span className="text-[#292d32] font-medium text-sm text-center">
+    //           {category.name}
+    //         </span>
+    //       </div>
+    //     ))}
+    //   </div>
+    // </section>
   );
 }
