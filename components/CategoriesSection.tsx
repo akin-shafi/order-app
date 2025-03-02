@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/data/content";
 
-
 export default function CategoriesSection() {
   return (
     <section className="py-12 px-4 sm:px-6 md:px-12 bg-[#fafafa]">
@@ -14,9 +13,9 @@ export default function CategoriesSection() {
           </h2>
           <Link
             href="#"
-            className="bg-[#210603] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm"
+            className="bg-[#210603] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#6C2E23] transition-colors duration-300"
           >
-            Visit Store
+            Store front..
           </Link>
         </div>
 
@@ -24,7 +23,7 @@ export default function CategoriesSection() {
           {categories.map((category, index) => (
             <div
               key={index}
-              className="bg-white p-2 md:p-4 rounded-lg flex flex-col items-center"
+              className="bg-white p-2 md:p-4 rounded-lg flex flex-col items-center hover:bg-[#f5f5dc] hover:cursor-pointer transition-colors duration-300"
             >
               <div className="w-12 h-12 md:w-16 md:h-16 mb-1 md:mb-2">
                 <Image

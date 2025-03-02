@@ -1,4 +1,3 @@
-// components/HeroSection.tsx
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -70,7 +69,7 @@ export default function HeroSection() {
 
       {/* Wave shape */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-48 bg-cover bg-center" /* Increased height to h-48 */
+        className="absolute bottom-0 left-0 right-0 h-12 md:h-48 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/grass.png')" }}
       ></div>
       {/* <CurvedDivider /> */}

@@ -33,6 +33,17 @@ export const categories = [
   { name: "Soups", image: "/images/swallow.png" },
 ];
 
+// export const categories = [
+//   { name: "Restaurants", image: "/images/restaurant.png" },
+//   { name: "Supermarkets", image: "/images/supermarket.png" },
+//   { name: "Pharmacies", image: "/images/pharmacy.png" },
+//   { name: "Local Markets", image: "/images/local_market.png" },
+//   { name: "Packages", image: "/images/packages.png" },
+//   { name: "Hotel", image: "/images/coffee_shop.png" },
+// ];
+
+
+
   export const features = [
   {
     image: "location-1.png",
