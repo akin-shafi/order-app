@@ -53,25 +53,24 @@ export default function StorePage() {
                 </div>
 
                 <div className="p-4">
-                  <Link href={`/store/id=${index + 1}`}>
-                    <h3 className="font-medium text-lg mb-2 text-truncate hover:underline">
-                      {restaurant.name}
-                    </h3>
-                  </Link>
-
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center text-gray-500 text-sm">
-                      <ClockIcon className="text-orange-600 mr-1" />
-
-                      {restaurant.deliveryTime}
-                    </div>
-
+                  <div className="flex items-center justify-between mb-1">
+                    <Link href={`/store/id=${index + 1}`}>
+                      <h3 className="font-medium text-lg mb-0 text-truncate hover:underline truncate-text-300">
+                        {restaurant.name}
+                      </h3>
+                    </Link>
                     <div className="flex items-center">
                       <span className="text-sm mr-1">
                         {restaurant.rating}({restaurant.reviews})
                       </span>
                       <StarIcon className="text-yellow-400" />
                     </div>
+                  </div>
+
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <ClockIcon className="text-orange-600 mr-1" />
+
+                    {restaurant.deliveryTime}
                   </div>
 
                   <div className="flex flex-wrap gap-4">

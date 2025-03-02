@@ -240,6 +240,13 @@ img.filter {
   }
 }
 
+.truncate-text-300{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px; /* Adjust the max-width value as needed */
+}
+
 .truncate-text {
   white-space: nowrap;
   overflow: hidden;

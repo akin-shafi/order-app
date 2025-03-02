@@ -56,7 +56,7 @@ export default function Header() {
   return (
     <header className="fixed top-4 left-0 right-0 z-50 bg-transparent px-4 sm:px-6 md:px-12 flex items-center justify-between">
       {/* Logo with dark background */}
-      <div className="bg-[#210603] p-3 rounded-lg">
+      <div className="bg-[#461914] hover:bg-[#210603] cursor-pointer p-3 rounded-lg">
         <Link href="/" className="flex items-center">
           <Image
             src="/logo.png"
