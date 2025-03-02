@@ -6,13 +6,17 @@ export default function FeaturesSection() {
   return (
     <section className="py-12 px-4 sm:px-6 md:px-12">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-[#292d32] mb-2">
+        {/* Heading */}
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-[#292d32] dark:text-white mb-2">
           Delicacy with good treat
         </h2>
-        <p className="text-center text-[#676767] text-sm md:text-base mb-8 md:mb-12">
+
+        {/* Subheading */}
+        <p className="text-center text-[#676767] dark:text-gray-300 text-sm md:text-base mb-8 md:mb-12">
           Welcome to The Biggest Network of Food Ordering & Delivery
         </p>
 
+        {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {features.map((feature, index) => (
             <div

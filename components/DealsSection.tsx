@@ -19,14 +19,14 @@ export default function DealsSection() {
 
         {/* Text container - increased width */}
         <div className="w-full lg:w-3/5 xl:w-2/3 text-center lg:text-left">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#292d32] leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#292d32] dark:text-white leading-tight">
             Find <span className="text-[#f15736]">deals</span>,{" "}
             <span className="text-green-600">get delivery</span>, and more from
             our restaurant partners.
           </h2>
 
           {/* Optional additional text */}
-          <p className="mt-4 md:mt-6 text-[#676767] text-sm md:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0">
+          <p className="mt-4 md:mt-6 text-[#676767] dark:text-gray-300 text-sm md:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0">
             Discover exclusive offers and seamless delivery from your favorite
             local restaurants. Enjoy restaurant-quality meals in the comfort of
             your home.
