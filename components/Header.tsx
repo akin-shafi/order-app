@@ -182,7 +182,10 @@ export default function Header() {
 
       {/* Mobile Controls (Hidden on Desktop) */}
       <div className="flex items-center gap-4 md:hidden">
-        <Link href="/cart" className="bg-white p-2 rounded-full text-[#461914]">
+        <Link
+          href="/store"
+          className="bg-white hover:bg-[#461914] hover:text-white p-2 rounded-full text-[#461914]"
+        >
           <ShoppingCart size={24} />
         </Link>
         <button
