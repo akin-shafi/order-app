@@ -35,7 +35,7 @@ export default function FeaturesSection() {
 
         <div className="border-t border-[#461914] pt-4">
           <p className="text-white text-xs text-center">
-            ©2024 Palapolo. All rights reserved
+            ©2025 BetaDay by Palapolo. All rights reserved
           </p>
         </div>
       </div>

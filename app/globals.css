@@ -233,3 +233,21 @@ img.filter {
   background-color: transparent !important;
 }
 
+
+@media (max-width: 767px) {
+  .store-link {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .hide-on-small {
+    display: none;
+  }
+  .truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Adjust the max-width value as needed */
+  }
+}

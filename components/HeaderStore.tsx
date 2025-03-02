@@ -1,0 +1,93 @@
+// components/Header.tsx
+// import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { MapPin, Search, ShoppingBag, User } from "lucide-react";
+
+export default function Header() {
+  // const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  // const mobileMenuItems = [
+  //   {
+  //     name: "Products",
+  //     icon: <Home size={20} />,
+  //     dropdown: ["BetaSpoon", "ShipazDay"],
+  //     href: "/products",
+  //   },
+  //   {
+  //     name: "Know Us",
+  //     icon: <Info size={20} />,
+  //     href: "/know-us",
+  //   },
+  //   {
+  //     name: "FAQs",
+  //     icon: <HelpCircle size={20} />,
+  //     href: "/faqs",
+  //   },
+  //   {
+  //     name: "Contact",
+  //     icon: <Phone size={20} />,
+  //     href: "/contact",
+  //   },
+  //   {
+  //     name: "Become a vendor",
+  //     icon: <Utensils size={20} />,
+  //     href: "/become-a-vendor",
+  //   },
+  //   {
+  //     name: "Become a Rider",
+  //     icon: <User size={20} />,
+  //     href: "/become-a-rider",
+  //   },
+  // ];
+
+  return (
+    <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+      <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="bg-[#210603] p-2 rounded-lg">
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/logoIcon.png"
+                alt="Palapolo Logo"
+                width={20}
+                height={20}
+                className="filter brightness-0 invert"
+              />
+            </Link>
+          </div>
+
+          <div className="flex items-center text-gray-600 text-sm">
+            <span className="flex items-center gap-1">
+              <span className="font-bold hide-on-small">Delivery to:</span>
+              <span className="font-medium flex items-center truncate-text">
+                56 Baale St, Olodi Apapa
+                <MapPin className="h-4 w-4 ml-1 hide-on-small" />
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="relative hidden md:block">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder="What can we get you?"
+              className="bg-gray-50 rounded-full py-2 pl-10 pr-4 w-64 text-sm focus:outline-none"
+            />
+          </div>
+
+          <button className="bg-[#210603] text-white p-2 rounded">
+            <ShoppingBag className="h-5 w-5" />
+          </button>
+
+          <button className="p-2">
+            <User className="h-5 w-5 text-gray-700" />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
