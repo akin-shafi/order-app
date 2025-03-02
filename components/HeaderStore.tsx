@@ -69,7 +69,7 @@ export default function Header() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center">
-              <div className="bg-[#210603] p-2 rounded-lg">
+              <div className="bg-[#461914] hover:bg-[#210603] p-2 rounded-lg">
                 <Image
                   src="/logoIcon.png"
                   alt="Palapolo Logo"
@@ -101,7 +101,7 @@ export default function Header() {
               />
             </div>
 
-            <button className="bg-[#210603] text-white p-2 rounded relative">
+            <button className="bg-[#461914] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
               {/* <Image
               src="/icons/basket.png"
               alt="basket"
@@ -113,8 +113,11 @@ export default function Header() {
               <CartBadge />
             </button>
 
-            <button className="p-2" onClick={() => setIsLoginModalOpen(true)}>
-              <User className="h-5 w-5 text-gray-700" />
+            <button
+              className="bg-[#461914] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative"
+              onClick={() => setIsLoginModalOpen(true)}
+            >
+              <User className="h-5 w-5  " />
             </button>
           </div>
         </div>
