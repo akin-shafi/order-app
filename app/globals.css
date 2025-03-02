@@ -37,28 +37,29 @@ body {
 .curved-divider {
   position: absolute;
   background: #C6DDB7;
+  height: 150px; /* Increased height */
   clip-path: polygon(
-    0% 15%,
-    5% 25%,
-    10% 15%,
-    15% 30%,
-    20% 20%,
-    25% 35%,
-    30% 25%,
-    35% 40%,
-    40% 30%,
-    45% 45%,
-    50% 35%,
-    55% 50%,
-    60% 40%,
-    65% 55%,
-    70% 45%,
-    75% 60%,
-    80% 50%,
-    85% 65%,
-    90% 55%,
-    95% 70%,
-    100% 60%,
+    0% 10%,      /* Adjusted y-value */
+    5% 20%,      /* Adjusted y-value */
+    10% 10%,     /* Adjusted y-value */
+    15% 25%,     /* Adjusted y-value */
+    20% 15%,     /* Adjusted y-value */
+    25% 30%,     /* Adjusted y-value */
+    30% 20%,     /* Adjusted y-value */
+    35% 35%,     /* Adjusted y-value */
+    40% 25%,     /* Adjusted y-value */
+    45% 40%,     /* Adjusted y-value */
+    50% 30%,     /* Adjusted y-value */
+    55% 45%,     /* Adjusted y-value */
+    60% 35%,     /* Adjusted y-value */
+    65% 50%,     /* Adjusted y-value */
+    70% 40%,     /* Adjusted y-value */
+    75% 55%,     /* Adjusted y-value */
+    80% 45%,     /* Adjusted y-value */
+    85% 60%,     /* Adjusted y-value */
+    90% 50%,     /* Adjusted y-value */
+    95% 65%,     /* Adjusted y-value */
+    100% 55%,    /* Adjusted y-value */
     100% 100%,
     0% 100%
   );
@@ -67,75 +68,76 @@ body {
 .curved-divider::before {
   content: '';
   position: absolute;
-  top: -5px;
+  top: -20px;
   left: 0;
   right: 0;
-  height: 20px;
+  height: 80px; /* Increased height */
   background: #A8C99B;
   clip-path: polygon(
-    0% 30%,
-    3% 40%,
-    7% 35%,
-    12% 45%,
-    17% 38%,
-    22% 50%,
-    27% 42%,
-    32% 55%,
-    37% 48%,
-    42% 60%,
-    47% 52%,
-    52% 65%,
-    57% 58%,
-    62% 70%,
-    67% 63%,
-    72% 75%,
-    77% 68%,
-    82% 80%,
-    87% 73%,
-    92% 85%,
-    97% 78%,
-    100% 90%
+    0% 25%,      /* Adjusted y-value */
+    3% 35%,      /* Adjusted y-value */
+    7% 30%,      /* Adjusted y-value */
+    12% 40%,     /* Adjusted y-value */
+    17% 33%,     /* Adjusted y-value */
+    22% 45%,     /* Adjusted y-value */
+    27% 37%,     /* Adjusted y-value */
+    32% 50%,     /* Adjusted y-value */
+    37% 43%,     /* Adjusted y-value */
+    42% 55%,     /* Adjusted y-value */
+    47% 47%,     /* Adjusted y-value */
+    52% 60%,     /* Adjusted y-value */
+    57% 53%,     /* Adjusted y-value */
+    62% 65%,     /* Adjusted y-value */
+    67% 58%,     /* Adjusted y-value */
+    72% 70%,     /* Adjusted y-value */
+    77% 63%,     /* Adjusted y-value */
+    82% 75%,     /* Adjusted y-value */
+    87% 68%,     /* Adjusted y-value */
+    92% 80%,     /* Adjusted y-value */
+    97% 73%,     /* Adjusted y-value */
+    100% 85%     /* Adjusted y-value */
   );
 }
 
 .curved-divider::after {
   content: '';
   position: absolute;
-  top: -10px;
+  top: -40px;
   left: 0;
   right: 0;
-  height: 35px;
+  height: 140px; /* Increased height */
   background: #8FB485;
   clip-path: polygon(
-    0% 50%,
-    4% 60%,
-    8% 55%,
-    12% 65%,
-    16% 58%,
-    20% 70%,
-    24% 62%,
-    28% 75%,
-    32% 68%,
-    36% 80%,
-    40% 72%,
-    44% 85%,
-    48% 78%,
-    52% 90%,
-    56% 83%,
-    60% 95%,
-    64% 88%,
-    68% 100%,
-    72% 93%,
-    76% 105%,
-    80% 98%,
-    84% 110%,
-    88% 103%,
-    92% 115%,
-    96% 108%,
-    100% 120%
+    0% 45%,      /* Adjusted y-value */
+    4% 55%,      /* Adjusted y-value */
+    8% 50%,      /* Adjusted y-value */
+    12% 60%,     /* Adjusted y-value */
+    16% 53%,     /* Adjusted y-value */
+    20% 65%,     /* Adjusted y-value */
+    24% 57%,     /* Adjusted y-value */
+    28% 70%,     /* Adjusted y-value */
+    32% 63%,     /* Adjusted y-value */
+    36% 75%,     /* Adjusted y-value */
+    40% 67%,     /* Adjusted y-value */
+    44% 80%,     /* Adjusted y-value */
+    48% 73%,     /* Adjusted y-value */
+    52% 85%,     /* Adjusted y-value */
+    56% 78%,     /* Adjusted y-value */
+    60% 90%,     /* Adjusted y-value */
+    64% 83%,     /* Adjusted y-value */
+    68% 95%,     /* Adjusted y-value */
+    72% 88%,     /* Adjusted y-value */
+    76% 100%,    /* Adjusted y-value */
+    80% 93%,     /* Adjusted y-value */
+    84% 105%,    /* Adjusted y-value */
+    88% 98%,     /* Adjusted y-value */
+    92% 110%,    /* Adjusted y-value */
+    96% 103%,    /* Adjusted y-value */
+    100% 115%    /* Adjusted y-value */
   );
   opacity: 0.8;
 }
+
 
 @keyframes marquee {
   0% { transform: translateX(100%); }

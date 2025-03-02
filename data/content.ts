@@ -3,7 +3,7 @@
   export const textGroups = [
     {
       headline: "Are you hungry?",
-      subline: "BetaDay is here",
+      subline: "Beta is here",
       description:
         "Craving restaurant-quality meals? Get chef-crafted dishes delivered faster than you can set the table!",
     },

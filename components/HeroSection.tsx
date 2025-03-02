@@ -69,7 +69,10 @@ export default function HeroSection() {
       </div>
 
       {/* Wave shape */}
-      <div className="absolute bottom-0 left-0 right-0 h-12 bg-white curved-divider"></div>
+      <div
+        className="absolute bottom-0 left-0 right-0 h-48 bg-cover bg-center" /* Increased height to h-48 */
+        style={{ backgroundImage: "url('/images/grass.png')" }}
+      ></div>
       {/* <CurvedDivider /> */}
     </section>
   );
