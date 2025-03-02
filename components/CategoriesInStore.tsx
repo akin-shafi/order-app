@@ -56,7 +56,7 @@ export default function CategoriesInStore() {
           <Swiper
             modules={[Navigation, A11y]}
             spaceBetween={18}
-            slidesPerView={2.6}
+            slidesPerView={2.5}
             navigation={{
               prevEl: ".swiper-button-prev",
               nextEl: ".swiper-button-next",
@@ -82,7 +82,7 @@ export default function CategoriesInStore() {
                       className="object-contain"
                     />
                   </div>
-                  <span className="text-[#292d32] font-medium text-sm text-center">
+                  <span className="text-[#292d32] font-medium text-sm text-center truncate-text">
                     {category.name}
                   </span>
                 </div>
