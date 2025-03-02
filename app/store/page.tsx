@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Heart } from "lucide-react";
-// import { categories } from "@/data/content";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import CategoriesInStore from "@/components/CategoriesInStore";
-// import { ClockIcon } from "@/components/icons";
+
 // Sample data for restaurants
 const restaurants = Array(6).fill({
   name: "Iya Sharafa Bead and Bread",
@@ -61,7 +60,6 @@ export default function StorePage() {
 
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center text-gray-500 text-sm">
-                      {/* <ClockIcon /> */}
                       <svg
                         className="w-4 h-4 mr-1"
                         fill="none"
@@ -92,7 +90,7 @@ export default function StorePage() {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    {restaurant.tags.map((tag, tagIndex) => (
+                    {restaurant.tags.map((tag: string, tagIndex: number) => (
                       <span
                         key={tagIndex}
                         className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
