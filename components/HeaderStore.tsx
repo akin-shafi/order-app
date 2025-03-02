@@ -6,6 +6,7 @@ import Image from "next/image";
 import { MapPin, Search, ShoppingBag, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
+import CartBadge from "./cart/cart-badge";
 
 export default function Header() {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
@@ -100,8 +101,7 @@ export default function Header() {
               />
             </div>
 
-            <button className="bg-[#210603] text-white p-2 rounded">
-              <ShoppingBag className="h-5 w-5" />
+            <button className="bg-[#210603] text-white p-2 rounded relative">
               {/* <Image
               src="/icons/basket.png"
               alt="basket"
@@ -109,6 +109,8 @@ export default function Header() {
               height={10}
               className="h-5 w-5"
             /> */}
+              <ShoppingBag className="h-5 w-5" />
+              <CartBadge />
             </button>
 
             <button className="p-2" onClick={() => setIsLoginModalOpen(true)}>
