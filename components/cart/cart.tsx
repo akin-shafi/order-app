@@ -11,7 +11,7 @@ export default function Cart() {
   if (state.items.length === 0) {
     return (
       <div className="bg-white border border-gray-100 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-center mb-4">
+        <h2 className="text-xl text-[#292d32] dark:text-white font-bold text-center mb-4">
           Your cart is empty. Add items to get started
         </h2>
 
@@ -25,7 +25,7 @@ export default function Cart() {
           />
         </div>
 
-        <p className="text-center text-gray-500 text-sm">
+        <p className="text-center text-gray-500 text-sm  dark:text-white">
           You&apos;ve not added any products yet. When you do, you&apos;ll see
           them here!
         </p>
