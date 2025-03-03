@@ -62,7 +62,7 @@ export default function RestaurantPage() {
             </Link>
 
             {/* Restaurant info */}
-            <div className="flex flex-col sm:flex-row items-start gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row items-start gap-4 mb-8 ">
               <Image
                 src={restaurant.image || "/images/food.png"}
                 alt={restaurant.name}
@@ -89,7 +89,9 @@ export default function RestaurantPage() {
                   {restaurant.deliveryTime}
                 </div>
 
-                <h1 className="text-2xl font-bold mb-1">{restaurant.name}</h1>
+                <h1 className="text-2xl font-bold mb-1  dark:text-white text-dark">
+                  {restaurant.name}
+                </h1>
 
                 <div className="flex items-center mb-2">
                   <svg
