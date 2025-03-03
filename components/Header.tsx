@@ -59,7 +59,7 @@ export default function Header() {
       <div className="bg-[#461914] hover:bg-[#210603] cursor-pointer p-3 rounded-lg">
         <Link href="/" className="flex items-center">
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt="BetaDay Logo"
             width={70}
             height={70}

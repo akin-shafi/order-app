@@ -14,21 +14,19 @@ import {
   sampleCategories,
 } from "@/data/content";
 
-// Define the MenuItem type
 type MenuItem = {
   id: string;
   name: string;
   description: string;
   price: string;
   image: string;
-  popular?: boolean; // Optional property
+  popular?: boolean;
 };
 
 export default function RestaurantPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const { dispatch } = useCart();
 
-  // Get all menu items for "All" category or filter by selected category
   const getMenuItems = (): MenuItem[] => {
     if (activeCategory === "all") {
       return Object.values(menuItemsByCategory).flat();
@@ -39,7 +37,6 @@ export default function RestaurantPage() {
     );
   };
 
-  // Calculate the progress bar position based on the active category
   const getProgressBarPosition = () => {
     const index = sampleCategories.findIndex(
       (cat) => cat.id === activeCategory
@@ -65,7 +62,7 @@ export default function RestaurantPage() {
             </Link>
 
             {/* Restaurant info */}
-            <div className="flex items-start gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row items-start gap-4 mb-8">
               <Image
                 src={restaurant.image || "/images/food.png"}
                 alt={restaurant.name}

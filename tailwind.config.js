@@ -9,6 +9,12 @@ module.exports = {
     "./styles/**/*.{css,scss}",
   ],
   theme: {
+    screens: {
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+    },
     extend: {
       colors: {
         border: "rgb(var(--border) / <alpha-value>)",
