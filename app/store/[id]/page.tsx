@@ -89,7 +89,7 @@ export default function RestaurantPage() {
                   {restaurant.deliveryTime}
                 </div>
 
-                <h1 className="text-2xl font-bold mb-1  dark:text-white text-dark">
+                <h1 className="text-2xl font-bold mb-1 text-[#292d32]">
                   {restaurant.name}
                 </h1>
 
@@ -100,7 +100,7 @@ export default function RestaurantPage() {
                   >
                     <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                   </svg>
-                  <span className="text-sm ml-1">
+                  <span className="text-sm ml-1 text-[#292d32]">
                     {restaurant.rating}({restaurant.reviews})
                   </span>
                 </div>
@@ -113,8 +113,8 @@ export default function RestaurantPage() {
             </div>
 
             {/* Categories */}
-            <div className="mb-8">
-              <h2 className="text-xl font-bold mb-4">Categories</h2>
+            <div className="mb-8  text-[#292d32]">
+              <h2 className="text-xl font-bold mb-4 ">Categories</h2>
 
               <div className="flex overflow-x-auto pb-2 -mx-1">
                 {sampleCategories.map((category) => (
@@ -177,7 +177,7 @@ export default function RestaurantPage() {
                       )}
                     </div>
 
-                    <div className="flex-1">
+                    <div className="flex-1  text-[#292d32]">
                       <h3 className="font-medium">{item.name}</h3>
                       <p className="text-sm text-gray-500 mb-2">
                         {item.description}

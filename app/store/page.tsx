@@ -55,7 +55,7 @@ export default function StorePage() {
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-1">
                     <Link href={`/store/id=${index + 1}`}>
-                      <h3 className="font-medium  dark:text-white text-dark text-lg mb-0 text-truncate hover:underline truncate-text-300">
+                      <h3 className="font-medium  text-[#292d32] text-lg mb-0 text-truncate hover:underline truncate-text-300">
                         {restaurant.name}
                       </h3>
                     </Link>
