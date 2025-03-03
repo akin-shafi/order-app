@@ -16,6 +16,7 @@ export default function FooterStore() {
                   width={70}
                   height={70}
                   className=""
+                  priority // Optional: Preload important images
                 />
               </Link>
             </div>

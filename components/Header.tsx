@@ -64,6 +64,7 @@ export default function Header() {
             width={70}
             height={70}
             className="filter brightness-0 invert"
+            priority // Optional: Preload important images
           />
         </Link>
       </div>

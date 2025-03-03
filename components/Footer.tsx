@@ -19,6 +19,7 @@ export default function FeaturesSection() {
               width={90}
               height={90}
               className="mr-2"
+              priority // Optional: Preload important images
             />
             {/* <span className="text-white font-bold text-xl">palapolo</span> */}
           </div>
