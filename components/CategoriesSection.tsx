@@ -14,7 +14,7 @@ export default function CategoriesSection() {
 
           <Link
             href="/store"
-            className="store-link bg-[#461914] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
+            className="store-link bg-[#1A2E20] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
           >
             View Store
           </Link>
@@ -24,7 +24,7 @@ export default function CategoriesSection() {
           {categories.map((category, index) => (
             <div
               key={index}
-              className="bg-white p-2 md:p-4 rounded-lg flex flex-col items-center hover:ring-2 ring-[#461914] hover:cursor-pointer transition-colors duration-300"
+              className="bg-white p-2 md:p-4 rounded-lg flex flex-col items-center hover:ring-2 ring-[#1A2E20] hover:cursor-pointer transition-colors duration-300"
             >
               <div className="w-12 h-12 md:w-16 md:h-16 mb-1 md:mb-2">
                 <Image
@@ -45,7 +45,7 @@ export default function CategoriesSection() {
         <div className="mt-6 block sm:hidden ">
           <Link
             href="/store"
-            className="w-full block text-center bg-[#461914] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
+            className="w-full block text-center bg-[#1A2E20] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
           >
             View Store
           </Link>
@@ -70,8 +70,8 @@ export default function CategoriesSection() {
     //     {categories.map((category, index) => (
     //       <div
     //         key={index}
-    //         className={`bg-gray-50 p-4 rounded-lg flex flex-col items-center cursor-pointer hover:ring-2 ring-[#461914] transition-all hover:shadow-md
-    //         ${index === 2 ? "ring-2 ring-[#461914]" : ""}
+    //         className={`bg-gray-50 p-4 rounded-lg flex flex-col items-center cursor-pointer hover:ring-2 ring-[#1A2E20] transition-all hover:shadow-md
+    //         ${index === 2 ? "ring-2 ring-[#1A2E20]" : ""}
     //       `}
     //       >
     //         <div className="w-16 h-16 mb-2">

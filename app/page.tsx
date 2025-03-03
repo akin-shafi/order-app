@@ -4,13 +4,12 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import DealsSection from "@/components/DealsSection";
 import CategoriesSection from "@/components/CategoriesSection";
-// import CategoriesInStore from "@/components/CategoriesInStore";
+import CategoriesInStore from "@/components/CategoriesInStore";
 import FeaturesSection from "@/components/FeaturesSection";
-// import AppShowCaseSection from "@/components/AppShowCaseSection";
-// import CTASection from "@/components/CTASection";
-// import Ticker from "@/components/Ticker";
+import AppShowCaseSection from "@/components/AppShowCaseSection";
+import CTASection from "@/components/CTASection";
+import Ticker from "@/components/Ticker";
 import Footer from "@/components/Footer";
-// Import other components as needed
 
 export default function Home() {
   return (
@@ -19,12 +18,11 @@ export default function Home() {
       <HeroSection />
       <DealsSection />
       <CategoriesSection />
-      {/* <CategoriesInStore /> */}
-
+      <CategoriesInStore />
       <FeaturesSection />
-      {/* <AppShowCaseSection /> */}
-      {/* <CTASection /> */}
-      {/* <Ticker /> */}
+      <AppShowCaseSection />
+      <CTASection />
+      <Ticker />
       <Footer />
     </div>
   );

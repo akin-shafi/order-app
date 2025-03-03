@@ -11,7 +11,7 @@ export default function FooterStore() {
             <div className=" p-3 rounded-lg">
               <Link href="/" className="flex items-center">
                 <Image
-                  src="/logo.png"
+                  src="/betaday-white.png"
                   alt="Palapolo Logo"
                   width={70}
                   height={70}

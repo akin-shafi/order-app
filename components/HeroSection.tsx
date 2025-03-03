@@ -41,7 +41,7 @@ export default function HeroSection() {
                   </span>
                 </h1>
 
-                {/* <p className="text-[#461914] mt-3 md:mt-4 text-sm md:text-base max-w-md mx-auto md:mx-0 animate-slideIn">
+                {/* <p className="text-[#1A2E20] mt-3 md:mt-4 text-sm md:text-base max-w-md mx-auto md:mx-0 animate-slideIn">
                   {group.description}
                 </p> */}
               </div>
@@ -58,11 +58,11 @@ export default function HeroSection() {
           <Image
             src="/images/beatsnoop.png"
             alt="Food Delivery"
-            layout="responsive"
             width={400}
             height={300}
             className="object-contain"
             priority
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
       </div>

@@ -103,7 +103,7 @@ export default function LoginModal({
                         className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 ${
                           errors.phoneNumber
                             ? "border-red-500 focus:ring-red-500"
-                            : "border-gray-300 focus:ring-[#461914]"
+                            : "border-gray-300 focus:ring-[#1A2E20]"
                         }`}
                       />
                     )}
@@ -120,7 +120,7 @@ export default function LoginModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#461914] text-white py-3 rounded-md hover:bg-[#5a2018] transition-colors focus:outline-none focus:ring-2 focus:ring-[#461914] focus:ring-offset-2 disabled:opacity-70"
+              className="w-full bg-[#1A2E20] text-white py-3 rounded-md hover:bg-[#5a2018] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A2E20] focus:ring-offset-2 disabled:opacity-70"
             >
               {isSubmitting ? "Processing..." : "Next"}
             </button>

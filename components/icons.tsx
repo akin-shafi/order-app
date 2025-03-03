@@ -1,7 +1,5 @@
 // components/icons.tsx
 
-
-
 export const GooglePlayIcon = ({ className }: { className?: string }) => (
   <svg
     width="24"

@@ -45,7 +45,7 @@ export default function RestaurantPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white ">
       <HeaderStore />
 
       <main className="max-w-6xl mx-auto px-4 py-6">
@@ -124,7 +124,7 @@ export default function RestaurantPage() {
                     className={`px-4 py-2 mx-1 rounded-md text-sm whitespace-nowrap transition-colors relative
                       ${
                         category.id === activeCategory
-                          ? "bg-[#461914] text-white"
+                          ? "bg-[#1A2E20] text-white"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }
                     `}
@@ -139,7 +139,7 @@ export default function RestaurantPage() {
 
               <div className="mt-2 h-1 bg-gray-200 rounded-full relative">
                 <motion.div
-                  className="absolute h-full bg-[#461914] rounded-full"
+                  className="absolute h-full bg-[#1A2E20] rounded-full"
                   initial={false}
                   animate={{
                     width: "20%",
@@ -197,7 +197,7 @@ export default function RestaurantPage() {
                               },
                             })
                           }
-                          className="p-1.5 rounded-md bg-white text-[#461914] border border-[#461914] hover:bg-[#461914] hover:text-white transition-colors"
+                          className="p-1.5 rounded-md bg-white text-[#1A2E20] border border-[#1A2E20] hover:bg-[#1A2E20] hover:text-white transition-colors"
                         >
                           <Plus className="h-4 w-4" />
                         </button>

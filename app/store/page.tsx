@@ -60,7 +60,7 @@ export default function StorePage() {
                       </h3>
                     </Link>
                     <div className="flex items-center">
-                      <span className="text-sm mr-1">
+                      <span className="text-sm mr-1 text-[#292d32]">
                         {restaurant.rating}({restaurant.reviews})
                       </span>
                       <StarIcon className="text-yellow-400" />

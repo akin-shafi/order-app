@@ -51,7 +51,7 @@ export default function Cart() {
           <span className="font-bold text-lg">{state.total}</span>
         </div>
 
-        <button className="w-full bg-[#461914] text-white py-3 rounded-md hover:bg-[#5a2018] transition-colors">
+        <button className="w-full bg-[#1A2E20] text-white py-3 rounded-md hover:bg-[#5a2018] transition-colors">
           Proceed to Checkout
         </button>
       </div>

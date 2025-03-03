@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function DealsSection() {
   return (
-    <section className="py-12 px-4 sm:px-6 md:px-12">
+    <section className="py-12 px-4 sm:px-6 md:px-12 bg-white">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 md:gap-8 items-center">
         {/* Image container - reduced width */}
         <div className="w-full lg:w-2/5 xl:w-1/3">
@@ -18,7 +18,7 @@ export default function DealsSection() {
         </div>
 
         {/* Text container - increased width */}
-        <div className="w-full lg:w-3/5 xl:w-2/3 text-center lg:text-left">
+        <div className="w-full lg:w-3/5 xl:w-2/3 text-center lg:text-left ">
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#292d32] dark:text-white leading-tight">
             Find <span className="text-[#f15736]">deals</span>,{" "}
             <span className="text-green-600">get delivery</span>, and more from

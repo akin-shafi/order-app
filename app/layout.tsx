@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title:
-    "Order Authentic Nigerian Food Online | Beans, Dodo, Semo, Fura Delivery | BetaDay",
+    "Order Quality Nigerian Food Online | Beans, Dodo, Semo, Fura Delivery | BetaDay",
   description:
     "Enjoy real Naija flavors delivered fast! Order from local chefs & restaurants offering fresh Amala, Eba, Pounded Yam, Jollof Rice, Dodo, Suya, and more. Same-day delivery of home-style Nigerian meals.",
   keywords: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "order local cuisine online",
     "beans and dodo near me",
     "fresh semo delivery",
-    "authentic fura",
+    "Quality fura",
     "Lagos food delivery",
     "Traditional home cooking",
     "Naija meals",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "Nkwobi",
     "Buka food online",
     "local restaurants Lagos",
-    "authentic Nigerian soups",
+    "Quality Nigerian soups",
     "office lunch delivery Lagos",
     "party jollof catering",
     "fresh fish pepper soup",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hot Nigerian Food Delivery - Same Day Swallow & Soup | BetaDay",
     description:
-      "From Mama Put to your table! Order authentic Efo Riro, Ofada Stew, Fresh Fufu, and Nigerian party dishes with free delivery in Lagos & Abuja.",
+      "From Mama Put to your table! Order Quality Efo Riro, Ofada Stew, Fresh Fufu, and Nigerian party dishes with free delivery in Lagos & Abuja.",
     url: "https://BetaDay.ng",
     siteName: "BetaDay Nigerian Foods",
     images: [
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Naija Food Delivery - Get Hot Amala & Ewedu Now | BetaDay",
     description:
-      "Craving home food? We deliver authentic Nigerian dishes from local kitchens - Iyan, Egusi, Boli, and fresh Akpu. Download app for ₦500 first order discount!",
+      "Craving home food? We deliver Quality Nigerian dishes from local kitchens - Iyan, Egusi, Boli, and fresh Akpu. Download app for ₦500 first order discount!",
     creator: "@BetaDayNaija",
     images: ["/twitter-naija-food.jpg"],
   },

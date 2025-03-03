@@ -51,7 +51,7 @@ export default function CTASection() {
   ];
 
   return (
-    <section className="bg-[#210603] py-24 px-6 md:px-12 pt-32 relative overflow-hidden">
+    <section className="bg-[#1A2E20] py-24 px-6 md:px-12 pt-32 relative overflow-hidden">
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -180,7 +180,7 @@ export default function CTASection() {
           transition={{ duration: 0.6, delay: 1.6 }}
           className="text-center mt-12"
         >
-          <button className="bg-[#f15736] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#e14725] transition-colors duration-300">
+          <button className="bg-[#0aa83b] text-white px-8 py-4 rounded-full cursor-pointer text-lg font-bold hover:bg-[#0a3e1a] transition-colors duration-300">
             Start Your Order Now
           </button>
         </motion.div>

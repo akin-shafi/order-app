@@ -69,9 +69,9 @@ export default function Header() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center">
-              <div className="bg-[#461914] hover:bg-[#210603] p-2 rounded-lg">
+              <div className=" p-2 rounded-lg">
                 <Image
-                  src="/logoIcon.png"
+                  src="/betaday.png"
                   alt="Palapolo Logo"
                   width={20}
                   height={20}
@@ -101,7 +101,7 @@ export default function Header() {
               />
             </div>
 
-            <button className="bg-[#461914] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
+            <button className="bg-[#1A2E20] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
               {/* <Image
               src="/icons/basket.png"
               alt="basket"
@@ -114,7 +114,7 @@ export default function Header() {
             </button>
 
             <button
-              className="bg-[#461914] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative"
+              className="bg-[#1A2E20] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative"
               onClick={() => setIsLoginModalOpen(true)}
             >
               <User className="h-5 w-5  " />
