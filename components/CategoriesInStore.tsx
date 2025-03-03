@@ -69,7 +69,7 @@ export default function CategoriesInStore() {
                   style={{
                     backgroundColor:
                       backgroundColors[index % backgroundColors.length],
-                    border: index === 0 ? "2px solid #FF97B9" : "none", // Add border to the first item
+                    border: index === 0 ? "" : "none", // Add border to the first item
                   }}
                   className={`p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md`}
                 >
@@ -99,7 +99,7 @@ export default function CategoriesInStore() {
               style={{
                 backgroundColor:
                   backgroundColors[index % backgroundColors.length],
-                border: index === 0 ? "2px solid #FF97B9" : "none", // Add border to the first item
+                border: index === 0 ? "" : "none", // Add border to the first item
               }}
               className={`p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md hover:ring-2 ring-[#461914]`}
             >
