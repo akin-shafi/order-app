@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +8,11 @@ import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { useCart } from "@/contexts/cart-context";
 import Cart from "@/components/cart/cart";
+import {
+  restaurant,
+  menuItemsByCategory,
+  sampleCategories,
+} from "@/data/content";
 
 // Define the MenuItem type
 type MenuItem = {
@@ -18,115 +22,6 @@ type MenuItem = {
   price: string;
   image: string;
   popular?: boolean; // Optional property
-};
-
-// Sample restaurant data
-const restaurant = {
-  id: "iya-sharafa",
-  name: "Iya Sharafa Bead and Bread",
-  image: "/images/food.png?height=120&width=180",
-  deliveryTime: "11min - 20min",
-  rating: "4.5",
-  reviews: "62",
-  openingTime: "9am - 12pm",
-};
-
-// Sample categories with counts
-const categories = [
-  { id: "all", name: "All", count: 18 },
-  { id: "combo", name: "COMBO", count: 6 },
-  { id: "beans", name: "BEANS", count: 4 },
-  { id: "spaghetti", name: "SPAGHETTI", count: 3 },
-  { id: "rice", name: "RICE", count: 3 },
-  { id: "swallow", name: "SWALLOW", count: 2 },
-];
-
-// Sample menu items organized by category
-const menuItemsByCategory = {
-  combo: [
-    {
-      id: "combo-1",
-      name: "Super Combo Pack",
-      description: "Rice + Beans + Plantain + Chicken",
-      price: "₦4,500",
-      image: "/images/food.png?height=80&width=120",
-      popular: true,
-    },
-    {
-      id: "combo-2",
-      name: "Classic Combo",
-      description: "Jollof Rice + Chicken + Coleslaw",
-      price: "₦3,500",
-      image: "/images/food.png?height=80&width=120",
-    },
-  ],
-  beans: [
-    {
-      id: "beans-1",
-      name: "Favorite Crispy Beans",
-      description: "Oil Beans + Plantain",
-      price: "₦2,500",
-      image: "/images/food.png?height=80&width=120",
-      popular: true,
-    },
-    {
-      id: "beans-2",
-      name: "Beans Porridge",
-      description: "Porridge Beans + Plantain + Fish",
-      price: "₦2,800",
-      image: "/images/food.png?height=80&width=120",
-    },
-  ],
-  spaghetti: [
-    {
-      id: "spaghetti-1",
-      name: "Spicy Spaghetti",
-      description: "Spaghetti + Chicken + Vegetables",
-      price: "₦2,800",
-      image: "/images/food.png?height=80&width=120",
-    },
-    {
-      id: "spaghetti-2",
-      name: "Seafood Spaghetti",
-      description: "Spaghetti + Mixed Seafood",
-      price: "₦3,500",
-      image: "/images/food.png?height=80&width=120",
-      popular: true,
-    },
-  ],
-  rice: [
-    {
-      id: "rice-1",
-      name: "Jollof Rice Special",
-      description: "Jollof Rice + Chicken + Plantain",
-      price: "₦3,000",
-      image: "/images/food.png?height=80&width=120",
-      popular: true,
-    },
-    {
-      id: "rice-2",
-      name: "Fried Rice Deluxe",
-      description: "Fried Rice + Turkey + Coleslaw",
-      price: "₦3,200",
-      image: "/images/food.png?height=80&width=120",
-    },
-  ],
-  swallow: [
-    {
-      id: "swallow-1",
-      name: "Pounded Yam",
-      description: "With Egusi Soup + Goat Meat",
-      price: "₦2,500",
-      image: "/images/food.png?height=80&width=120",
-    },
-    {
-      id: "swallow-2",
-      name: "Amala Special",
-      description: "With Ewedu + Gbegiri + Fish",
-      price: "₦2,300",
-      image: "/images/food.png?height=80&width=120",
-    },
-  ],
 };
 
 export default function RestaurantPage() {
@@ -146,8 +41,10 @@ export default function RestaurantPage() {
 
   // Calculate the progress bar position based on the active category
   const getProgressBarPosition = () => {
-    const index = categories.findIndex((cat) => cat.id === activeCategory);
-    return `${(index / (categories.length - 1)) * 100}%`;
+    const index = sampleCategories.findIndex(
+      (cat) => cat.id === activeCategory
+    );
+    return `${(index / (sampleCategories.length - 1)) * 100}%`;
   };
 
   return (
@@ -221,7 +118,7 @@ export default function RestaurantPage() {
               <h2 className="text-xl font-bold mb-4">Categories</h2>
 
               <div className="flex overflow-x-auto pb-2 -mx-1">
-                {categories.map((category) => (
+                {sampleCategories.map((category) => (
                   <button
                     key={category.id}
                     onClick={() => setActiveCategory(category.id)}

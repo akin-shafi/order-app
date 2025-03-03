@@ -1,26 +1,25 @@
 // data/content.ts
   
-  export const textGroups = [
-    {
-      headline: "Are you hungry?",
-      subline: "Beta is here",
-      description:
-        "Craving restaurant-quality meals? Get chef-crafted dishes delivered faster than you can set the table!",
-    },
-    {
-      headline: "Midnight munchies?",
-      subline: "Beta got you covered",
-      description:
-        "Late-night cravings solved! Our 24/7 delivery brings your favorite meals anytime, anywhere.",
-    },
-    {
-      headline: "Taste the difference",
-      subline: "Freshness delivered",
-      description:
-        "Straight from our partner kitchens to your door - meals so fresh, you'll think you cooked them yourself!",
-    },
-  ];
-
+export const textGroups = [
+  {
+    headline: "Are you hungry?",
+    subline: "Beta is here",
+    description:
+      "Craving restaurant-quality meals? Get chef-crafted dishes delivered faster than you can set the table!",
+  },
+  {
+    headline: "Midnight munchies?",
+    subline: "Beta got you covered",
+    description:
+      "Late-night cravings solved! Our 24/7 delivery brings your favorite meals anytime, anywhere.",
+  },
+  {
+    headline: "Taste the difference",
+    subline: "Freshness delivered",
+    description:
+      "Straight from our partner kitchens to your door - meals so fresh, you'll think you cooked them yourself!",
+  },
+];
 
 export const categories = [
   { name: "Beans Combo", image: "/images/beans.png" },
@@ -33,18 +32,7 @@ export const categories = [
   { name: "Soups", image: "/images/swallow.png" },
 ];
 
-// export const categories = [
-//   { name: "Restaurants", image: "/images/restaurant.png" },
-//   { name: "Supermarkets", image: "/images/supermarket.png" },
-//   { name: "Pharmacies", image: "/images/pharmacy.png" },
-//   { name: "Local Markets", image: "/images/local_market.png" },
-//   { name: "Packages", image: "/images/packages.png" },
-//   { name: "Hotel", image: "/images/coffee_shop.png" },
-// ];
-
-
-
-  export const features = [
+export const features = [
   {
     image: "location-1.png",
     title: "Wide selection of restaurants",
@@ -63,4 +51,110 @@ export const categories = [
     description:
       "Your food arrives piping hot with our priority delivery network. Guaranteed within 20 minutes or your next meal is on us! Clock's ticking...",
   },
+];
+
+export const menuItemsByCategory = {
+  combo: [
+    {
+      id: "combo-1",
+      name: "Super Combo Pack",
+      description: "Rice + Beans + Plantain + Chicken",
+      price: "₦4,500",
+      image: "/images/food.png?height=80&width=120",
+      popular: true,
+    },
+    {
+      id: "combo-2",
+      name: "Classic Combo",
+      description: "Jollof Rice + Chicken + Coleslaw",
+      price: "₦3,500",
+      image: "/images/food.png?height=80&width=120",
+    },
+  ],
+  beans: [
+    {
+      id: "beans-1",
+      name: "Favorite Crispy Beans",
+      description: "Oil Beans + Plantain",
+      price: "₦2,500",
+      image: "/images/food.png?height=80&width=120",
+      popular: true,
+    },
+    {
+      id: "beans-2",
+      name: "Beans Porridge",
+      description: "Porridge Beans + Plantain + Fish",
+      price: "₦2,800",
+      image: "/images/food.png?height=80&width=120",
+    },
+  ],
+  spaghetti: [
+    {
+      id: "spaghetti-1",
+      name: "Spicy Spaghetti",
+      description: "Spaghetti + Chicken + Vegetables",
+      price: "₦2,800",
+      image: "/images/food.png?height=80&width=120",
+    },
+    {
+      id: "spaghetti-2",
+      name: "Seafood Spaghetti",
+      description: "Spaghetti + Mixed Seafood",
+      price: "₦3,500",
+      image: "/images/food.png?height=80&width=120",
+      popular: true,
+    },
+  ],
+  rice: [
+    {
+      id: "rice-1",
+      name: "Jollof Rice Special",
+      description: "Jollof Rice + Chicken + Plantain",
+      price: "₦3,000",
+      image: "/images/food.png?height=80&width=120",
+      popular: true,
+    },
+    {
+      id: "rice-2",
+      name: "Fried Rice Deluxe",
+      description: "Fried Rice + Turkey + Coleslaw",
+      price: "₦3,200",
+      image: "/images/food.png?height=80&width=120",
+    },
+  ],
+  swallow: [
+    {
+      id: "swallow-1",
+      name: "Pounded Yam",
+      description: "With Egusi Soup + Goat Meat",
+      price: "₦2,500",
+      image: "/images/food.png?height=80&width=120",
+    },
+    {
+      id: "swallow-2",
+      name: "Amala Special",
+      description: "With Ewedu + Gbegiri + Fish",
+      price: "₦2,300",
+      image: "/images/food.png?height=80&width=120",
+    },
+  ],
+};
+
+export const restaurant = {
+  id: "iya-sharafa",
+  name: "Iya Sharafa Bead and Bread",
+  image: "/images/food.png?height=120&width=180",
+  deliveryTime: "11min - 20min",
+  rating: "4.5",
+  reviews: "62",
+  openingTime: "9am - 12pm",
+};
+
+export const sampleCategories = [
+  { id: "all", name: "All", count: 18 },
+  { id: "combo", name: "COMBO", count: 6 },
+  { id: "beans", name: "BEANS", count: 4 },
+  { id: "spaghetti", name: "SPAGHETTI", count: 3 },
+  { id: "rice", name: "RICE", count: 3 },
+  { id: "swallow", name: "SWALLOW", count: 2 },
 ];
