@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Search, ShoppingBag, User } from "lucide-react";
+import { MapPin, Search, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
+import { CartIcon } from "./icons";
 
 export default function Header() {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
@@ -68,17 +69,30 @@ export default function Header() {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center">
+            {/* <Link href="/" className="flex items-center">
               <div className=" p-2 rounded-lg">
                 <Image
-                  src="/betaday.png"
+                  src="/beta.png"
                   alt="Palapolo Logo"
                   width={20}
                   height={20}
                   className="filter brightness-0 invert"
                 />
               </div>
-            </Link>
+            </Link> */}
+
+            <div className="bg-[#F5F5F5] hover:bg-[#1A2E20] cursor-pointer p-2 rounded-full">
+              <Link href="/" className="flex items-center">
+                <Image
+                  src="/betaday.png"
+                  alt="BetaDay Logo"
+                  width={90}
+                  height={90}
+                  className=""
+                  priority // Optional: Preload important images
+                />
+              </Link>
+            </div>
 
             <div className="flex items-center text-gray-600 text-sm">
               <span className="flex items-center gap-1">
@@ -109,7 +123,7 @@ export default function Header() {
               height={10}
               className="h-5 w-5"
             /> */}
-              <ShoppingBag className="h-5 w-5" />
+              <CartIcon className="h-4 w-4" />
               <CartBadge />
             </button>
 
@@ -117,7 +131,7 @@ export default function Header() {
               className="bg-[#1A2E20] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative"
               onClick={() => setIsLoginModalOpen(true)}
             >
-              <User className="h-5 w-5  " />
+              <User className="h-4 w-4  " />
             </button>
           </div>
         </div>

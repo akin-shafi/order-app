@@ -166,7 +166,7 @@ export default function Header() {
           href="/store"
           className="bg-[#F5F5F5] p-3 rounded-full text-[#1A2E20] hover:text-[#f15736]"
         >
-          <CartIcon />
+          <CartIcon className="h-5 w-5" />
         </Link>
       </div>
 

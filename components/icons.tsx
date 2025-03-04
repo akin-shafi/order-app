@@ -49,9 +49,9 @@ export const WhatsAppIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export const CartIcon = () => (
+export const CartIcon = ({ className }: { className?: string }) => (
   <svg
-    className="w-6 h-6"
+    className={className}
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
