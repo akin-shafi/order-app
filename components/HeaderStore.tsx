@@ -158,14 +158,14 @@ export default function HeaderStore() {
 
       {/* Loading and Error Overlays */}
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="text-white">Fetching your location...</div>
-        </div>
+        // <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="text-white">Fetching your location...</div>
+        // </div>
       )}
       {error && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="text-red-500">{error}</div>
-        </div>
+        // <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="text-red-500">{error}</div>
+        // </div>
       )}
     </>
   );
