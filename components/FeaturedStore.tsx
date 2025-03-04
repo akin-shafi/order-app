@@ -18,6 +18,29 @@ interface Restaurant {
   tags: string[];
 }
 
+// Skeleton Loader Component
+const SkeletonCard = () => (
+  <div className="bg-white rounded-lg overflow-hidden border border-gray-100 animate-pulse">
+    <div className="w-full h-48 bg-gray-200" />
+    <div className="p-4">
+      <div className="flex items-center justify-between mb-1">
+        <div className="h-6 bg-gray-200 rounded w-3/4" />
+        <div className="flex items-center">
+          <div className="h-4 bg-gray-200 rounded w-12" />
+        </div>
+      </div>
+      <div className="flex items-center text-gray-500 text-sm">
+        <div className="h-4 w-4 bg-gray-200 rounded mr-1" />
+        <div className="h-4 bg-gray-200 rounded w-20" />
+      </div>
+      <div className="flex flex-wrap gap-4 mt-2">
+        <div className="h-4 bg-gray-200 rounded w-16" />
+        <div className="h-4 bg-gray-200 rounded w-20" />
+      </div>
+    </div>
+  </div>
+);
+
 export default function FeaturedStore() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(false);
@@ -75,8 +98,8 @@ export default function FeaturedStore() {
   }, [address]);
 
   const handleHeartClick = (e: React.MouseEvent, restaurantId: string) => {
-    e.preventDefault(); // Prevent Link navigation
-    e.stopPropagation(); // Stop event from bubbling up to Link
+    e.preventDefault();
+    e.stopPropagation();
     console.log(`Heart clicked for restaurant: ${restaurantId}`);
     // Add your logic here (e.g., toggle favorite status)
   };
@@ -87,7 +110,15 @@ export default function FeaturedStore() {
         Featured Restaurants
       </h2>
 
-      {loading && <div className="text-center">Loading restaurants...</div>}
+      {loading && (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array(6)
+            .fill(0)
+            .map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+        </div>
+      )}
 
       {error && !loading && (
         <div className="text-center text-red-500 mb-4">{error}</div>
@@ -145,7 +176,6 @@ export default function FeaturedStore() {
                   </div>
                 </div>
               </Link>
-              {/* Heart button outside Link */}
               <button
                 onClick={(e) =>
                   handleHeartClick(e, restaurant.id || `${index}`)

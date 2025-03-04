@@ -33,53 +33,6 @@ export default function RestaurantPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Check if there's an address in context on page load
-    if (!address) {
-      // If no address, get current location
-      handleGetCurrentLocation();
-    }
-  }, [address]);
-
-  const handleGetCurrentLocation = () => {
-    setIsLoading(true);
-    setError(null);
-
-    if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
-      setIsLoading(false);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
-          );
-          const data = await response.json();
-          if (data.status === "OK" && data.results.length > 0) {
-            const fetchedAddress = data.results[0].formatted_address;
-            setAddress(fetchedAddress);
-            setCoordinates({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-          } else {
-            throw new Error("Unable to find address");
-          }
-          setIsLoading(false);
-        } catch (err) {
-          setError("Error fetching your address");
-          setIsLoading(false);
-        }
-      },
-      (err) => {
-        setError("Unable to retrieve your location");
-        setIsLoading(false);
-      }
-    );
-  };
 
   const getMenuItems = (): MenuItem[] => {
     if (activeCategory === "all") {

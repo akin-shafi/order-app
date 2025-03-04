@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Search, User } from "lucide-react";
@@ -8,14 +9,63 @@ import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
 import { CartIcon } from "./icons";
-import { useAddress } from "@/contexts/address-context"; // Import address context
-import AddressSearchModal from "./modal/address-search-modal"; // Add modal
+import { useAddress } from "@/contexts/address-context";
+import AddressSearchModal from "./modal/address-search-modal";
 
 export default function HeaderStore() {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const { address } = useAddress(); // Fetch address from context directly
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { address, setAddress, setCoordinates } = useAddress(); // Fetch and set address from context
+
+  useEffect(() => {
+    // Check if there's an address in context on initial load
+    if (!address && !isLoading) {
+      fetchCurrentLocation();
+    }
+  }, [address]); // Re-run if address changes (e.g., cleared elsewhere)
+
+  const fetchCurrentLocation = () => {
+    setIsLoading(true);
+    setError(null);
+
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by your browser");
+      setIsLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+          );
+          const data = await response.json();
+          if (data.status === "OK" && data.results.length > 0) {
+            const fetchedAddress = data.results[0].formatted_address;
+            setAddress(fetchedAddress);
+            setCoordinates({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          } else {
+            throw new Error("Unable to find address");
+          }
+          setIsLoading(false);
+        } catch (err) {
+          setError("Error fetching your address");
+          setIsLoading(false);
+        }
+      },
+      (err) => {
+        setError("Unable to retrieve your location");
+        setIsLoading(false);
+      }
+    );
+  };
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
@@ -105,6 +155,18 @@ export default function HeaderStore() {
         isOpen={isAddressModalOpen}
         onClose={() => setIsAddressModalOpen(false)}
       />
+
+      {/* Loading and Error Overlays */}
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="text-white">Fetching your location...</div>
+        </div>
+      )}
+      {error && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="text-red-500">{error}</div>
+        </div>
+      )}
     </>
   );
 }
