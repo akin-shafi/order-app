@@ -319,23 +319,21 @@ export default function AddressSearchModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-50 flex items-start justify-center pt-20">
-      <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md mx-4 relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
+      <div className="bg-white rounded-lg w-full max-w-md mx-4 relative">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-400"
+          className="absolute right-4 top-4 text-black hover:text-gray-600"
         >
           <X size={24} />
         </button>
-
         <div className="p-6">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+          <h2 className="text-2xl font-bold mb-6 text-black">
             Add a delivery address
           </h2>
-
           <div className="relative mb-4">
             <Flag
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-black"
               size={20}
             />
             <input
@@ -343,15 +341,14 @@ export default function AddressSearchModal({
               placeholder="Search for streets, cities, districts..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] focus:border-transparent dark:bg-gray-700 dark:text-gray-100"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] focus:border-transparent"
               autoComplete="off"
             />
           </div>
-
           {/* Predictions Dropdown - Show when there are predictions and not loading */}
           {predictions.length > 0 && !isLoading && (
             <div
-              className="fixed left-6 right-6 md:left-auto md:right-auto md:w-[calc(100%-48px)] max-w-md mx-auto bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto z-[100]"
+              className="fixed left-6 right-6 md:left-auto md:right-auto md:w-[calc(100%-48px)] max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto z-[100]"
               style={{ top: "auto" }}
             >
               {predictions.map((prediction) => (
@@ -363,39 +360,35 @@ export default function AddressSearchModal({
                       prediction.description
                     )
                   }
-                  className="w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none"
+                  className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:outline-none"
                 >
-                  <div className="font-medium text-gray-900 dark:text-gray-100">
+                  <div className="font-medium text-black">
                     {prediction.structured_formatting.main_text}
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="text-sm text-gray-500">
                     {prediction.structured_formatting.secondary_text}
                   </div>
                 </button>
               ))}
             </div>
           )}
-
           {/* Google Maps API Status */}
           {!googleLoaded && (
             <div className="text-amber-500 text-sm mb-4">
               Loading Google Maps API...
             </div>
           )}
-
           {/* Loading State */}
           {isLoading && (
-            <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400 my-4">
+            <div className="flex items-center justify-center gap-2 text-black my-4">
               <Loader2 className="animate-spin" size={20} />
               <span>Verifying address...</span>
             </div>
           )}
-
           {/* Error Message */}
           {error && !isLoading && (
             <div className="text-red-500 text-sm mb-4">{error}</div>
           )}
-
           {/* Map Preview - Only show when there's an error and showMap is true */}
           {showMap && selectedAddress && error && !isLoading && (
             <div className="mt-4 rounded-lg overflow-hidden h-48 relative">
@@ -411,14 +404,13 @@ export default function AddressSearchModal({
               />
             </div>
           )}
-
           {/* Use Current Location Button */}
           <button
             onClick={() => {
               onClose();
               document.dispatchEvent(new Event("getCurrentLocation"));
             }}
-            className="mt-4 w-full flex items-center justify-center gap-2 bg-[#e8f5f3] dark:bg-[#004d40] text-[#00a082] dark:text-[#00bfa5] py-3 rounded-full hover:bg-[#d7eae7] dark:hover:bg-[#003d33] transition-colors"
+            className="mt-4 w-full flex items-center justify-center gap-2 bg-[#e8f5f3] text-[#00a082] py-3 rounded-full hover:bg-[#d7eae7] transition-colors"
           >
             <Navigation size={20} />
             Use current location
