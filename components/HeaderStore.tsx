@@ -37,7 +37,7 @@ export default function HeaderStore() {
         "Geolocation is not supported by your browser. Please set your location manually."
       );
       setIsLoading(false);
-      setHasAttemptedFetch(true); // Mark as attempted
+      setHasAttemptedFetch(true);
       return;
     }
 
@@ -56,17 +56,19 @@ export default function HeaderStore() {
               longitude: position.coords.longitude,
             });
           } else {
-            throw new Error("No address found for these coordinates.");
+            setError(
+              "No address found for your location. Please set it manually."
+            );
           }
           setIsLoading(false);
-          setHasAttemptedFetch(true); // Success, mark as attempted
+          setHasAttemptedFetch(true);
         } catch (err) {
           console.error("Geocoding API error:", err);
           setError(
-            "Error fetching address from coordinates. Please try again or set manually."
+            "Failed to fetch address. Please try again or set manually."
           );
           setIsLoading(false);
-          setHasAttemptedFetch(true); // Error, mark as attempted
+          setHasAttemptedFetch(true);
         }
       },
       (err) => {
@@ -74,7 +76,7 @@ export default function HeaderStore() {
         switch (err.code) {
           case err.PERMISSION_DENIED:
             errorMessage =
-              "Location permission denied. Please enable it or set your location manually.";
+              "Location permission denied. Please enable it or set manually.";
             break;
           case err.POSITION_UNAVAILABLE:
             errorMessage = "Location unavailable. Please check your settings.";
@@ -83,11 +85,12 @@ export default function HeaderStore() {
             errorMessage = "Location request timed out. Please try again.";
             break;
           default:
-            errorMessage = "An error occurred while fetching your location.";
+            errorMessage =
+              "An error occurred. Please set your location manually.";
         }
         setError(errorMessage);
         setIsLoading(false);
-        setHasAttemptedFetch(true); // Error, mark as attempted
+        setHasAttemptedFetch(true);
       },
       {
         timeout: 10000,
@@ -194,14 +197,14 @@ export default function HeaderStore() {
       />
 
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="text-white">Fetching your location...</div>
-        </div>
+        // <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="text-white">Fetching your location...</div>
+        // </div>
       )}
       {error && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="text-red-500 text-center">{error}</div>
-        </div>
+        // <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="text-red-500 text-center">{error}</div>
+        // </div>
       )}
     </>
   );
