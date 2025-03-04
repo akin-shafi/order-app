@@ -76,7 +76,7 @@ export default function HeaderStore({
               />
             </div>
 
-            <button className="bg-[#f15736] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
+            <button className="bg-[#FF6600] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
               <CartIcon className="h-4 w-4" />
               <CartBadge />
             </button>

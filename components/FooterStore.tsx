@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function FooterStore() {
   return (
-    <footer className="border-t border-gray-200 mt-16 py-8">
+    <footer className="bg-[#1A2E20] border-t border-gray-200 mt-16 py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0">
@@ -22,7 +22,7 @@ export default function FooterStore() {
             </div>
           </div>
 
-          <div className="flex gap-6 text-gray-600">
+          <div className="flex gap-6 text-gray-100">
             <Link href="#" className="hover:text-[#f15736]">
               About
             </Link>
@@ -38,7 +38,7 @@ export default function FooterStore() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+        <div className="flex flex-col md:flex-row justify-between items-center text-gray-200 text-sm">
           <div className="flex gap-4 mb-4 md:mb-0">
             <Link href="#" className="flex items-center hover:text-[#f15736]">
               WhatsApp

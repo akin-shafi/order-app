@@ -45,7 +45,7 @@ export default function CategoriesInStore() {
 
           <Link
             href="/store"
-            className="store-link bg-[#1A2E20] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
+            className="store-link bg-[#1A2E20] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#FF6600] transition-colors duration-300"
           >
             View Store
           </Link>

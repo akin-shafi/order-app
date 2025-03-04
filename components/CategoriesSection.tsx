@@ -47,7 +47,7 @@ export default function CategoriesSection() {
         <div className="mt-6 block sm:hidden">
           <Link
             href="/store"
-            className="w-full block text-center bg-[#1A2E20] text-white px-3 py-4 md:px-4 md:py-2 rounded text-md md:text-sm hover:bg-[#F15736] transition-colors duration-300"
+            className="w-full block text-center bg-[#1A2E20] text-white px-3 py-4 md:px-4 md:py-2 rounded text-md md:text-sm hover:bg-[#FF6600] transition-colors duration-300"
           >
             View Store
           </Link>

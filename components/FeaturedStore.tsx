@@ -127,7 +127,7 @@ export default function FeaturedStore({ deliveryAddress }: FeaturedStoreProps) {
                 </div>
 
                 <div className="flex items-center text-gray-500 text-sm">
-                  <ClockIcon className="text-orange-600 mr-1" />
+                  <ClockIcon className="text-[#FF6600] mr-1" />
                   {restaurant.deliveryTime}
                 </div>
 
@@ -135,7 +135,7 @@ export default function FeaturedStore({ deliveryAddress }: FeaturedStoreProps) {
                   {restaurant.tags.map((tag, tagIndex) => (
                     <span
                       key={tagIndex}
-                      className="text-orange-600 text-xs py-1 rounded"
+                      className="text-[#FF6600] text-xs py-1 rounded"
                     >
                       {tag}
                     </span>

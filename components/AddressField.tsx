@@ -163,7 +163,7 @@ export default function AddressField() {
         locality: locationDetails.locality || "",
       });
       await new Promise((resolve) => setTimeout(resolve, 500)); // Optional delay
-      router.push(`/store?${params.toString()}`);
+      router.push(`/store`);
     } catch (error) {
       setError("Error processing request");
       setIsSending(false);
@@ -207,7 +207,9 @@ export default function AddressField() {
       {isLoading && (
         <div className="absolute left-0 right-0 text-center mt-2 flex items-center justify-center gap-2 animate-fadeIn">
           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          <span className="text-sm text-dark font-bold">Fetching your location...</span>
+          <span className="text-sm text-dark font-bold">
+            Fetching your location...
+          </span>
         </div>
       )}
 
