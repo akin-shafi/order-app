@@ -226,46 +226,33 @@ export default function AddressSearchModal({
 
   const verifyDeliveryZone = async (locationDetails: LocationDetails) => {
     try {
-      // For demo purposes, we'll simulate a successful response for specific areas
-      // In a real application, you would call your backend API here
+      // Make API call to your backend verification endpoint
+      const response = await fetch("/api/verify-delivery-zone", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          state: locationDetails.state,
+          localGovernment: locationDetails.localGovernment,
+          locality: locationDetails.locality,
+        }),
+      });
 
-      // Example API call to your backend
-      // const response = await fetch('/api/verify-delivery-zone', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     state: locationDetails.state,
-      //     localGovernment: locationDetails.localGovernment,
-      //     locality: locationDetails.locality,
-      //   }),
-      // });
-      // const data = await response.json();
-      // return data.isDeliverable;
+      const data = await response.json();
 
-      // For demo, we'll just check if it's in Lagos
-      if (locationDetails.state.toLowerCase().includes("lagos")) {
-        // You can add more specific checks for local government and locality
-        const supportedLocalGovs = [
-          "ajeromi/ifelodun",
-          "apapa",
-          "lagos island",
-          "surulere",
-        ];
-        return supportedLocalGovs.some((lg) =>
-          locationDetails.localGovernment
-            .toLowerCase()
-            .includes(lg.toLowerCase())
-        );
+      if (!response.ok) {
+        throw new Error(data.message || "Delivery zone verification failed");
       }
-      return false;
+
+      return data.isDeliverable;
     } catch (error) {
       console.error("Error verifying delivery zone:", error);
       return false;
     }
   };
 
+  // Updated handleAddressSelect function with better error handling
   const handleAddressSelect = async (placeId: string, description: string) => {
     setIsLoading(true);
     setError(null);
@@ -328,7 +315,11 @@ export default function AddressSearchModal({
       );
     } catch (error) {
       console.error("Error processing address:", error);
-      setError("Error processing your address. Please try again.");
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Error processing your address. Please try again."
+      );
       setIsLoading(false);
     }
   };
