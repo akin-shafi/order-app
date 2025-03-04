@@ -56,6 +56,83 @@ body {
   animation: blip 0.3s ease-in-out;
 }
 
+/* Existing styles remain unchanged until the end... */
+/* Existing styles remain unchanged until the end... */
+
+/* Define bg-brand-opacity */
+.bg-brand-opacity {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile-specific modal styles */
+@media (max-width: 767px) {
+  .mobile-modal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    max-height: 90vh;
+    height: auto;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    animation: slideUp 0.3s ease-out forwards;
+    overflow-y: hidden; /* Enable vertical scrolling */
+  }
+
+  /* Tiny scrollbar styling for mobile-modal */
+  .mobile-modal::-webkit-scrollbar {
+    width: 4px; /* Tiny width */
+  }
+
+  .mobile-modal::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light track background */
+  }
+
+  .mobile-modal::-webkit-scrollbar-thumb {
+    background: #1A2E20; /* Scrollbar color */
+    border-radius: 2px; /* Rounded edges */
+  }
+
+  .mobile-modal::-webkit-scrollbar-thumb:hover {
+    background: #153d28; /* Slightly lighter on hover */
+  }
+
+  /* Firefox scrollbar support */
+  .mobile-modal {
+    scrollbar-width: thin; /* Tiny scrollbar */
+    scrollbar-color: #1A2E20 #f1f1f1; /* Thumb color, track color */
+  }
+
+  /* Adjust outer container to align at bottom on mobile */
+  .fixed.inset-0 {
+    align-items: flex-end;
+    justify-content: stretch;
+    padding: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Rest of your existing styles... */
+
+.PhoneInput {
+  display: flex;
+  align-items: center;
+  border: 1px solid #bebebe !important;
+  padding-left: 6px !important;
+  border-radius: 5px !important;
+}
+
+/* Rest of your existing styles... */
+
 /* .curved-divider {
   position: absolute;
   background: #C6DDB7;

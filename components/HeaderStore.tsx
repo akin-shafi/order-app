@@ -145,7 +145,7 @@ export default function HeaderStore() {
                   onClick={handleAddressClick}
                   className="flex text-xs w-fit items-center leading-none"
                 >
-                  <MapPin className="h-4 w-4 ml-1 hide-on-small" />
+                  <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
                   {address || "Set your location"}
                 </button>
               </span>
@@ -163,7 +163,7 @@ export default function HeaderStore() {
             </div>
 
             <button
-              className="relative bg-[#1A2E20] flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              className="relative bg-[#1A2E20] hover:bg-[#FF6600]  cursor-pointer flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               onClick={(e) => {
                 e.currentTarget.classList.add("blip-effect");
                 setTimeout(() => {
@@ -176,7 +176,7 @@ export default function HeaderStore() {
             </button>
 
             <button
-              className="relative bg-[#1A2E20] flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              className="relative bg-[#FF6600] hover:bg-gray-400  cursor-pointer flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               onClick={(e) => {
                 e.currentTarget.classList.add("blip-effect");
                 setTimeout(() => {

@@ -80,28 +80,26 @@ export default function SignupModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-md relative">
+    <div className="fixed inset-0 bg-brand-opacity z-50 flex items-center justify-center p-4 md:items-center md:justify-center">
+      <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
+          className="absolute right-4 top-4 rounded-full border text-gray-400 hover:text-gray-600 p-2 bg-white"
         >
           <X size={20} />
         </button>
 
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-center mb-2">
-            Create an Account
+        <div className="p-6 mt-10">
+          <h2 className="text-2xl font-bold text-center mb-2 text-black">
+            Sign Up
           </h2>
-          <p className="text-gray-500 text-center mb-6">
-            you need to create account to continue.
-          </p>
+          <p className="text-gray-500 text-center mb-6">Sign Up to continue.</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label
                 htmlFor="fullName"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium mb-1 text-black"
               >
                 Full Name
               </label>
@@ -109,7 +107,7 @@ export default function SignupModal({
                 id="fullName"
                 type="text"
                 placeholder="Enter your full name"
-                className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 ${
+                className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                   errors.fullName
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-[#1A2E20]"
@@ -124,14 +122,17 @@ export default function SignupModal({
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium mb-1 text-black"
+              >
                 Email
               </label>
               <input
                 id="email"
                 type="email"
                 placeholder="Enter your email"
-                className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 ${
+                className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                   errors.email
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-[#1A2E20]"
@@ -148,7 +149,7 @@ export default function SignupModal({
             <div>
               <label
                 htmlFor="phoneNumber"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium mb-1 text-black"
               >
                 Phone Number
               </label>
@@ -157,6 +158,7 @@ export default function SignupModal({
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <PhoneInput
+                    autoComplete="off"
                     international
                     defaultCountry="NG"
                     value={value}
@@ -164,7 +166,7 @@ export default function SignupModal({
                     inputComponent={({ ...props }) => (
                       <input
                         {...props}
-                        className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 ${
+                        className={`w-full p-3 rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                           errors.phoneNumber
                             ? "border-red-500 focus:ring-red-500"
                             : "border-gray-300 focus:ring-[#1A2E20]"
@@ -184,7 +186,7 @@ export default function SignupModal({
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium mb-1 text-black"
               >
                 Password
               </label>
@@ -193,7 +195,7 @@ export default function SignupModal({
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 ${
+                  className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                     errors.password
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 focus:ring-[#1A2E20]"
@@ -218,7 +220,7 @@ export default function SignupModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1A2E20] text-white py-3 rounded-md hover:bg-[#5a2018] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A2E20] focus:ring-offset-2 disabled:opacity-70"
+              className="w-full bg-[#1A2E20] text-white cursor-pointer py-3 rounded-md hover:bg-[#FF6600] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A2E20] focus:ring-offset-2 disabled:opacity-70"
             >
               {isSubmitting ? "Processing..." : "Next"}
             </button>
@@ -228,7 +230,7 @@ export default function SignupModal({
             <p className="text-gray-500">
               Have an Account?{" "}
               <button
-                className="text-[#1A2E20] font-medium hover:underline"
+                className="text-[#FF6600] cursor-pointer font-medium hover:underline"
                 onClick={onLogin}
               >
                 Login

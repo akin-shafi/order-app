@@ -16,12 +16,11 @@ interface LoginModalProps {
 }
 
 const loginSchema = z.object({
-  phoneNumber: z.string().refine(
-    (value) => {
-      return value && isValidPhoneNumber(value);
-    },
-    { message: "Please enter a valid phone number" }
-  ),
+  phoneNumber: z
+    .string()
+    .refine((value) => value && isValidPhoneNumber(value), {
+      message: "Please enter a valid phone number",
+    }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -45,15 +44,9 @@ export default function LoginModal({
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      // Here you would typically send the data to your API
       console.log("Login form submitted:", data);
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      // Call onSuccess callback if provided
-      if (onSuccess) {
-        onSuccess();
-      }
-      // Close the modal
+      if (onSuccess) onSuccess();
       onClose();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -63,22 +56,20 @@ export default function LoginModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-md relative">
+    <div className="fixed inset-0 z-50 bg-brand-opacity flex items-center justify-center p-4 md:items-center md:justify-center">
+      <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
+          className="absolute right-4 top-4  rounded-full border text-gray-400 hover:text-gray-600 p-2 bg-white"
         >
           <X size={20} />
         </button>
 
-        <div className="p-6">
+        <div className="p-6 mt-10">
           <h2 className="text-2xl font-bold text-center mb-2 text-black">
-            Log In
+            Sign In
           </h2>
-          <p className="text-black text-center mb-6">
-            you need to login to continue.
-          </p>
+          <p className="text-black text-center mb-6">Sign In to continue.</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
@@ -93,6 +84,7 @@ export default function LoginModal({
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <PhoneInput
+                    autoComplete="off"
                     international
                     defaultCountry="NG"
                     value={value}
@@ -100,12 +92,12 @@ export default function LoginModal({
                     inputComponent={({ ...props }) => (
                       <input
                         {...props}
-                        className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-black ${
+                        className={`w-full p-3 rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-black ${
                           errors.phoneNumber
                             ? "border-red-500 focus:ring-red-500"
                             : "border-gray-300 focus:ring-[#1A2E20]"
                         }`}
-                        style={{ height: "42px" }} // Adjust this value to match the desired height
+                        style={{ height: "42px" }}
                       />
                     )}
                   />
@@ -121,7 +113,7 @@ export default function LoginModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1A2E20] text-white py-3 rounded-md hover:bg-[#5a2018] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A2E20] focus:ring-offset-2 disabled:opacity-70"
+              className="w-full bg-[#1A2E20] text-white py-3 rounded-md hover:bg-[#FF6600] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A2E20] focus:ring-offset-2 disabled:opacity-70"
             >
               {isSubmitting ? "Processing..." : "Next"}
             </button>
@@ -131,7 +123,7 @@ export default function LoginModal({
             <p className="text-black">
               Don&apos;t have an Account?{" "}
               <button
-                className="text-black font-medium hover:underline"
+                className="text-[#FF6600] cursor-pointer font-medium hover:underline"
                 onClick={onCreateAccount}
               >
                 Create One

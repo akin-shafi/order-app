@@ -69,7 +69,7 @@ export default function Ticker() {
   }, [tickerContent.length]); // Added tickerContent.length to dependencies
 
   return (
-    <div className="bg-gradient-to-r from-[#D7F2DF] to-[#6ACE88] relative">
+    <div className="bg-gradient-to-r from-[#a5f2bc] to-[#6ACE88] relative">
       {/* Animated background pattern */}
       <div
         className="absolute inset-0 opacity-10"
