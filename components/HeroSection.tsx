@@ -19,8 +19,11 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="bg-[#ffecd8] pb-20 px-4 sm:px-6 md:px-12 relative pt-32 md:pt-0">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 md:gap-8 items-center md:h-auto mt-0 md:mt-20 lg:mt-0">
+    <section className="bg-[#ffecd8] pb-20 px-4 sm:px-6 md:px-12 relative pt-32 md:pt-0 ">
+      <div className="hidden lg:block mt-24 w-full"></div>
+
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 md:gap-8 items-center md:h-auto mt-0 md:mt-20 lg:mt-0 px-4 sm:px-6 lg:px-8">
+        {/* Text Section */}
         <div className="order-2 md:order-1 text-center md:text-left">
           {/* Animated Text Container */}
           <div className="relative h-[100px] md:h-[200px] overflow-hidden">
@@ -40,27 +43,24 @@ export default function HeroSection() {
                     {group.subline}
                   </span>
                 </h1>
-
-                {/* <p className="text-[#1A2E20] mt-3 md:mt-4 text-sm md:text-base max-w-md mx-auto md:mx-0 animate-slideIn">
-                  {group.description}
-                </p> */}
               </div>
             ))}
           </div>
 
           {/* CTA Section */}
-          {/* <OrderDirectly /> */}
-          <AddressField />
+          <div className="mt-6 md:mt-8">
+            <AddressField />
+          </div>
         </div>
 
         {/* Image Section */}
-        <div className="hidden md:block order-1 md:order-2 relative h-48 sm:h-64 md:h-auto md:mt-10 mt-0">
+        <div className="flex justify-center items-center text-center md:block order-1 md:order-2 relative h-48 sm:h-64 md:h-auto md:mt-10 mt-0">
           <Image
             src="/images/beatsnoop.png"
             alt="Food Delivery"
             width={400}
             height={300}
-            className="object-contain"
+            className="object-contain w-full h-auto max-w-[400px] mx-auto"
             priority
             sizes="(max-width: 768px) 100vw, 50vw"
           />
@@ -68,9 +68,13 @@ export default function HeroSection() {
       </div>
 
       {/* Wave shape */}
+
       <div
-        className="absolute bottom-0 left-0 right-0 h-12 md:h-48 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/grass.png')" }}
+        className="absolute bottom-0 left-0 right-0 h-16 bg-[#C6DDB7]"
+        style={{
+          borderTopLeftRadius: "50% 100%",
+          borderTopRightRadius: "50% 100%",
+        }}
       ></div>
       {/* <CurvedDivider /> */}
     </section>
