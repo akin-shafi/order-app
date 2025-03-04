@@ -341,7 +341,7 @@ export default function AddressSearchModal({
               placeholder="Search for streets, cities, districts..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] focus:border-transparent text-black placeholder-gray-700"
               autoComplete="off"
             />
           </div>
