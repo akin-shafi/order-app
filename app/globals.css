@@ -29,6 +29,21 @@ body {
   font-family: 'DM Sans', Arial, Helvetica, sans-serif; /* Changed to DM Sans with fallbacks */
 }
 
+.bg-custom-white { background-color: #FFFFFF; }
+.ring-custom-gray-1 { border-color: #E0E0E0; }
+.bg-custom-ghost-white { background-color: #F8F8FF; }
+.ring-custom-gray-2 { border-color: #D3D3D3; }
+.bg-custom-snow { background-color: #FFFAFA; }
+.ring-custom-gray-3 { border-color: #E8E8E8; }
+.bg-custom-white-smoke { background-color: #F5F5F5; }
+.ring-custom-gray-4 { border-color: #DADADA; }
+.bg-custom-alice-blue { background-color: #F0F8FF; }
+.ring-custom-gray-5 { border-color: #D1D1D1; }
+.bg-custom-seashell { background-color: #FFF5EE; }
+.ring-custom-gray-6 { border-color: #E5E5E5; }
+.bg-custom-linen { background-color: #FAF0E6; }
+.ring-custom-gray-7 { border-color: #DBDBDB; }
+
 .curved-divider {
   background-color: #C6DDB7;
   border-top-left-radius: 50% 100%;

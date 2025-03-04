@@ -23,7 +23,8 @@ export default function CategoriesSection() {
         {/* Categories Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4">
           {categories.map((category, index) => (
-            <div
+            <Link
+              href={`/store?category=${category.name}`}
               key={index}
               className="bg-white p-2 md:p-4 rounded-lg flex flex-col items-center hover:ring-2 ring-[#1A2E20] hover:cursor-pointer transition-colors duration-300"
             >
@@ -39,7 +40,7 @@ export default function CategoriesSection() {
               <span className="text-[#292d32] font-medium text-md md:text-sm text-center">
                 {category.name}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
 

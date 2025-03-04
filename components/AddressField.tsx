@@ -8,59 +8,10 @@ import { useAddress } from "@/contexts/address-context";
 import AddressSearchModal from "./modal/address-search-modal";
 import { useRouter } from "next/navigation";
 import { Select } from "antd"; // Import Ant Design Select
+import { SEARCH_OPTIONS } from "@/data/content";
 // import "./AddressField.css"; // We'll add custom CSS
 
 const { Option, OptGroup } = Select;
-
-// Business categories and items
-const SEARCH_OPTIONS = [
-  {
-    category: "Restaurants",
-    items: [
-      { value: "Food", label: "Food" },
-      { value: "Fast Food", label: "Fast Food" },
-      { value: "Local Dishes", label: "Local Dishes" },
-      { value: "Pizza", label: "Pizza" },
-      { value: "Desserts", label: "Desserts" },
-    ],
-  },
-  {
-    category: "Supermarket",
-    items: [
-      { value: "Groceries", label: "Groceries" },
-      { value: "Toiletries", label: "Toiletries" },
-      { value: "Bread", label: "Bread" },
-      { value: "Beverages", label: "Beverages" },
-      { value: "Snacks", label: "Snacks" },
-    ],
-  },
-  {
-    category: "Pharmacies",
-    items: [
-      { value: "Medication", label: "Medication" },
-      { value: "First Aid Supplies", label: "First Aid Supplies" },
-      { value: "Vitamins", label: "Vitamins" },
-      { value: "Personal Care", label: "Personal Care" },
-    ],
-  },
-  {
-    category: "Local Market",
-    items: [
-      { value: "Fresh Produce", label: "Fresh Produce" },
-      { value: "Meat", label: "Meat" },
-      { value: "Fish", label: "Fish" },
-      { value: "Spices", label: "Spices" },
-    ],
-  },
-  {
-    category: "Laundry",
-    items: [
-      { value: "Laundry Service", label: "Laundry Service" },
-      { value: "Dry Cleaning", label: "Dry Cleaning" },
-      { value: "Ironing", label: "Ironing" },
-    ],
-  },
-];
 
 export default function AddressField() {
   const {

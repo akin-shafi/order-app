@@ -1,70 +1,108 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y } from "swiper/modules";
 import { categories } from "@/data/content";
 
-// Array of background colors for each slide
 const backgroundColors = [
-  "#FFE0E9",
-  "#FFDFC7",
-  "#CADBFF",
-  "#A5DFC0",
-  "#FFE3B2",
-  "#A4D0A1",
-  "#FFE3B2",
+  "#FFFFFF", // Pure white
+  "#F8F8FF", // Ghost white
+  "#FFFAFA", // Snow
+  "#F5F5F5", // White smoke
+  "#F0F8FF", // Alice blue
+  "#FFF5EE", // Seashell
+  "#FAF0E6", // Linen
 ];
 
-// Skeleton Loader Component for Categories
 const SkeletonCategoryCard = () => (
-  <div className="p-4 rounded-lg flex flex-col items-center animate-pulse">
-    <div className="w-16 h-16 mb-2 bg-gray-200 rounded-full" />
-    <div className="h-4 bg-gray-200 rounded w-20" />
+  <div className="p-3 rounded-lg flex flex-col items-center animate-pulse">
+    <div className="w-12 h-12 mb-2 bg-gray-200 rounded-full" />
+    <div className="h-3 bg-gray-200 rounded w-16" />
   </div>
 );
 
 export default function CategoriesInStore() {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    searchParams.get("category")
+  );
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(
+    searchParams.get("filter")
+  );
 
-  // Handle hydration mismatch and simulate loading
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Sync state with URL params on mount
+    setSelectedCategory(searchParams.get("category"));
+    setSelectedFilter(searchParams.get("filter"));
+  }, [searchParams]);
 
-  // Determine the className based on the route
+  const handleCategoryClick = (categoryName: string) => {
+    const newSelectedCategory =
+      selectedCategory?.toLowerCase() === categoryName.toLowerCase()
+        ? null
+        : categoryName;
+    setSelectedCategory(newSelectedCategory);
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (newSelectedCategory) {
+      params.set("category", newSelectedCategory.toLowerCase());
+    } else {
+      params.delete("category");
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const handleFilterClick = (filter: string) => {
+    const newSelectedFilter =
+      selectedFilter?.toLowerCase() === filter.toLowerCase() ? null : filter;
+    setSelectedFilter(newSelectedFilter);
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (newSelectedFilter) {
+      params.set("filter", newSelectedFilter.toLowerCase());
+    } else {
+      params.delete("filter");
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const sectionClassName =
     pathname === "/store"
       ? "mb-2"
       : "py-12 px-4 sm:px-6 md:px-12 bg-[#fafafa] mb-2";
 
+  const getCardClassName = (categoryName: string) => {
+    const baseClass =
+      "p-3 rounded-lg flex flex-col items-center cursor-pointer transition-all shadow-md hover:ring-1 ring-[#FF6600]";
+    return selectedCategory?.toLowerCase() === categoryName.toLowerCase()
+      ? `${baseClass} ring-1 ring-[#FF6600]`
+      : baseClass;
+  };
+
+  const getFilterButtonClassName = (filter: string) => {
+    const baseClass =
+      "px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors";
+    return selectedFilter?.toLowerCase() === filter.toLowerCase()
+      ? `${baseClass} bg-[#1A2E20] text-white`
+      : `${baseClass} bg-[#D7F2DF]  text-[#292d32] hover:bg-gray-300`;
+  };
+
   return (
     <section className={sectionClassName}>
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between lg:items-center gap-4 mb-6">
-          <h2 className="text-2xl font-medium text-[#292d32]">
-            Explore Categories
-          </h2>
-
-          <Link
-            href="/store"
-            className="store-link bg-[#1A2E20] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#FF6600] transition-colors duration-300"
-          >
-            View Store
-          </Link>
-        </div>
-
-        {/* Mobile view with Swiper */}
         {!mounted ? (
           <div className="md:hidden relative group">
             <Swiper
               modules={[Navigation, A11y]}
-              spaceBetween={18}
-              slidesPerView={2.5}
+              spaceBetween={15}
+              slidesPerView={3}
               className="px-1 py-2"
             >
               {Array(7)
@@ -80,8 +118,8 @@ export default function CategoriesInStore() {
           <div className="md:hidden relative group">
             <Swiper
               modules={[Navigation, A11y]}
-              spaceBetween={18}
-              slidesPerView={2.5}
+              spaceBetween={15}
+              slidesPerView={3}
               navigation={{
                 prevEl: ".swiper-button-prev",
                 nextEl: ".swiper-button-next",
@@ -94,20 +132,20 @@ export default function CategoriesInStore() {
                     style={{
                       backgroundColor:
                         backgroundColors[index % backgroundColors.length],
-                      border: index === 0 ? "" : "none",
                     }}
-                    className="p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md"
+                    className={getCardClassName(category.name)}
+                    onClick={() => handleCategoryClick(category.name)}
                   >
-                    <div className="w-16 h-16 mb-0">
+                    <div className="w-12 h-12 mb-0">
                       <Image
                         src={category.image || "/placeholder.svg"}
                         alt={category.name}
-                        width={60}
-                        height={60}
+                        width={48}
+                        height={48}
                         className="object-contain"
                       />
                     </div>
-                    <span className="text-[#292d32] font-medium text-sm text-center truncate-text">
+                    <span className="text-[#292d32] font-medium text-xs text-center truncate-text">
                       {category.name}
                     </span>
                   </div>
@@ -117,9 +155,8 @@ export default function CategoriesInStore() {
           </div>
         )}
 
-        {/* Desktop view with grid */}
         {!mounted ? (
-          <div className="hidden md:grid md:grid-cols-7 gap-4">
+          <div className="hidden md:grid md:grid-cols-8 gap-3">
             {Array(7)
               .fill(0)
               .map((_, index) => (
@@ -127,31 +164,55 @@ export default function CategoriesInStore() {
               ))}
           </div>
         ) : (
-          <div className="hidden md:grid md:grid-cols-7 gap-4">
+          <div className="hidden md:grid md:grid-cols-8 gap-3">
             {categories.map((category, index) => (
               <div
                 key={index}
                 style={{
                   backgroundColor:
                     backgroundColors[index % backgroundColors.length],
-                  border: index === 0 ? "" : "none",
                 }}
-                className="p-4 rounded-lg flex flex-col items-center cursor-pointer transition-all hover:shadow-md hover:ring-2 ring-[#1A2E20]"
+                className={getCardClassName(category.name)}
+                onClick={() => handleCategoryClick(category.name)}
               >
-                <div className="w-16 h-16 mb-2">
+                <div className="w-12 h-12 mb-1">
                   <Image
                     src={category.image || "/placeholder.svg"}
                     alt={category.name}
-                    width={64}
-                    height={64}
+                    width={48}
+                    height={48}
                     className="object-contain"
                   />
                 </div>
-                <span className="text-[#292d32] font-medium text-sm text-center">
+                <span className="text-[#292d32] font-medium text-xs text-center">
                   {category.name}
                 </span>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Filter Buttons */}
+        {mounted && (
+          <div className="mt-4 flex justify-center gap-4">
+            <button
+              className={getFilterButtonClassName("My Favorite")}
+              onClick={() => handleFilterClick("My Favorite")}
+            >
+              My Favorite
+            </button>
+            <button
+              className={getFilterButtonClassName("Deliver Now")}
+              onClick={() => handleFilterClick("Deliver Now")}
+            >
+              Deliver Now
+            </button>
+            <button
+              className={getFilterButtonClassName("On Schedule")}
+              onClick={() => handleFilterClick("On Schedule")}
+            >
+              On Schedule
+            </button>
           </div>
         )}
       </div>
