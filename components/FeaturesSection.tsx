@@ -4,15 +4,15 @@ import { features } from "@/data/content";
 
 export default function FeaturesSection() {
   return (
-    <section className="py-12 px-4 sm:px-6 md:px-12">
+    <section className="py-12 px-4 sm:px-6 md:px-12 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-[#292d32] dark:text-white mb-2">
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-[#292d32] mb-2">
           Delicacy with good treat
         </h2>
 
         {/* Subheading */}
-        <p className="text-center text-[#676767] dark:text-gray-300 text-sm md:text-base mb-8 md:mb-12">
+        <p className="text-center text-[#676767] text-sm md:text-base mb-8 md:mb-12">
           Welcome to The Biggest Network of Food Ordering & Delivery
         </p>
 

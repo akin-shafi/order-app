@@ -176,7 +176,7 @@ export default function AddressField() {
   return (
     <div className="relative space-y-4">
       {/* Address Input */}
-      <div className="flex flex-col sm:flex-row gap-2 p-1 rounded-full max-w-md mx-auto md:mx-0 animate-fadeInUp">
+      <div className="flex flex-col sm:flex-row gap-2 p-1 bg-transparent sm:bg-white rounded-full max-w-md mx-auto md:mx-0 animate-fadeInUp">
         <div className="flex-1 flex items-center bg-white rounded-full pl-2">
           <MapPin className="text-[#f15736] h-5 w-5 mr-2" />
           <input
@@ -188,7 +188,7 @@ export default function AddressField() {
               setError(null);
             }}
             onFocus={() => setIsModalOpen(true)}
-            className="bg-white border-none outline-none w-full py-2 text-sm text-black placeholder-black"
+            className="bg-white rounded-full border-none outline-none w-full py-2 text-sm text-black placeholder-black"
             style={{ fontFamily: "inherit", fontSize: "inherit" }}
           />
         </div>

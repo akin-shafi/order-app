@@ -126,27 +126,27 @@ export default function HeaderStore() {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="bg-[#F5F5F5] hover:bg-[#f15736] cursor-pointer p-2 rounded-full">
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/betaday.png"
-                  alt="BetaDay Logo"
-                  width={90}
-                  height={90}
-                  priority
-                />
-              </Link>
-            </div>
+            <Link href="/" className="cursor-pointer block rounded">
+              <Image
+                src="/beta-icon.png"
+                alt="betaday logo"
+                width={45} // Specify the actual width of your image
+                height={45} // Specify the actual height of your image
+                quality={45}
+                priority // Optional: if this is above-the-fold content
+                className="object-contain rounded"
+              />
+            </Link>
 
             <div className="flex items-center text-gray-600 text-sm">
-              <span className="flex items-center gap-1">
-                <span className="font-bold hide-on-small">Delivery to:</span>
+              <span className="flex items-center ml-2 md:ml-5 mr-6">
+                {/* <span className="font-bold hide-on-small">Delivery to:</span> */}
                 <button
                   onClick={handleAddressClick}
-                  className="font-bold flex items-center truncate-text hover:text-[#f15736]"
+                  className="flex text-xs w-fit items-center leading-none"
                 >
-                  {address || "Set your location"}
                   <MapPin className="h-4 w-4 ml-1 hide-on-small" />
+                  {address || "Set your location"}
                 </button>
               </span>
             </div>
@@ -158,18 +158,32 @@ export default function HeaderStore() {
               <input
                 type="text"
                 placeholder="What can we get you?"
-                className="bg-gray-50 rounded-full py-2 pl-10 pr-4 w-64 text-sm focus:outline-none"
+                className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm bg-focus"
               />
             </div>
 
-            <button className="bg-[#f15736] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
+            <button
+              className="relative bg-[#1A2E20] flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              onClick={(e) => {
+                e.currentTarget.classList.add("blip-effect");
+                setTimeout(() => {
+                  e.currentTarget.classList.remove("blip-effect");
+                }, 300); // Match the duration of the animation
+              }}
+            >
               <CartIcon className="h-4 w-4" />
               <CartBadge />
             </button>
 
             <button
-              className="bg-gray-200 hover:bg-[#210603] hover:text-white cursor-pointer text-dark p-2 rounded relative"
-              onClick={() => setIsLoginModalOpen(true)}
+              className="relative bg-[#1A2E20] flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              onClick={(e) => {
+                e.currentTarget.classList.add("blip-effect");
+                setTimeout(() => {
+                  e.currentTarget.classList.remove("blip-effect");
+                }, 300); // Match the duration of the animation
+                setIsLoginModalOpen(true);
+              }}
             >
               <User className="h-4 w-4" />
             </button>

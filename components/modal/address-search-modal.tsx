@@ -57,7 +57,9 @@ export default function AddressSearchModal({
     useRef<google.maps.places.AutocompleteService | null>(null);
   const placesService = useRef<google.maps.places.PlacesService | null>(null);
   const [googleLoaded, setGoogleLoaded] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null); // Ref for the input
 
+  // Load Google Maps API
   useEffect(() => {
     const checkGoogleMapsLoaded = () => {
       if (window.google && window.google.maps && window.google.maps.places) {
@@ -75,7 +77,13 @@ export default function AddressSearchModal({
     checkGoogleMapsLoaded();
   }, []);
 
-  // Extract location details from address components
+  // Auto-focus input when modal opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
+
   const extractLocationDetails = (
     addressComponents: Array<{
       long_name: string;
@@ -83,25 +91,18 @@ export default function AddressSearchModal({
       types: string[];
     }>
   ): LocationDetails => {
-    // Default values
     let state = "";
     let localGovernment = "";
     let locality = "";
     let formattedAddress = "";
 
-    // Extract each component
     addressComponents.forEach((component) => {
-      // State (administrative_area_level_1)
       if (component.types.includes("administrative_area_level_1")) {
         state = component.long_name;
       }
-
-      // Local Government (administrative_area_level_2)
       if (component.types.includes("administrative_area_level_2")) {
         localGovernment = component.long_name;
       }
-
-      // Locality (administrative_area_level_3 or locality)
       if (component.types.includes("administrative_area_level_3")) {
         locality = component.long_name;
       } else if (locality === "" && component.types.includes("locality")) {
@@ -111,25 +112,17 @@ export default function AddressSearchModal({
       }
     });
 
-    // Build a formatted address with the extracted components
     formattedAddress = [locality, localGovernment, state]
       .filter(Boolean)
       .join(", ");
 
-    return {
-      state,
-      localGovernment,
-      locality,
-      formattedAddress,
-    };
+    return { state, localGovernment, locality, formattedAddress };
   };
 
-  // Add a direct API call function as a fallback
   const searchAddressAPI = async (query: string) => {
     if (!query) return;
 
     try {
-      // Use the Geocoding API as a fallback if Places API isn't working
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
           query
@@ -137,16 +130,13 @@ export default function AddressSearchModal({
           process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
         }`
       );
-
       const data = await response.json();
 
       if (data.status === "OK" && data.results.length > 0) {
-        // Convert geocoding results to a format similar to place predictions
         const formattedResults = data.results.map((result: GeocodingResult) => {
           const locationDetails = extractLocationDetails(
             result.address_components
           );
-
           return {
             place_id: result.place_id,
             description: result.formatted_address,
@@ -156,11 +146,9 @@ export default function AddressSearchModal({
                 result.formatted_address.split(",")[0],
               secondary_text: result.formatted_address,
             },
-            // Store the location details for later use
             locationDetails,
           };
         });
-
         setPredictions(formattedResults);
       } else {
         setPredictions([]);
@@ -173,7 +161,6 @@ export default function AddressSearchModal({
 
   const handleSearch = async (input: string) => {
     setSearchQuery(input);
-    // When user starts typing, hide the map and clear previous error
     setShowMap(false);
     setError(null);
     setSelectedAddress(null);
@@ -216,26 +203,20 @@ export default function AddressSearchModal({
     }
   };
 
-  // ... (verifyDeliveryZone remains unchanged)
   const verifyDeliveryZone = async (locationDetails: LocationDetails) => {
     try {
       const response = await fetch("/api/verify-delivery-zone", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           state: locationDetails.state,
           localGovernment: locationDetails.localGovernment,
         }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message || "Delivery zone verification failed");
       }
-
       return data.isDeliverable;
     } catch (error) {
       console.error("Error verifying delivery zone:", error);
@@ -256,7 +237,7 @@ export default function AddressSearchModal({
 
       placesService.current.getDetails(
         {
-          placeId: placeId,
+          placeId,
           fields: ["formatted_address", "geometry", "address_components"],
         },
         async (place, status) => {
@@ -323,7 +304,7 @@ export default function AddressSearchModal({
       <div className="bg-white rounded-lg w-full max-w-md mx-4 relative">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-black hover:text-gray-600"
+          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
         >
           <X size={24} />
         </button>
@@ -333,19 +314,19 @@ export default function AddressSearchModal({
           </h2>
           <div className="relative mb-4">
             <Flag
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-black"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
               size={20}
             />
             <input
+              ref={inputRef} // Attach ref to input
               type="text"
               placeholder="Search for streets, cities, districts..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] focus:border-transparent text-black placeholder-gray-700"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] focus:border-transparent text-black placeholder-gray-500"
               autoComplete="off"
             />
           </div>
-          {/* Predictions Dropdown - Show when there are predictions and not loading */}
           {predictions.length > 0 && !isLoading && (
             <div
               className="fixed left-6 right-6 md:left-auto md:right-auto md:w-[calc(100%-48px)] max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto z-[100]"
@@ -360,7 +341,7 @@ export default function AddressSearchModal({
                       prediction.description
                     )
                   }
-                  className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:outline-none"
+                  className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:outline-none text-black"
                 >
                   <div className="font-medium text-black">
                     {prediction.structured_formatting.main_text}
@@ -372,24 +353,20 @@ export default function AddressSearchModal({
               ))}
             </div>
           )}
-          {/* Google Maps API Status */}
           {!googleLoaded && (
             <div className="text-amber-500 text-sm mb-4">
               Loading Google Maps API...
             </div>
           )}
-          {/* Loading State */}
           {isLoading && (
-            <div className="flex items-center justify-center gap-2 text-black my-4">
+            <div className="flex items-center justify-center gap-2 text-gray-500 my-4">
               <Loader2 className="animate-spin" size={20} />
               <span>Verifying address...</span>
             </div>
           )}
-          {/* Error Message */}
           {error && !isLoading && (
             <div className="text-red-500 text-sm mb-4">{error}</div>
           )}
-          {/* Map Preview - Only show when there's an error and showMap is true */}
           {showMap && selectedAddress && error && !isLoading && (
             <div className="mt-4 rounded-lg overflow-hidden h-48 relative">
               <Image
@@ -404,7 +381,6 @@ export default function AddressSearchModal({
               />
             </div>
           )}
-          {/* Use Current Location Button */}
           <button
             onClick={() => {
               onClose();

@@ -1,4 +1,5 @@
 "use client";
+
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -46,15 +47,12 @@ export default function LoginModal({
     try {
       // Here you would typically send the data to your API
       console.log("Login form submitted:", data);
-
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
       // Call onSuccess callback if provided
       if (onSuccess) {
         onSuccess();
       }
-
       // Close the modal
       onClose();
     } catch (error) {
@@ -75,8 +73,10 @@ export default function LoginModal({
         </button>
 
         <div className="p-6">
-          <h2 className="text-2xl font-bold text-center mb-2">Log In</h2>
-          <p className="text-gray-500 text-center mb-6">
+          <h2 className="text-2xl font-bold text-center mb-2 text-black">
+            Log In
+          </h2>
+          <p className="text-black text-center mb-6">
             you need to login to continue.
           </p>
 
@@ -84,7 +84,7 @@ export default function LoginModal({
             <div>
               <label
                 htmlFor="phoneNumber"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium mb-1 text-black"
               >
                 Phone Number
               </label>
@@ -100,11 +100,12 @@ export default function LoginModal({
                     inputComponent={({ ...props }) => (
                       <input
                         {...props}
-                        className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 ${
+                        className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-black ${
                           errors.phoneNumber
                             ? "border-red-500 focus:ring-red-500"
                             : "border-gray-300 focus:ring-[#1A2E20]"
                         }`}
+                        style={{ height: "42px" }} // Adjust this value to match the desired height
                       />
                     )}
                   />
@@ -127,7 +128,7 @@ export default function LoginModal({
           </form>
 
           <div className="mt-4 text-center">
-            <p className="text-gray-500">
+            <p className="text-black">
               Don&apos;t have an Account?{" "}
               <button
                 className="text-black font-medium hover:underline"

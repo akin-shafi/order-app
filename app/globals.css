@@ -35,6 +35,27 @@ body {
   border-top-right-radius: 50% 100%;
 }
 
+.bg-focus {
+  opacity: 1;
+  border-color: 1px solid #1A2E20 !important;
+}
+
+@keyframes blip {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.blip-effect {
+  animation: blip 0.3s ease-in-out;
+}
+
 /* .curved-divider {
   position: absolute;
   background: #C6DDB7;
