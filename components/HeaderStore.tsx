@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,21 +17,22 @@ export default function HeaderStore() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { address, setAddress, setCoordinates } = useAddress(); // Fetch and set address from context
+  const { address, setAddress, setCoordinates } = useAddress();
 
   useEffect(() => {
-    // Check if there's an address in context on initial load
-    if (!address && !isLoading) {
+    if (!address && !isLoading && !error) {
       fetchCurrentLocation();
     }
-  }, [address]); // Re-run if address changes (e.g., cleared elsewhere)
+  }, [address]);
 
   const fetchCurrentLocation = () => {
     setIsLoading(true);
     setError(null);
 
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
+      setError(
+        "Geolocation is not supported by your browser. Please set your location manually."
+      );
       setIsLoading(false);
       return;
     }
@@ -52,17 +52,39 @@ export default function HeaderStore() {
               longitude: position.coords.longitude,
             });
           } else {
-            throw new Error("Unable to find address");
+            throw new Error("No address found for these coordinates.");
           }
           setIsLoading(false);
         } catch (err) {
-          setError("Error fetching your address");
+          console.error("Geocoding API error:", err);
+          setError(
+            "Error fetching address from coordinates. Please try again or set manually."
+          );
           setIsLoading(false);
         }
       },
       (err) => {
-        setError("Unable to retrieve your location");
+        let errorMessage = "Unable to retrieve your location.";
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            errorMessage =
+              "Location permission denied. Please enable it or set your location manually.";
+            break;
+          case err.POSITION_UNAVAILABLE:
+            errorMessage = "Location unavailable. Please check your settings.";
+            break;
+          case err.TIMEOUT:
+            errorMessage = "Location request timed out. Please try again.";
+            break;
+          default:
+            errorMessage = "An error occurred while fetching your location.";
+        }
+        setError(errorMessage);
         setIsLoading(false);
+      },
+      {
+        timeout: 10000, // 10 seconds timeout
+        maximumAge: 60000, // Accept cached position up to 1 minute old
       }
     );
   };
@@ -158,13 +180,13 @@ export default function HeaderStore() {
 
       {/* Loading and Error Overlays */}
       {isLoading && (
-        // <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="text-white">Fetching your location...</div>
-        // </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="text-white">Fetching your location...</div>
+        </div>
       )}
       {error && (
         // <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="text-red-500">{error}</div>
+        <div className="text-red-500 text-center">{error}</div>
         // </div>
       )}
     </>
