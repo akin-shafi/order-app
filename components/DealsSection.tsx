@@ -19,7 +19,7 @@ export default function DealsSection() {
 
         {/* Text container - increased width */}
         <div className="w-full lg:w-3/5 xl:w-2/3 text-center lg:text-left ">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#292d32] dark:text-white leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#292d32]  leading-tight">
             Find <span className="text-[#f15736]">deals</span>,{" "}
             <span className="text-green-600">get delivery</span>, and more from
             our restaurant partners.
