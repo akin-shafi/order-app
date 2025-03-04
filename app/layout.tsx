@@ -1,6 +1,9 @@
+import type React from "react";
+import { AddressProvider } from "@/contexts/address-context";
 import type { Metadata } from "next";
 import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
 import { CartProvider } from "@/contexts/cart-context";
+import GoogleMapsScript from "@/components/google-maps-script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -108,7 +111,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
       >
-        <CartProvider>{children}</CartProvider>
+        <GoogleMapsScript />
+        <AddressProvider>
+          <CartProvider>{children}</CartProvider>
+        </AddressProvider>
       </body>
     </html>
   );

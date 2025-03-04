@@ -10,10 +10,10 @@ export default function DealsSection() {
           <Image
             src="/images/package.png"
             alt="Food Bag"
-            layout="responsive"
             width={400} // Increased base width
             height={300} // Maintain aspect ratio
             className="object-contain max-w-[400px] mx-auto"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
 

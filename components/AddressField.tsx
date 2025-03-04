@@ -1,13 +1,32 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState } from "react";
-import { MapPin, Navigation } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MapPin, Navigation, Search } from "lucide-react";
+import { useAddress } from "@/contexts/address-context";
+import AddressSearchModal from "./modal/address-search-modal";
 
 export default function AddressField() {
-  const [address, setAddress] = useState("");
+  const { address, setAddress, setCoordinates } = useAddress();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Listen for getCurrentLocation event from modal
+    const handleGetCurrentLocation = () => {
+      getCurrentLocation();
+    };
+    document.addEventListener("getCurrentLocation", handleGetCurrentLocation);
+    return () => {
+      document.removeEventListener(
+        "getCurrentLocation",
+        handleGetCurrentLocation
+      );
+    };
+  }, []);
 
   const getAddressFromCoordinates = async (
     latitude: number,
@@ -41,11 +60,15 @@ export default function AddressField() {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          const address = await getAddressFromCoordinates(
+          const fetchedAddress = await getAddressFromCoordinates(
             position.coords.latitude,
             position.coords.longitude
           );
-          setAddress(address);
+          setAddress(fetchedAddress);
+          setCoordinates({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
           setIsLoading(false);
         } catch (error) {
           setError("Error fetching your address");
@@ -60,8 +83,9 @@ export default function AddressField() {
   };
 
   return (
-    <div className="relative">
-      <div className="mt-2 flex flex-col sm:flex-row gap-2 sm:bg-white p-1 rounded-full max-w-md mx-auto md:mx-0 animate-fadeInUp">
+    <div className="relative space-y-4">
+      {/* Address Input */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:bg-white p-1 rounded-full max-w-md mx-auto md:mx-0 animate-fadeInUp">
         <div className="flex-1 flex items-center bg-white rounded-full pl-2">
           <MapPin className="text-[#f15736] h-5 w-5 mr-2" />
           <input
@@ -69,6 +93,7 @@ export default function AddressField() {
             placeholder="What is your address?"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            onFocus={() => setIsModalOpen(true)}
             className="bg-transparent border-none outline-none w-full py-2 text-sm"
           />
         </div>
@@ -86,9 +111,7 @@ export default function AddressField() {
       {isLoading && (
         <div className="absolute left-0 right-0 text-center mt-2 flex items-center justify-center gap-2 animate-fadeIn">
           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          <span className="text-sm text-[#00846b]">
-            Fetching your location...
-          </span>
+          <span className="text-sm text-white">Fetching your location...</span>
         </div>
       )}
 
@@ -98,6 +121,28 @@ export default function AddressField() {
           {error}
         </div>
       )}
+
+      {/* Search Input - Only show when address is set */}
+      {address && (
+        <div className="relative max-w-md mx-auto md:mx-0 animate-fadeInUp">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <input
+              type="text"
+              placeholder="What can we get you?"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-white rounded-full border-none outline-none shadow-sm text-sm"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Address Search Modal */}
+      <AddressSearchModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
