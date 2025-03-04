@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,13 +18,15 @@ export default function HeaderStore() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasAttemptedFetch, setHasAttemptedFetch] = useState(false); // Track if we've tried fetching
   const { address, setAddress, setCoordinates } = useAddress();
 
   useEffect(() => {
-    if (!address && !isLoading && !error) {
+    // Only attempt fetch on initial load if we haven't tried yet
+    if (!address && !isLoading && !hasAttemptedFetch) {
       fetchCurrentLocation();
     }
-  }, [address]);
+  }, [address, hasAttemptedFetch]); // Depend on hasAttemptedFetch to avoid re-triggering
 
   const fetchCurrentLocation = () => {
     setIsLoading(true);
@@ -34,6 +37,7 @@ export default function HeaderStore() {
         "Geolocation is not supported by your browser. Please set your location manually."
       );
       setIsLoading(false);
+      setHasAttemptedFetch(true); // Mark as attempted
       return;
     }
 
@@ -55,12 +59,14 @@ export default function HeaderStore() {
             throw new Error("No address found for these coordinates.");
           }
           setIsLoading(false);
+          setHasAttemptedFetch(true); // Success, mark as attempted
         } catch (err) {
           console.error("Geocoding API error:", err);
           setError(
             "Error fetching address from coordinates. Please try again or set manually."
           );
           setIsLoading(false);
+          setHasAttemptedFetch(true); // Error, mark as attempted
         }
       },
       (err) => {
@@ -81,10 +87,11 @@ export default function HeaderStore() {
         }
         setError(errorMessage);
         setIsLoading(false);
+        setHasAttemptedFetch(true); // Error, mark as attempted
       },
       {
-        timeout: 10000, // 10 seconds timeout
-        maximumAge: 60000, // Accept cached position up to 1 minute old
+        timeout: 10000,
+        maximumAge: 60000,
       }
     );
   };
@@ -101,6 +108,14 @@ export default function HeaderStore() {
 
   const handleAuthSuccess = () => {
     console.log("Authentication successful!");
+  };
+
+  const handleAddressClick = () => {
+    setIsAddressModalOpen(true);
+    // If there's an error, clear it and allow manual setting without re-fetching
+    if (error) {
+      setError(null);
+    }
   };
 
   return (
@@ -124,7 +139,7 @@ export default function HeaderStore() {
               <span className="flex items-center gap-1">
                 <span className="font-bold hide-on-small">Delivery to:</span>
                 <button
-                  onClick={() => setIsAddressModalOpen(true)}
+                  onClick={handleAddressClick}
                   className="font-bold flex items-center truncate-text hover:text-[#f15736]"
                 >
                   {address || "Set your location"}
@@ -178,16 +193,15 @@ export default function HeaderStore() {
         onClose={() => setIsAddressModalOpen(false)}
       />
 
-      {/* Loading and Error Overlays */}
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="text-white">Fetching your location...</div>
         </div>
       )}
       {error && (
-        // <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="text-red-500 text-center">{error}</div>
-        // </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="text-red-500 text-center">{error}</div>
+        </div>
       )}
     </>
   );
