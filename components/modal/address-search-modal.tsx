@@ -52,30 +52,26 @@ export default function AddressSearchModal({
   const [error, setError] = useState<string | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [showMap, setShowMap] = useState(false);
-  const { setAddress, setCoordinates } = useAddress();
+  const { setAddress, setCoordinates, setLocationDetails } = useAddress();
   const autocompleteService =
     useRef<google.maps.places.AutocompleteService | null>(null);
   const placesService = useRef<google.maps.places.PlacesService | null>(null);
   const [googleLoaded, setGoogleLoaded] = useState(false);
 
   useEffect(() => {
-    // Check if Google Maps API is loaded
     const checkGoogleMapsLoaded = () => {
       if (window.google && window.google.maps && window.google.maps.places) {
         setGoogleLoaded(true);
         autocompleteService.current =
           new window.google.maps.places.AutocompleteService();
-        // Create a dummy div for PlacesService (required but not used directly)
         const dummyElement = document.createElement("div");
         placesService.current = new window.google.maps.places.PlacesService(
           dummyElement
         );
       } else {
-        // If not loaded yet, check again after a short delay
         setTimeout(checkGoogleMapsLoaded, 100);
       }
     };
-
     checkGoogleMapsLoaded();
   }, []);
 
@@ -175,21 +171,24 @@ export default function AddressSearchModal({
     }
   };
 
-  // Update the handleSearch function to use the fallback if needed
   const handleSearch = async (input: string) => {
     setSearchQuery(input);
+    // When user starts typing, hide the map and clear previous error
+    setShowMap(false);
+    setError(null);
+    setSelectedAddress(null);
+
     if (!input) {
       setPredictions([]);
       return;
     }
 
-    // Try using the Places API first
     if (autocompleteService.current && googleLoaded) {
       try {
         autocompleteService.current.getPlacePredictions(
           {
             input,
-            componentRestrictions: { country: "NG" }, // Restrict to Nigeria
+            componentRestrictions: { country: "NG" },
             types: ["address"],
           },
           (predictions, status) => {
@@ -198,14 +197,8 @@ export default function AddressSearchModal({
               predictions &&
               predictions.length > 0
             ) {
-              console.log("Predictions received:", predictions); // Debug log
               setPredictions(predictions as unknown as PlaceResult[]);
             } else {
-              console.log(
-                "No predictions or error, falling back to Geocoding API:",
-                status
-              ); // Debug log
-              // Fall back to direct API call if Places API returns no results
               searchAddressAPI(input);
             }
           }
@@ -218,15 +211,14 @@ export default function AddressSearchModal({
         searchAddressAPI(input);
       }
     } else {
-      // If Places API is not available, use the direct API call
       console.log("Places API not available, using Geocoding API");
       searchAddressAPI(input);
     }
   };
 
+  // ... (verifyDeliveryZone remains unchanged)
   const verifyDeliveryZone = async (locationDetails: LocationDetails) => {
     try {
-      // Make API call to your backend verification endpoint
       const response = await fetch("/api/verify-delivery-zone", {
         method: "POST",
         headers: {
@@ -235,7 +227,6 @@ export default function AddressSearchModal({
         body: JSON.stringify({
           state: locationDetails.state,
           localGovernment: locationDetails.localGovernment,
-          locality: locationDetails.locality,
         }),
       });
 
@@ -252,7 +243,6 @@ export default function AddressSearchModal({
     }
   };
 
-  // Updated handleAddressSelect function with better error handling
   const handleAddressSelect = async (placeId: string, description: string) => {
     setIsLoading(true);
     setError(null);
@@ -271,12 +261,9 @@ export default function AddressSearchModal({
         },
         async (place, status) => {
           if (status === google.maps.places.PlacesServiceStatus.OK && place) {
-            // Extract location details
             const locationDetails = extractLocationDetails(
               place.address_components || []
             );
-
-            console.log("Extracted location details:", locationDetails);
 
             if (!locationDetails.state || !locationDetails.localGovernment) {
               setError("Unable to determine location details");
@@ -297,7 +284,6 @@ export default function AddressSearchModal({
               return;
             }
 
-            // Success - update address and close modal
             setAddress(description);
             if (place.geometry?.location) {
               setCoordinates({
@@ -305,6 +291,12 @@ export default function AddressSearchModal({
                 longitude: place.geometry.location.lng(),
               });
             }
+            setLocationDetails({
+              state: locationDetails.state,
+              localGovernment: locationDetails.localGovernment,
+              locality: locationDetails.locality,
+            });
+
             setIsLoading(false);
             onClose();
           } else {
@@ -354,8 +346,8 @@ export default function AddressSearchModal({
             />
           </div>
 
-          {/* Predictions Dropdown */}
-          {predictions.length > 0 && !isLoading && !error && (
+          {/* Predictions Dropdown - Show when there are predictions and not loading */}
+          {predictions.length > 0 && !isLoading && (
             <div
               className="fixed left-6 right-6 md:left-auto md:right-auto md:w-[calc(100%-48px)] max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto z-[100]"
               style={{ top: "auto" }}
@@ -398,10 +390,12 @@ export default function AddressSearchModal({
           )}
 
           {/* Error Message */}
-          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+          {error && !isLoading && (
+            <div className="text-red-500 text-sm mb-4">{error}</div>
+          )}
 
-          {/* Map Preview */}
-          {showMap && selectedAddress && (
+          {/* Map Preview - Only show when there's an error and showMap is true */}
+          {showMap && selectedAddress && error && !isLoading && (
             <div className="mt-4 rounded-lg overflow-hidden h-48 relative">
               <Image
                 src={`https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(
@@ -420,7 +414,6 @@ export default function AddressSearchModal({
           <button
             onClick={() => {
               onClose();
-              // Trigger the getCurrentLocation function from AddressField
               document.dispatchEvent(new Event("getCurrentLocation"));
             }}
             className="mt-4 w-full flex items-center justify-center gap-2 bg-[#e8f5f3] text-[#00a082] py-3 rounded-full hover:bg-[#d7eae7] transition-colors"

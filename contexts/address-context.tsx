@@ -13,6 +13,16 @@ interface AddressContextType {
     latitude: number | null;
     longitude: number | null;
   }) => void;
+  locationDetails: {
+    state: string;
+    localGovernment: string;
+    locality: string;
+  };
+  setLocationDetails: (details: {
+    state: string;
+    localGovernment: string;
+    locality: string;
+  }) => void;
 }
 
 const AddressContext = createContext<AddressContextType | undefined>(undefined);
@@ -26,6 +36,15 @@ export function AddressProvider({ children }: { children: ReactNode }) {
     latitude: null,
     longitude: null,
   });
+  const [locationDetails, setLocationDetails] = useState<{
+    state: string;
+    localGovernment: string;
+    locality: string;
+  }>({
+    state: "",
+    localGovernment: "",
+    locality: "",
+  });
 
   return (
     <AddressContext.Provider
@@ -34,6 +53,8 @@ export function AddressProvider({ children }: { children: ReactNode }) {
         setAddress,
         coordinates,
         setCoordinates,
+        locationDetails,
+        setLocationDetails,
       }}
     >
       {children}

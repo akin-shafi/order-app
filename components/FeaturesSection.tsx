@@ -31,8 +31,9 @@ export default function FeaturesSection() {
                 <Image
                   src={`/icons/${feature.image}`}
                   alt={feature.title}
-                  width={40}
-                  height={40}
+                  width={40} // Intrinsic width
+                  height={40} // Intrinsic height
+                  className="w-auto h-auto max-w-[40px] max-h-[40px]" // Using Tailwind
                 />
               </div>
               <h3 className="text-base md:text-lg font-bold text-[#292d32] mb-1 md:mb-2">

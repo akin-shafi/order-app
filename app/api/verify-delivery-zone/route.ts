@@ -7,7 +7,7 @@ const DELIVERY_ZONES = [
     localGovernments: [
       {
         name: "Ajeromi/Ifelodun",
-        localities: ["Olodi", "Ajegunle", "Amukoko", "Layeni"],
+        localities: ["Olodi", "Ajegunle", "Amukoko", "Layeni", "Temidire II"],
       },
       {
         name: "Apapa",
@@ -27,13 +27,16 @@ const DELIVERY_ZONES = [
 
 export async function POST(request: Request) {
   try {
-    const { state, localGovernment, locality } = await request.json()
+    const { state, localGovernment } = await request.json()
 
     // Find the state
     const stateZone = DELIVERY_ZONES.find((zone) => zone.state.toLowerCase() === state.toLowerCase())
 
     if (!stateZone) {
-      return NextResponse.json({ isDeliverable: false, message: "We don't deliver to this state yet." })
+      return NextResponse.json({ 
+        isDeliverable: false, 
+        message: "We don't deliver to this state yet." 
+      })
     }
 
     // Find the local government
@@ -46,17 +49,7 @@ export async function POST(request: Request) {
       })
     }
 
-    // Check if we deliver to this locality
-    const isLocalitySupported = lgZone.localities.some((loc) => loc.toLowerCase() === locality.toLowerCase())
-
-    if (!isLocalitySupported && locality) {
-      return NextResponse.json({
-        isDeliverable: false,
-        message: `We don't deliver to ${locality}, ${localGovernment} yet.`,
-      })
-    }
-
-    // All checks passed
+    // All checks passed (locality check removed)
     return NextResponse.json({
       isDeliverable: true,
       message: "Great! We deliver to your area.",
@@ -66,4 +59,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Error processing request" }, { status: 500 })
   }
 }
-

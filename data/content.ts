@@ -158,3 +158,52 @@ export const sampleCategories = [
   { id: "rice", name: "RICE", count: 3 },
   { id: "swallow", name: "SWALLOW", count: 2 },
 ];
+
+export const SEARCH_OPTIONS = [
+  {
+    category: "Restaurants",
+    items: [
+      { value: "Food", label: "Food" },
+      { value: "Fast Food", label: "Fast Food" },
+      { value: "Local Dishes", label: "Local Dishes" },
+      { value: "Pizza", label: "Pizza" },
+      { value: "Desserts", label: "Desserts" },
+    ],
+  },
+  {
+    category: "Supermarket",
+    items: [
+      { value: "Groceries", label: "Groceries" },
+      { value: "Toiletries", label: "Toiletries" },
+      { value: "Bread", label: "Bread" },
+      { value: "Beverages", label: "Beverages" },
+      { value: "Snacks", label: "Snacks" },
+    ],
+  },
+  {
+    category: "Pharmacies",
+    items: [
+      { value: "Medication", label: "Medication" },
+      { value: "First Aid Supplies", label: "First Aid Supplies" },
+      { value: "Vitamins", label: "Vitamins" },
+      { value: "Personal Care", label: "Personal Care" },
+    ],
+  },
+  {
+    category: "Local Market",
+    items: [
+      { value: "Fresh Produce", label: "Fresh Produce" },
+      { value: "Meat", label: "Meat" },
+      { value: "Fish", label: "Fish" },
+      { value: "Spices", label: "Spices" },
+    ],
+  },
+  {
+    category: "Laundry",
+    items: [
+      { value: "Laundry Service", label: "Laundry Service" },
+      { value: "Dry Cleaning", label: "Dry Cleaning" },
+      { value: "Ironing", label: "Ironing" },
+    ],
+  },
+];

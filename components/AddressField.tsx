@@ -3,19 +3,81 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MapPin, Navigation, Search } from "lucide-react";
+import { MapPin, Navigation, Search, Loader2 } from "lucide-react";
 import { useAddress } from "@/contexts/address-context";
 import AddressSearchModal from "./modal/address-search-modal";
+import { useRouter } from "next/navigation";
+import { Select } from "antd"; // Import Ant Design Select
+// import "./AddressField.css"; // We'll add custom CSS
+
+const { Option, OptGroup } = Select;
+
+// Business categories and items
+const SEARCH_OPTIONS = [
+  {
+    category: "Restaurants",
+    items: [
+      { value: "Food", label: "Food" },
+      { value: "Fast Food", label: "Fast Food" },
+      { value: "Local Dishes", label: "Local Dishes" },
+      { value: "Pizza", label: "Pizza" },
+      { value: "Desserts", label: "Desserts" },
+    ],
+  },
+  {
+    category: "Supermarket",
+    items: [
+      { value: "Groceries", label: "Groceries" },
+      { value: "Toiletries", label: "Toiletries" },
+      { value: "Bread", label: "Bread" },
+      { value: "Beverages", label: "Beverages" },
+      { value: "Snacks", label: "Snacks" },
+    ],
+  },
+  {
+    category: "Pharmacies",
+    items: [
+      { value: "Medication", label: "Medication" },
+      { value: "First Aid Supplies", label: "First Aid Supplies" },
+      { value: "Vitamins", label: "Vitamins" },
+      { value: "Personal Care", label: "Personal Care" },
+    ],
+  },
+  {
+    category: "Local Market",
+    items: [
+      { value: "Fresh Produce", label: "Fresh Produce" },
+      { value: "Meat", label: "Meat" },
+      { value: "Fish", label: "Fish" },
+      { value: "Spices", label: "Spices" },
+    ],
+  },
+  {
+    category: "Laundry",
+    items: [
+      { value: "Laundry Service", label: "Laundry Service" },
+      { value: "Dry Cleaning", label: "Dry Cleaning" },
+      { value: "Ironing", label: "Ironing" },
+    ],
+  },
+];
 
 export default function AddressField() {
-  const { address, setAddress, setCoordinates } = useAddress();
+  const {
+    address,
+    setAddress,
+    setCoordinates,
+    setLocationDetails,
+    locationDetails,
+  } = useAddress();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    // Listen for getCurrentLocation event from modal
     const handleGetCurrentLocation = () => {
       getCurrentLocation();
     };
@@ -37,7 +99,6 @@ export default function AddressField() {
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
       );
       const data = await response.json();
-
       if (data.status === "OK" && data.results.length > 0) {
         return data.results[0].formatted_address;
       }
@@ -50,13 +111,11 @@ export default function AddressField() {
   const getCurrentLocation = () => {
     setIsLoading(true);
     setError(null);
-
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
       setIsLoading(false);
       return;
     }
-
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
@@ -82,6 +141,38 @@ export default function AddressField() {
     );
   };
 
+  const handleSendRequest = async () => {
+    if (!address.trim()) {
+      setError("Please enter an address");
+      return;
+    }
+    if (!searchQuery.trim()) {
+      setError("Please select what you want");
+      return;
+    }
+
+    setIsSending(true);
+    setError(null);
+
+    try {
+      const params = new URLSearchParams({
+        address: address,
+        search: searchQuery,
+        state: locationDetails.state || "",
+        localGovernment: locationDetails.localGovernment || "",
+        locality: locationDetails.locality || "",
+      });
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Optional delay
+      router.push(`/store?${params.toString()}`);
+    } catch (error) {
+      setError("Error processing request");
+      setIsSending(false);
+    }
+  };
+
+  const isButtonDisabled =
+    isLoading || isSending || !address.trim() || !searchQuery.trim();
+
   return (
     <div className="relative space-y-4">
       {/* Address Input */}
@@ -92,26 +183,31 @@ export default function AddressField() {
             type="text"
             placeholder="What is your address?"
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              setError(null);
+            }}
             onFocus={() => setIsModalOpen(true)}
             className="bg-transparent border-none outline-none w-full py-2 text-sm"
           />
         </div>
-        <button
-          onClick={getCurrentLocation}
-          disabled={isLoading}
-          className="bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-sm hover:bg-[#d8432c] transition-colors disabled:opacity-70"
-        >
-          <Navigation className="h-4 w-4 mr-2" />
-          Use current location
-        </button>
+        {!address && (
+          <button
+            onClick={getCurrentLocation}
+            disabled={isLoading}
+            className="bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-sm hover:bg-[#d8432c] transition-colors disabled:opacity-70"
+          >
+            <Navigation className="h-4 w-4 mr-2" />
+            Use current location
+          </button>
+        )}
       </div>
 
-      {/* Loading State */}
+      {/* Loading State for location */}
       {isLoading && (
         <div className="absolute left-0 right-0 text-center mt-2 flex items-center justify-center gap-2 animate-fadeIn">
           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          <span className="text-sm text-white">Fetching your location...</span>
+          <span className="text-sm text-dark font-bold">Fetching your location...</span>
         </div>
       )}
 
@@ -122,19 +218,57 @@ export default function AddressField() {
         </div>
       )}
 
-      {/* Search Input - Only show when address is set */}
+      {/* Search Input with Dropdown */}
       {address && (
         <div className="relative max-w-md mx-auto md:mx-0 animate-fadeInUp">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
+            <Select
+              showSearch
               placeholder="What can we get you?"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white rounded-full border-none outline-none shadow-sm text-sm"
-            />
+              value={searchQuery || undefined} // Use undefined for placeholder to show
+              onChange={(value) => {
+                setSearchQuery(value);
+                setError(null);
+              }}
+              filterOption={(input, option) =>
+                (option?.label?.toString().toLowerCase() ?? "").includes(
+                  input.toLowerCase()
+                )
+              }
+              className="custom-ant-select w-full"
+              dropdownStyle={{ borderRadius: "8px" }}
+            >
+              {SEARCH_OPTIONS.map((category) => (
+                <OptGroup key={category.category} label={category.category}>
+                  {category.items.map((item) => (
+                    <Option
+                      key={item.value}
+                      value={item.value}
+                      label={item.label}
+                    >
+                      {item.label}
+                    </Option>
+                  ))}
+                </OptGroup>
+              ))}
+            </Select>
           </div>
+
+          <button
+            onClick={handleSendRequest}
+            disabled={isButtonDisabled}
+            className="w-full mt-8 bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-sm hover:bg-[#d8432c] transition-colors disabled:opacity-70"
+          >
+            {isSending ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              "Send Request"
+            )}
+          </button>
         </div>
       )}
 

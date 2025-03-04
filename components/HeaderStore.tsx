@@ -1,5 +1,5 @@
-// components/Header.tsx
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,45 +9,17 @@ import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
 import { CartIcon } from "./icons";
 
-export default function Header() {
+interface HeaderStoreProps {
+  deliveryAddress: string;
+  onAddressClick: () => void;
+}
+
+export default function HeaderStore({
+  deliveryAddress,
+  onAddressClick,
+}: HeaderStoreProps) {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-
-  // const mobileMenuItems = [
-  //   {
-  //     name: "Products",
-  //     icon: <Home size={20} />,
-  //     dropdown: ["BetaSpoon", "ShipazDay"],
-  //     href: "/products",
-  //   },
-  //   {
-  //     name: "Know Us",
-  //     icon: <Info size={20} />,
-  //     href: "/know-us",
-  //   },
-  //   {
-  //     name: "FAQs",
-  //     icon: <HelpCircle size={20} />,
-  //     href: "/faqs",
-  //   },
-  //   {
-  //     name: "Contact",
-  //     icon: <Phone size={20} />,
-  //     href: "/contact",
-  //   },
-  //   {
-  //     name: "Become a vendor",
-  //     icon: <Utensils size={20} />,
-  //     href: "/become-a-vendor",
-  //   },
-  //   {
-  //     name: "Become a Rider",
-  //     icon: <User size={20} />,
-  //     href: "/become-a-rider",
-  //   },
-  // ];
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
@@ -60,7 +32,6 @@ export default function Header() {
   };
 
   const handleAuthSuccess = () => {
-    // Handle successful authentication (e.g., show toast, update UI, etc.)
     console.log("Authentication successful!");
   };
 
@@ -69,27 +40,14 @@ export default function Header() {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {/* <Link href="/" className="flex items-center">
-              <div className=" p-2 rounded-lg">
-                <Image
-                  src="/beta.png"
-                  alt="Palapolo Logo"
-                  width={20}
-                  height={20}
-                  className="filter brightness-0 invert"
-                />
-              </div>
-            </Link> */}
-
-            <div className="bg-[#F5F5F5] hover:bg-[#1A2E20] cursor-pointer p-2 rounded-full">
+            <div className="bg-[#F5F5F5] hover:bg-[#f15736] cursor-pointer p-2 rounded-full">
               <Link href="/" className="flex items-center">
                 <Image
                   src="/betaday.png"
                   alt="BetaDay Logo"
                   width={90}
                   height={90}
-                  className=""
-                  priority // Optional: Preload important images
+                  priority
                 />
               </Link>
             </div>
@@ -97,10 +55,13 @@ export default function Header() {
             <div className="flex items-center text-gray-600 text-sm">
               <span className="flex items-center gap-1">
                 <span className="font-bold hide-on-small">Delivery to:</span>
-                <span className="font-medium flex items-center truncate-text">
-                  56 Baale St, Olodi Apapa
+                <button
+                  onClick={onAddressClick}
+                  className="font-bold flex items-center truncate-text hover:text-[#f15736]"
+                >
+                  {deliveryAddress || "Set your location"}
                   <MapPin className="h-4 w-4 ml-1 hide-on-small" />
-                </span>
+                </button>
               </span>
             </div>
           </div>
@@ -115,23 +76,16 @@ export default function Header() {
               />
             </div>
 
-            <button className="bg-[#1A2E20] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
-              {/* <Image
-              src="/icons/basket.png"
-              alt="basket"
-              width={10}
-              height={10}
-              className="h-5 w-5"
-            /> */}
+            <button className="bg-[#f15736] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
               <CartIcon className="h-4 w-4" />
               <CartBadge />
             </button>
 
             <button
-              className="bg-[#1A2E20] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative"
+              className="bg-gray-200 hover:bg-[#210603] hover:text-white cursor-pointer text-dark p-2 rounded relative"
               onClick={() => setIsLoginModalOpen(true)}
             >
-              <User className="h-4 w-4  " />
+              <User className="h-4 w-4" />
             </button>
           </div>
         </div>
