@@ -10,13 +10,13 @@ import { categories } from "@/data/content";
 
 // Array of background colors for each slide
 const backgroundColors = [
-  "#FFF0F5",
-  "#FFF3ED",
-  "#EBF4FF",
-  "#DCF7ED",
-  "#FFF8E4",
-  "#DAEFE3",
-  "#FFF8E4",
+  "#FFE0E9",
+  "#FFDFC7",
+  "#CADBFF",
+  "#A5DFC0",
+  "#FFE3B2",
+  "#A4D0A1",
+  "#FFE3B2",
 ];
 
 // Skeleton Loader Component for Categories
