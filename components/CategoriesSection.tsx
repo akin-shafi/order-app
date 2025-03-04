@@ -36,7 +36,7 @@ export default function CategoriesSection() {
                   className="object-contain"
                 />
               </div>
-              <span className="text-[#292d32] font-medium text-xs md:text-sm text-center">
+              <span className="text-[#292d32] font-medium text-md md:text-sm text-center">
                 {category.name}
               </span>
             </div>
