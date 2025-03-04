@@ -6,8 +6,8 @@ import DealsSection from "@/components/DealsSection";
 import CategoriesSection from "@/components/CategoriesSection";
 // import CategoriesInStore from "@/components/CategoriesInStore";
 import FeaturesSection from "@/components/FeaturesSection";
-import AppShowCaseSection from "@/components/AppShowCaseSection";
-import CTASection from "@/components/CTASection";
+// import AppShowCaseSection from "@/components/AppShowCaseSection";
+// import CTASection from "@/components/CTASection";
 import Ticker from "@/components/Ticker";
 import Footer from "@/components/Footer";
 
@@ -21,8 +21,8 @@ export default function Home() {
       {/* <CategoriesInStore /> */}
       <DealsSection />
       <FeaturesSection />
-      <AppShowCaseSection />
-      <CTASection />
+      {/* <AppShowCaseSection /> */}
+      {/* <CTASection /> */}
       <Ticker />
       <Footer />
     </div>
