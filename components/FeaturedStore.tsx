@@ -6,10 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ClockIcon, StarIcon } from "@/components/icons";
 import { Heart } from "lucide-react";
-
-interface FeaturedStoreProps {
-  deliveryAddress: string;
-}
+import { useAddress } from "@/contexts/address-context"; // Import address context
 
 interface Restaurant {
   id: string;
@@ -21,14 +18,15 @@ interface Restaurant {
   tags: string[];
 }
 
-export default function FeaturedStore({ deliveryAddress }: FeaturedStoreProps) {
+export default function FeaturedStore() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { address } = useAddress(); // Fetch address from context
 
   useEffect(() => {
     const fetchRestaurants = async () => {
-      if (!deliveryAddress) {
+      if (!address) {
         // Use static data as fallback if no address
         setRestaurants(
           Array(6).fill({
@@ -49,7 +47,7 @@ export default function FeaturedStore({ deliveryAddress }: FeaturedStoreProps) {
 
       try {
         const response = await fetch(
-          `/api/restaurants?address=${encodeURIComponent(deliveryAddress)}`
+          `/api/restaurants?address=${encodeURIComponent(address)}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch restaurants");
@@ -76,7 +74,7 @@ export default function FeaturedStore({ deliveryAddress }: FeaturedStoreProps) {
     };
 
     fetchRestaurants();
-  }, [deliveryAddress]); // Re-fetch when deliveryAddress changes
+  }, [address]); // Re-fetch when address changes
 
   return (
     <section>

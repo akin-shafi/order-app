@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
@@ -7,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { useCart } from "@/contexts/cart-context";
+import { useAddress } from "@/contexts/address-context"; // Import address context
 import Cart from "@/components/cart/cart";
 import {
   restaurant,
@@ -26,6 +29,57 @@ type MenuItem = {
 export default function RestaurantPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const { dispatch } = useCart();
+  const { address, setAddress, setCoordinates } = useAddress(); // Get address from context
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check if there's an address in context on page load
+    if (!address) {
+      // If no address, get current location
+      handleGetCurrentLocation();
+    }
+  }, [address]);
+
+  const handleGetCurrentLocation = () => {
+    setIsLoading(true);
+    setError(null);
+
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by your browser");
+      setIsLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+          );
+          const data = await response.json();
+          if (data.status === "OK" && data.results.length > 0) {
+            const fetchedAddress = data.results[0].formatted_address;
+            setAddress(fetchedAddress);
+            setCoordinates({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          } else {
+            throw new Error("Unable to find address");
+          }
+          setIsLoading(false);
+        } catch (err) {
+          setError("Error fetching your address");
+          setIsLoading(false);
+        }
+      },
+      (err) => {
+        setError("Unable to retrieve your location");
+        setIsLoading(false);
+      }
+    );
+  };
 
   const getMenuItems = (): MenuItem[] => {
     if (activeCategory === "all") {
@@ -45,9 +99,8 @@ export default function RestaurantPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white ">
-      <HeaderStore />
-
+    <div className="min-h-screen bg-white">
+      <HeaderStore /> {/* No props needed, fetches address internally */}
       <main className="max-w-6xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left column - Restaurant details and menu */}
@@ -62,7 +115,7 @@ export default function RestaurantPage() {
             </Link>
 
             {/* Restaurant info */}
-            <div className="flex flex-col sm:flex-row items-start gap-4 mb-8 ">
+            <div className="flex flex-col sm:flex-row items-start gap-4 mb-8">
               <Image
                 src={restaurant.image || "/images/food.png"}
                 alt={restaurant.name}
@@ -84,7 +137,7 @@ export default function RestaurantPage() {
                       strokeLinejoin="round"
                       strokeWidth="2"
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
+                    />
                   </svg>
                   {restaurant.deliveryTime}
                 </div>
@@ -113,8 +166,8 @@ export default function RestaurantPage() {
             </div>
 
             {/* Categories */}
-            <div className="mb-8  text-[#292d32]">
-              <h2 className="text-xl font-bold mb-4 ">Categories</h2>
+            <div className="mb-8 text-[#292d32]">
+              <h2 className="text-xl font-bold mb-4">Categories</h2>
 
               <div className="flex overflow-x-auto pb-2 -mx-1">
                 {sampleCategories.map((category) => (
@@ -177,7 +230,7 @@ export default function RestaurantPage() {
                       )}
                     </div>
 
-                    <div className="flex-1  text-[#292d32]">
+                    <div className="flex-1 text-[#292d32]">
                       <h3 className="font-medium">{item.name}</h3>
                       <p className="text-sm text-gray-500 mb-2">
                         {item.description}
@@ -217,9 +270,19 @@ export default function RestaurantPage() {
           </div>
         </div>
       </main>
-
       {/* Footer */}
       <FooterStore />
+      {/* Loading and Error States */}
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="text-white">Fetching your location...</div>
+        </div>
+      )}
+      {error && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="text-red-500">{error}</div>
+        </div>
+      )}
     </div>
   );
 }

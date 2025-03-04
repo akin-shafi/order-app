@@ -8,18 +8,14 @@ import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
 import { CartIcon } from "./icons";
+import { useAddress } from "@/contexts/address-context"; // Import address context
+import AddressSearchModal from "./modal/address-search-modal"; // Add modal
 
-interface HeaderStoreProps {
-  deliveryAddress: string;
-  onAddressClick: () => void;
-}
-
-export default function HeaderStore({
-  deliveryAddress,
-  onAddressClick,
-}: HeaderStoreProps) {
+export default function HeaderStore() {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const { address } = useAddress(); // Fetch address from context directly
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
@@ -56,10 +52,10 @@ export default function HeaderStore({
               <span className="flex items-center gap-1">
                 <span className="font-bold hide-on-small">Delivery to:</span>
                 <button
-                  onClick={onAddressClick}
+                  onClick={() => setIsAddressModalOpen(true)}
                   className="font-bold flex items-center truncate-text hover:text-[#f15736]"
                 >
-                  {deliveryAddress || "Set your location"}
+                  {address || "Set your location"}
                   <MapPin className="h-4 w-4 ml-1 hide-on-small" />
                 </button>
               </span>
@@ -76,7 +72,7 @@ export default function HeaderStore({
               />
             </div>
 
-            <button className="bg-[#FF6600] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
+            <button className="bg-[#f15736] hover:bg-[#210603] cursor-pointer text-white p-2 rounded relative">
               <CartIcon className="h-4 w-4" />
               <CartBadge />
             </button>
@@ -103,6 +99,11 @@ export default function HeaderStore({
         onClose={() => setIsLoginModalOpen(false)}
         onSuccess={handleAuthSuccess}
         onCreateAccount={openSignupModal}
+      />
+
+      <AddressSearchModal
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
       />
     </>
   );
