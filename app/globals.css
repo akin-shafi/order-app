@@ -255,10 +255,11 @@ img.filter {
 }
 
 .overlay {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease-in-out;
 }
+
 .hover-container:hover .overlay {
-  opacity: 0.2; /* Adjust the opacity value as needed */
+  opacity: 0.5; /* Darkens on hover */
 }
 
 @media (max-width: 767px) {
