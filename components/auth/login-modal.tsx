@@ -3,11 +3,10 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import PhoneInput from "react-phone-number-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { X } from "lucide-react";
-import "react-phone-number-input/style.css";
-import { useRef } from "react";
+import "react-phone-input-2/lib/style.css";
+import PhoneNumberInput from "../PhoneNumberInput";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -42,8 +41,6 @@ export default function LoginModal({
       phoneNumber: "",
     },
   });
-
-  const inputRef = useRef<HTMLInputElement>(null); // Ref to maintain focus
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
@@ -86,25 +83,10 @@ export default function LoginModal({
                 name="phoneNumber"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <PhoneInput
-                    autoComplete="off"
-                    international
-                    defaultCountry="NG"
-                    value={value}
-                    onChange={onChange}
-                    inputComponent={({ ...props }) => (
-                      <input
-                        {...props}
-                        ref={inputRef} // Attach ref to the input
-                        className={`w-full p-3 rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-black ${
-                          errors.phoneNumber
-                            ? "border-red-500 focus:ring-red-500"
-                            : "border-gray-300 focus:ring-[#1A2E20]"
-                        }`}
-                        style={{ height: "42px" }}
-                        onFocus={() => inputRef.current?.focus()} // Ensure focus persists
-                      />
-                    )}
+                  <PhoneNumberInput
+                    phoneNo={value}
+                    setPhoneNo={onChange}
+                    onFocus={() => console.log("Phone input focused")} // Optional: for debugging
                   />
                 )}
               />

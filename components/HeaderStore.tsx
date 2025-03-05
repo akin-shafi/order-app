@@ -62,11 +62,12 @@ export default function HeaderStore() {
               <Image
                 src="/beta-icon.png"
                 alt="betaday logo"
-                width={45}
-                height={45}
-                quality={45}
+                width={55}
+                height={55}
+                quality={55}
                 priority
-                className="object-contain rounded"
+                className="object-contain rounded w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
+                sizes="(max-width: 640px) 16vw, (max-width: 768px) 20vw, (max-width: 1024px) 24vw, 28vw"
               />
             </Link>
 
@@ -74,7 +75,7 @@ export default function HeaderStore() {
               <span className="flex items-center ml-2 md:ml-5 mr-6">
                 <button
                   onClick={handleAddressClick}
-                  className="flex font-medium text-md md:text-sm w-fit items-center leading-none"
+                  className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
                 >
                   <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
                   {isLoading ? "Locating..." : address || "Set your location"}
