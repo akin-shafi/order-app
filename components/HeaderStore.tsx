@@ -12,6 +12,7 @@ import CartBadge from "./cart/cart-badge";
 import { CartIcon } from "./icons";
 import AddressSearchModal from "./modal/address-search-modal";
 import { useCurrentLocation } from "@/utils/useCurrentLocation";
+import Link from "next/link";
 
 // Assuming there's an AddressContext or similar to get initial address
 interface AddressContextType {
@@ -57,15 +58,17 @@ export default function HeaderStore() {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Image
-              src="/beta-icon.png"
-              alt="betaday logo"
-              width={45}
-              height={45}
-              quality={45}
-              priority
-              className="object-contain rounded"
-            />
+            <Link href="/">
+              <Image
+                src="/beta-icon.png"
+                alt="betaday logo"
+                width={45}
+                height={45}
+                quality={45}
+                priority
+                className="object-contain rounded"
+              />
+            </Link>
 
             <div className="flex items-center text-gray-600 text-sm">
               <span className="flex items-center ml-2 md:ml-5 mr-6">
