@@ -160,7 +160,7 @@ export default function AddressField() {
                 Processing...
               </>
             ) : (
-              "Place an Order"
+              "Place your Order"
             )}
           </button>
         </div>
