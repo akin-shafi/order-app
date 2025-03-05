@@ -4,10 +4,31 @@ import { NextResponse } from "next/server"
 const DELIVERY_ZONES = [
   {
     state: "Lagos",
+    
     localGovernments: [
       {
         name: "Ajeromi/Ifelodun",
-        localities: ["Olodi", "Ajegunle", "Amukoko", "Layeni", "Temidire II"],
+        "localities": [
+          "Olodi",
+          "Ajegunle",
+          "Amukoko",
+          "Layeni",
+          "Temidire II",
+          "Awodi",
+          "Orodu",
+          "Ashafa",
+          "Cardoso",
+          "Onibaba",
+          "Tolu",
+          "Aiyetoro Ajeromi",
+          "Araromi Ajeromi",
+          "Temidire I",
+          "Boundary",
+          "Wilmer",
+          "Maza Maza",
+          "Alayabiagba",
+          "Iganmu"
+        ]
       },
       {
         name: "Apapa",

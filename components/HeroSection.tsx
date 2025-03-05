@@ -19,7 +19,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="bg-[#ffecd8] pb-20 px-4 sm:px-6 md:px-12 relative pt-32 md:pt-0 ">
+    <section className="bg-[#fadbbb] pb-20 px-4 sm:px-6 md:px-12 relative pt-32 md:pt-0 ">
       <div className="hidden lg:block mt-24 w-full"></div>
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 md:gap-8 items-center md:h-auto mt-0 md:mt-20 lg:mt-0 px-4 sm:px-6 lg:px-8">
@@ -60,7 +60,7 @@ export default function HeroSection() {
             alt="Food Delivery"
             width={400}
             height={300}
-            className="object-contain w-full h-auto max-w-[400px] mx-auto"
+            className="object-contain w-full h-auto max-w-[300px] md:max-w-[400px] mx-auto"
             priority
             sizes="(max-width: 768px) 100vw, 50vw"
           />
