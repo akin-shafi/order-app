@@ -64,7 +64,8 @@ export default function Header() {
             alt="BetaDay Logo"
             width={100}
             height={100}
-            className=""
+            className="object-contain rounded"
+            quality={100}
             priority // Optional: Preload important images
           />
         </Link>

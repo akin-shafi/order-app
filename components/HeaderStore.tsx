@@ -94,7 +94,7 @@ export default function HeaderStore() {
             </div>
 
             <button
-              className="relative bg-[#1A2E20] hover:bg-[#FF6600] cursor-pointer flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               onClick={(e) => {
                 e.currentTarget.classList.add("blip-effect");
                 setTimeout(
@@ -103,12 +103,12 @@ export default function HeaderStore() {
                 );
               }}
             >
-              <CartIcon className="h-4 w-4" />
+              <CartIcon className="h-6 w-6" />
               <CartBadge />
             </button>
 
             <button
-              className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[30px] h-[30px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               onClick={(e) => {
                 e.currentTarget.classList.add("blip-effect");
                 setTimeout(
@@ -118,7 +118,7 @@ export default function HeaderStore() {
                 setIsLoginModalOpen(true);
               }}
             >
-              <User className="h-4 w-4" />
+              <User className="h-6 w-6" />
             </button>
           </div>
         </div>
