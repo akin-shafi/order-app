@@ -129,9 +129,9 @@ export default function AddressField() {
         )}
       </div>
 
-      {/* Loading State */}
+      {/* Loading State with Higher z-index */}
       {isLoading && (
-        <div className="absolute left-0 right-0 text-center mt-2 flex items-center justify-center gap-2 animate-fadeIn">
+        <div className="absolute left-0 right-0 text-center mt-2 flex items-center justify-center gap-2 animate-fadeIn z-10">
           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
           <span className="text-sm text-black font-bold">
             Fetching your location...
