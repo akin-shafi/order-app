@@ -66,7 +66,9 @@ export default function Header() {
             height={100}
             className="object-contain rounded"
             quality={100}
-            priority // Optional: Preload important images
+            priority
+            placeholder="blur"
+            blurDataURL="/betaday-placeholder.png" // Low-resolution image path
           />
         </Link>
       </div>

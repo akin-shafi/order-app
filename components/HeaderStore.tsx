@@ -5,7 +5,7 @@
 
 import React, { useState, useContext } from "react";
 import Image from "next/image";
-import { MapPin, Search, User } from "lucide-react";
+import { MapPin, Search, ShoppingCart, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
@@ -103,7 +103,7 @@ export default function HeaderStore() {
                 );
               }}
             >
-              <CartIcon className="h-6 w-6" />
+              <ShoppingCart size={24} />
               <CartBadge />
             </button>
 

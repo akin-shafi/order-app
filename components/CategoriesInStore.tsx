@@ -88,7 +88,7 @@ export default function CategoriesInStore() {
 
   const getFilterButtonClassName = (filter: string) => {
     const baseClass =
-      "px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors";
+      "p-4 rounded-full text-sm font-medium cursor-pointer transition-colors";
     return selectedFilter?.toLowerCase() === filter.toLowerCase()
       ? `${baseClass} bg-[#1A2E20] text-white`
       : `${baseClass} bg-[#D7F2DF]  text-[#292d32] hover:bg-gray-300`;
