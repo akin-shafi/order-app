@@ -36,7 +36,7 @@ export default function HeroSection() {
                     : "opacity-0 translate-y-4"
                 }`}
               >
-                <h1 className="text-[#210603] text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-snug">
+                <h1 className="text-[#210603] text-4xl sm:text-4xl md:text-4xl lg:text-5xl font-bold leading-snug">
                   <span className="animate-fadeIn">{group.headline}</span>
                   <br />
                   <span className="text-[#f15736] animate-fadeInDelay">
