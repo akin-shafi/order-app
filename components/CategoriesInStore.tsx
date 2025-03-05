@@ -8,13 +8,13 @@ import { Navigation, A11y } from "swiper/modules";
 import { categories } from "@/data/content";
 
 const backgroundColors = [
-  "#FFFFFF", // Pure white
-  "#F8F8FF", // Ghost white
-  "#FFFAFA", // Snow
-  "#F5F5F5", // White smoke
-  "#F0F8FF", // Alice blue
-  "#FFF5EE", // Seashell
-  "#FAF0E6", // Linen
+  "#FFE0E9",
+  "#FFDFC7",
+  "#CADBFF",
+  "#A5DFC0",
+  "#FFE3B2",
+  "#A4D0A1",
+  "#FFE3B2",
 ];
 
 const SkeletonCategoryCard = () => (

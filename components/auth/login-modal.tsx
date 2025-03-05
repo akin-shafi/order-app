@@ -1,9 +1,6 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { isValidPhoneNumber } from "libphonenumber-js";
 import { X } from "lucide-react";
 import "react-phone-input-2/lib/style.css";
 import PhoneNumberInput from "../PhoneNumberInput";
@@ -15,15 +12,9 @@ interface LoginModalProps {
   onCreateAccount: () => void;
 }
 
-const loginSchema = z.object({
-  phoneNumber: z
-    .string()
-    .refine((value) => value && isValidPhoneNumber(value), {
-      message: "Please enter a valid phone number",
-    }),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
+interface LoginFormValues {
+  phoneNumber: string;
+}
 
 export default function LoginModal({
   isOpen,
@@ -36,7 +27,6 @@ export default function LoginModal({
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
     defaultValues: {
       phoneNumber: "",
     },
@@ -82,11 +72,15 @@ export default function LoginModal({
               <Controller
                 name="phoneNumber"
                 control={control}
+                rules={{ required: "Phone number is required" }} // Basic required validation
                 render={({ field: { onChange, value } }) => (
                   <PhoneNumberInput
                     phoneNo={value}
-                    setPhoneNo={onChange}
-                    onFocus={() => console.log("Phone input focused")} // Optional: for debugging
+                    setPhoneNo={(val) => {
+                      console.log("PhoneNo changed to:", val); // Debug the change
+                      onChange(val);
+                    }}
+                    onFocus={() => console.log("Phone input focused")}
                   />
                 )}
               />
@@ -108,7 +102,7 @@ export default function LoginModal({
 
           <div className="mt-4 text-center">
             <p className="text-black">
-              Don&apos;t have an Account?{" "}
+              {`Don’t have an Account?`}{" "}
               <button
                 className="text-[#FF6600] cursor-pointer font-medium hover:underline"
                 onClick={onCreateAccount}
