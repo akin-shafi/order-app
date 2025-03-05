@@ -70,11 +70,11 @@ export default function HeaderStore() {
               />
             </Link>
 
-            <div className="flex items-center text-gray-600 text-sm">
+            <div className="flex items-center text-gray-600">
               <span className="flex items-center ml-2 md:ml-5 mr-6">
                 <button
                   onClick={handleAddressClick}
-                  className="flex text-xs w-fit items-center leading-none"
+                  className="flex font-medium text-md md:text-sm w-fit items-center leading-none"
                 >
                   <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
                   {isLoading ? "Locating..." : address || "Set your location"}

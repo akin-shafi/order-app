@@ -7,6 +7,7 @@ import PhoneInput from "react-phone-number-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { X } from "lucide-react";
 import "react-phone-number-input/style.css";
+import { useRef } from "react";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -42,6 +43,8 @@ export default function LoginModal({
     },
   });
 
+  const inputRef = useRef<HTMLInputElement>(null); // Ref to maintain focus
+
   const onSubmit = async (data: LoginFormValues) => {
     try {
       console.log("Login form submitted:", data);
@@ -60,7 +63,7 @@ export default function LoginModal({
       <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4  rounded-full border text-gray-400 hover:text-gray-600 p-2 bg-white"
+          className="absolute right-4 top-4 rounded-full border text-gray-400 hover:text-gray-600 p-2 bg-white"
         >
           <X size={20} />
         </button>
@@ -92,12 +95,14 @@ export default function LoginModal({
                     inputComponent={({ ...props }) => (
                       <input
                         {...props}
+                        ref={inputRef} // Attach ref to the input
                         className={`w-full p-3 rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-black ${
                           errors.phoneNumber
                             ? "border-red-500 focus:ring-red-500"
                             : "border-gray-300 focus:ring-[#1A2E20]"
                         }`}
                         style={{ height: "42px" }}
+                        onFocus={() => inputRef.current?.focus()} // Ensure focus persists
                       />
                     )}
                   />
