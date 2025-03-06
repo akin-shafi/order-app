@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MapPin, Search, ShoppingCart, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
@@ -11,22 +11,56 @@ import CartBadge from "./cart/cart-badge";
 import AddressSearchModal from "./modal/address-search-modal";
 import { useCurrentLocation } from "@/utils/useCurrentLocation";
 import Link from "next/link";
-
-// Assuming there's an AddressContext or similar to get initial address
-interface AddressContextType {
-  address?: string;
-}
-const AddressContext = React.createContext<AddressContextType>({});
+import { useAddress } from "@/contexts/address-context";
 
 export default function HeaderStore() {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
-  const { address: contextAddress } = useContext(AddressContext);
-  const { address, isLoading, error, debugInfo } = useCurrentLocation({
-    initialAddress: contextAddress,
-  });
+  const {
+    address: contextAddress,
+    setAddress,
+    setCoordinates,
+    setLocationDetails,
+  } = useAddress();
+
+  const {
+    address,
+    isLoading,
+    error,
+    coordinates,
+    locationDetails,
+    fetchCurrentLocation,
+  } = useCurrentLocation({ initialAddress: contextAddress });
+
+  // Update context when location data changes
+  useEffect(() => {
+    if (address && address !== contextAddress) {
+      setAddress(address);
+    }
+    if (coordinates) {
+      setCoordinates(coordinates);
+    }
+    if (locationDetails) {
+      setLocationDetails(locationDetails);
+    }
+  }, [
+    address,
+    coordinates,
+    locationDetails,
+    contextAddress,
+    setAddress,
+    setCoordinates,
+    setLocationDetails,
+  ]);
+
+  // Fetch location on mount if not already in context
+  useEffect(() => {
+    if (!contextAddress) {
+      fetchCurrentLocation();
+    }
+  }, [contextAddress, fetchCurrentLocation]);
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
@@ -44,7 +78,6 @@ export default function HeaderStore() {
 
   const handleAddressClick = () => {
     setIsAddressModalOpen(true);
-    // Removed setError call as it’s not implemented
   };
 
   return (
@@ -139,14 +172,6 @@ export default function HeaderStore() {
       />
 
       {error && <div className="text-red-500 text-center">{error}</div>}
-      {debugInfo && process.env.NODE_ENV === "development" && (
-        <div className="text-xs text-gray-500 text-center">{debugInfo}</div>
-      )}
     </>
   );
-}
-
-// Temporary placeholder for setError until implemented
-function setError(_arg0: null) {
-  console.warn("setError not implemented");
 }

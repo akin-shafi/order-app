@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// FeaturedStore.tsx
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ClockIcon, StarIcon } from "@/components/icons";
 import { Heart } from "lucide-react";
 import { useAddress } from "@/contexts/address-context";
+import { useBusiness } from "@/hooks/useBusiness";
 
-interface Restaurant {
+interface Business {
   id: string;
   name: string;
   image: string;
-  deliveryTime: string;
+  city: string;
+  categories: string[];
+  priceRange: string | null;
+  deliveryTimeRange: string | null;
   rating: string;
-  reviews: string;
-  tags: string[];
-  category: string;
+  ratingCount: number;
 }
 
 const SkeletonCard = () => (
@@ -47,70 +47,28 @@ export default function FeaturedStore({
 }: {
   selectedCategory: string | null;
 }) {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const { address } = useAddress();
+  const { address, locationDetails } = useAddress();
+  const { businesses, loading, error } = useBusiness({
+    address,
+    localGovernment: locationDetails?.localGovernment,
+    state: locationDetails?.state,
+    category: selectedCategory || undefined,
+  });
 
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      const staticData = Array(6)
-        .fill(null)
-        .map((_, index) => ({
-          id: `static-${index}`,
-          name: "Iya Sharafa Bead and Bread",
-          image: "/images/beans-and-bread.png",
-          deliveryTime: "11min - 20min",
-          rating: "4.5",
-          reviews: "62",
-          tags: ["RESTAURANT", "BETA MART"],
-          category: "Food",
-        }));
+  const filteredBusinesses = businesses;
 
-      if (!address) {
-        setRestaurants(staticData);
-        return;
-      }
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch(
-          `/api/restaurants?address=${encodeURIComponent(address)}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch restaurants");
-        }
-        const data = await response.json();
-        setRestaurants(data);
-      } catch (err) {
-        setError("Error loading featured restaurants");
-        setRestaurants(staticData);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRestaurants();
-  }, [address]);
-
-  const filteredRestaurants = selectedCategory
-    ? restaurants.filter(
-        (r) => r.category?.toLowerCase() === selectedCategory.toLowerCase()
-      )
-    : restaurants;
-
-  const handleHeartClick = (e: React.MouseEvent, restaurantId: string) => {
+  const handleHeartClick = (e: React.MouseEvent, businessId: string) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(`Heart clicked for restaurant: ${restaurantId}`);
+    console.log(`Heart clicked for business: ${businessId}`);
   };
+
+  console.log("FeaturedStore - Filtered businesses:", filteredBusinesses);
 
   return (
     <section>
       <h2 className="text-xl font-medium text-[#292d32] mb-6 mt-6">
-        Featured Restaurants
+        Featured Businesses
       </h2>
 
       {loading && (
@@ -124,24 +82,64 @@ export default function FeaturedStore({
       )}
 
       {error && !loading && (
-        <div className="text-center text-red-500 mb-4">{error}</div>
+        <div className="flex flex-col items-center justify-center text-center my-4">
+          <div className="relative w-32 h-30 mb-6 rounded bg-gray-100 flex items-center justify-center">
+            <Image
+              src="/icons/empty_box.png"
+              alt="No businesses"
+              width={64}
+              height={64}
+              className="object-contain"
+            />
+          </div>
+          <h3 className="text-2xl font-bold text-black mb-2">
+            {error === "Waiting for location data..."
+              ? "Fetching your location..."
+              : "Error loading businesses"}
+          </h3>
+          <p className="text-sm text-gray-500 mb-4">
+            {error === "Waiting for location data..."
+              ? "Please wait while we get your location."
+              : "Please try again or set your location manually."}
+          </p>
+        </div>
       )}
 
-      {!loading && (
+      {!loading && !error && filteredBusinesses.length === 0 && (
+        <div className="flex flex-col items-center justify-center text-center my-4">
+          <div className="relative w-32 h-30 mb-6 rounded bg-gray-100 flex items-center justify-center">
+            <Image
+              src="/icons/empty_box.png"
+              alt="Delivery unavailable"
+              width={64}
+              height={64}
+              className="object-contain"
+            />
+          </div>
+          <h3 className=" font-bold text-md text-black mb-2">
+            No businesses found for this location or category
+          </h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Click the address field above to enter new location
+          </p>
+        </div>
+      )}
+
+      {!loading && filteredBusinesses.length > 0 && (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredRestaurants.map((restaurant, index) => (
+          {filteredBusinesses.map((business) => (
             <div
-              key={restaurant.id}
+              key={business.id}
               className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative"
             >
-              <Link href={`/store/id=${restaurant.id}`} className="block">
+              <Link href={`/store/id=${business.id}`} className="block">
                 <div className="relative hover-container">
                   <Image
-                    src={restaurant.image || "/placeholder.svg"}
-                    alt={restaurant.name}
+                    src={business.image || "/placeholder.svg"}
+                    alt={business.name}
                     width={280}
-                    height={160} // Adjusted to match h-40 (160px)
-                    className="w-full h-40 object-cover w-auto h-auto" // Preserve aspect ratio
+                    height={160}
+                    className="w-full h-40 object-cover"
                   />
                   <div className="absolute inset-0 bg-black opacity-0 overlay transition-opacity duration-300 ease-in-out"></div>
                 </div>
@@ -149,11 +147,11 @@ export default function FeaturedStore({
                 <div className="p-3">
                   <div className="flex items-center justify-between mb-1">
                     <h3 className="font-medium text-[#292d32] text-base mb-0 text-truncate hover:underline truncate-text-300">
-                      {restaurant.name}
+                      {business.name}
                     </h3>
                     <div className="flex items-center">
                       <span className="text-xs mr-1 text-[#292d32]">
-                        {restaurant.rating}({restaurant.reviews})
+                        {business.rating}({business.ratingCount})
                       </span>
                       <StarIcon className="text-yellow-400 w-4 h-4" />
                     </div>
@@ -161,23 +159,23 @@ export default function FeaturedStore({
 
                   <div className="flex items-center text-gray-500 text-xs">
                     <ClockIcon className="text-[#FF6600] mr-1 w-4 h-4" />
-                    {restaurant.deliveryTime}
+                    {business.deliveryTimeRange || "N/A"}
                   </div>
 
                   <div className="flex flex-wrap gap-3 mt-1">
-                    {restaurant.tags.map((tag, tagIndex) => (
+                    {business.categories.map((category, index) => (
                       <span
-                        key={tagIndex}
+                        key={index}
                         className="text-[#FF6600] text-xs py-0.5 rounded"
                       >
-                        {tag}
+                        {category}
                       </span>
                     ))}
                   </div>
                 </div>
               </Link>
               <button
-                onClick={(e) => handleHeartClick(e, restaurant.id)}
+                onClick={(e) => handleHeartClick(e, business.id)}
                 className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-10"
               >
                 <Heart className="h-4 w-4 text-red-400 hover:text-gray-500" />
@@ -187,11 +185,13 @@ export default function FeaturedStore({
         </div>
       )}
 
-      <div className="flex justify-center mt-6">
-        <button className="border border-gray-300 text-gray-700 px-4 py-1.5 rounded hover:bg-gray-50 transition-colors text-sm">
-          View More
-        </button>
-      </div>
+      {!loading && filteredBusinesses.length > 0 && (
+        <div className="flex justify-center mt-6">
+          <button className="border border-gray-300 text-gray-700 px-4 py-1.5 rounded hover:bg-gray-50 transition-colors text-sm">
+            View More
+          </button>
+        </div>
+      )}
     </section>
   );
 }
