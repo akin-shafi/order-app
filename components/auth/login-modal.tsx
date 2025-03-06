@@ -2,7 +2,7 @@
 
 import { useForm, Controller } from "react-hook-form";
 import { X } from "lucide-react";
-import PhoneNumberInput from "../PhoneNumberInput";
+// import PhoneNumberInput from "../PhoneNumberInput";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -87,16 +87,16 @@ export default function LoginModal({
                 }}
                 render={({ field: { onChange, value } }) => (
                   <>
-                    <PhoneNumberInput
+                    {/* <PhoneNumberInput
                       phoneNo={value || ""}
                       setPhoneNo={onChange}
                       onFocus={() => console.log("Phone input focused")}
-                    />
+                    /> */}
                     <input
                       type="tel"
                       value={value || ""}
                       onChange={(e) => onChange(e.target.value)}
-                      className="w-full p-3 border rounded-md text-[#000000]"
+                      className="w-full p-3 border rounded-md "
                     />
                   </>
                 )}

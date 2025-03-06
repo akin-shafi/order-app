@@ -80,6 +80,33 @@ body {
 }
 
 
+/* Ensure text color is always black */
+input[type="tel"] {
+  color: black;
+}
+
+/* Ensure placeholder color is always gray */
+input[type="tel"]::placeholder {
+  color: gray;
+}
+
+/* This is to support different browsers */
+input[type="tel"]::-webkit-input-placeholder {
+  color: gray;
+}
+
+input[type="tel"]:-moz-placeholder {
+  color: gray;
+}
+
+input[type="tel"]::-moz-placeholder {
+  color: gray;
+}
+
+input[type="tel"]:-ms-input-placeholder {
+  color: gray;
+}
+
 
 /* Mobile-specific modal styles */
 @media (max-width: 767px) {
