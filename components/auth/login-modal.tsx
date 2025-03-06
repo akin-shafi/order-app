@@ -1,12 +1,9 @@
 "use client";
 
-import {
-  useForm,
-  // Controller
-} from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { X } from "lucide-react";
 import "react-phone-input-2/lib/style.css";
-// import PhoneNumberInput from "../PhoneNumberInput";
+import PhoneNumberInput from "../PhoneNumberInput";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -26,7 +23,7 @@ export default function LoginModal({
   onCreateAccount,
 }: LoginModalProps) {
   const {
-    // control,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
@@ -50,8 +47,9 @@ export default function LoginModal({
 
   return (
     <div className="fixed inset-0 z-50 bg-brand-opacity flex items-center justify-center p-4 md:items-center md:justify-center">
-      <div className="bg-white rounded-lg rounded-top w-full max-w-md relative md:max-w-md mobile-modal">
+      <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
         <button
+          type="button" // Ensure no form submission
           onClick={onClose}
           className="absolute right-4 top-4 rounded-md border text-gray-400 hover:text-gray-600 p-2 bg-white"
         >
@@ -72,21 +70,21 @@ export default function LoginModal({
               >
                 Phone Number
               </label>
-              {/* <Controller
+              <Controller
                 name="phoneNumber"
                 control={control}
-                rules={{ required: "Phone number is required" }} // Basic required validation
+                rules={{ required: "Phone number is required" }}
                 render={({ field: { onChange, value } }) => (
                   <PhoneNumberInput
-                    phoneNo={value}
+                    phoneNo={value || ""} // Ensure value is always a string
                     setPhoneNo={(val) => {
-                      console.log("PhoneNo changed to:", val); // Debug the change
+                      console.log("PhoneNo changed to:", val);
                       onChange(val);
                     }}
                     onFocus={() => console.log("Phone input focused")}
                   />
                 )}
-              /> */}
+              />
               {errors.phoneNumber && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.phoneNumber.message}
@@ -105,8 +103,9 @@ export default function LoginModal({
 
           <div className="mt-4 text-center">
             <p className="text-black">
-              {`Don’t have an Account?`}{" "}
+              Don&apos;t have an Account?{" "}
               <button
+                type="button" // Prevent form submission
                 className="text-[#FF6600] cursor-pointer font-medium hover:underline"
                 onClick={onCreateAccount}
               >
