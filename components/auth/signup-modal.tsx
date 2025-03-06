@@ -1,11 +1,8 @@
 "use client";
 
-import {
-  useForm,
-  // Controller
-} from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Mail, X } from "lucide-react";
-// import PhoneNumberInput from "../PhoneNumberInput";
+import PhoneNumberInput from "../PhoneNumberInput";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -31,7 +28,7 @@ export default function SignupModal({
   const {
     register,
     handleSubmit,
-    // control,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormValues>({
     defaultValues: {
@@ -44,6 +41,10 @@ export default function SignupModal({
   });
 
   const onSubmit = async (data: SignupFormValues) => {
+    if (!/^\+234\d{10}$/.test(data.phoneNumber)) {
+      console.error("Invalid phone number submitted:", data.phoneNumber);
+      return; // Prevent submission if invalid
+    }
     try {
       console.log("Form submitted:", data);
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -54,12 +55,19 @@ export default function SignupModal({
     }
   };
 
+  const handlePhoneBlur = (value: string) => {
+    if (value && !/^\+234\d{10}$/.test(value)) {
+      console.warn("Invalid Nigerian phone number:", value);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-brand-opacity z-50 flex items-center justify-center p-4 md:items-center md:justify-center">
       <div className="bg-white rounded-lg rounded-top w-full max-w-md relative md:max-w-md mobile-modal">
         <button
+          type="button"
           onClick={onClose}
           className="absolute right-4 top-4 rounded-md border text-gray-400 hover:text-gray-600 p-2 bg-white"
         >
@@ -169,21 +177,27 @@ export default function SignupModal({
               >
                 Phone Number
               </label>
-              {/* <Controller
+              <Controller
                 name="phoneNumber"
                 control={control}
-                rules={{ required: "Phone number is required" }}
+                rules={{
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^\+234\d{10}$/,
+                    message:
+                      "Please enter a valid Nigerian phone number (e.g., +2348145360866 or 08098290445)",
+                  },
+                }}
                 render={({ field: { onChange, value } }) => (
                   <PhoneNumberInput
-                    phoneNo={value}
-                    setPhoneNo={(val) => {
-                      console.log("PhoneNo changed to:", val);
-                      onChange(val);
-                    }}
+                    value={value || ""}
+                    onChange={onChange}
                     onFocus={() => console.log("Phone input focused")}
+                    onBlur={handlePhoneBlur}
+                    hasError={!!errors.phoneNumber}
                   />
                 )}
-              /> */}
+              />
               {errors.phoneNumber && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.phoneNumber.message}
@@ -221,6 +235,7 @@ export default function SignupModal({
             <p className="text-gray-500">
               Have an Account?{" "}
               <button
+                type="button"
                 className="text-[#FF6600] cursor-pointer font-medium hover:underline"
                 onClick={onLogin}
               >
