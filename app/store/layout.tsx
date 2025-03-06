@@ -9,7 +9,7 @@ export default function StoreLayout({
   return (
     <Suspense
       fallback={
-        <div className="fixed inset-0 flex items-center h-auto justify-center bg-gray-100 bg-opacity-75 z-50">
+        <div className="fixed inset-0 flex  justify-center bg-gray-100 bg-opacity-75 z-50">
           <div className="flex flex-col items-center gap-4">
             {/* Fancy Spinner */}
             <div className="relative w-16 h-16">
