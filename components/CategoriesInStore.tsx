@@ -6,19 +6,11 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y } from "swiper/modules";
 import { categories } from "@/data/content";
-
-const backgroundColors = [
-  "#FFE0E9",
-  "#FFDFC7",
-  "#CADBFF",
-  "#A5DFC0",
-  "#FFE3B2",
-  "#A4D0A1",
-  "#FFE3B2",
-];
+import "swiper/css";
+import "swiper/css/navigation";
 
 const SkeletonCategoryCard = () => (
-  <div className="p-3 rounded-lg flex flex-col items-center animate-pulse">
+  <div className="p-3 rounded-lg flex flex-col items-center animate-pulse bg-white w-[120px]">
     <div className="w-12 h-12 mb-2 bg-gray-200 rounded-full" />
     <div className="h-3 bg-gray-200 rounded w-16" />
   </div>
@@ -38,7 +30,6 @@ export default function CategoriesInStore() {
 
   useEffect(() => {
     setMounted(true);
-    // Sync state with URL params on mount
     setSelectedCategory(searchParams.get("category"));
     setSelectedFilter(searchParams.get("filter"));
   }, [searchParams]);
@@ -80,9 +71,9 @@ export default function CategoriesInStore() {
 
   const getCardClassName = (categoryName: string) => {
     const baseClass =
-      "p-3 rounded-lg flex flex-col items-center cursor-pointer transition-all shadow-md hover:ring-1 ring-[#FF6600]";
+      "p-3 rounded-lg flex flex-col items-center cursor-pointer transition-all shadow-md hover:ring-2 hover:ring-[#FF6600] bg-white w-[120px]";
     return selectedCategory?.toLowerCase() === categoryName.toLowerCase()
-      ? `${baseClass} ring-1 ring-[#FF6600]`
+      ? `${baseClass} ring-2 ring-[#FF6600] bg-[#FFF5E6]` // Active state
       : baseClass;
   };
 
@@ -91,19 +82,20 @@ export default function CategoriesInStore() {
       "p-4 rounded-full text-sm font-medium cursor-pointer transition-colors";
     return selectedFilter?.toLowerCase() === filter.toLowerCase()
       ? `${baseClass} bg-[#1A2E20] text-white`
-      : `${baseClass} bg-[#D7F2DF]  text-[#292d32] hover:bg-gray-300`;
+      : `${baseClass} bg-[#D7F2DF] text-[#292d32] hover:bg-gray-300`;
   };
 
   return (
     <section className={sectionClassName}>
       <div className="max-w-6xl mx-auto">
+        {/* Mobile: Swiper with 2.5 items */}
         {!mounted ? (
-          <div className="md:hidden relative group">
+          <div className="md:hidden">
             <Swiper
               modules={[Navigation, A11y]}
-              spaceBetween={15}
-              slidesPerView={3}
-              className="px-1 py-2"
+              spaceBetween={20}
+              slidesPerView={2.5}
+              className="py-4 px-2"
             >
               {Array(7)
                 .fill(0)
@@ -115,34 +107,30 @@ export default function CategoriesInStore() {
             </Swiper>
           </div>
         ) : (
-          <div className="md:hidden relative group">
+          <div className="md:hidden">
             <Swiper
               modules={[Navigation, A11y]}
-              spaceBetween={15}
-              slidesPerView={3}
+              spaceBetween={20}
+              slidesPerView={2.5}
               navigation={{
                 prevEl: ".swiper-button-prev",
                 nextEl: ".swiper-button-next",
               }}
-              className="px-1 py-2"
+              className="py-4 px-2"
             >
               {categories.map((category, index) => (
                 <SwiperSlide key={index}>
                   <div
-                    style={{
-                      backgroundColor:
-                        backgroundColors[index % backgroundColors.length],
-                    }}
                     className={getCardClassName(category.name)}
                     onClick={() => handleCategoryClick(category.name)}
                   >
-                    <div className="w-12 h-12 mb-0">
+                    <div className="w-12 h-12 mb-0 flex justify-center">
                       <Image
                         src={category.image || "/placeholder.svg"}
                         alt={category.name}
                         width={48}
                         height={48}
-                        className="object-contain"
+                        className="object-contain w-auto h-auto"
                       />
                     </div>
                     <span className="text-[#292d32] font-medium text-xs text-center truncate-text">
@@ -155,8 +143,9 @@ export default function CategoriesInStore() {
           </div>
         )}
 
+        {/* Desktop: Spread all items across screen width */}
         {!mounted ? (
-          <div className="hidden md:grid md:grid-cols-8 gap-3">
+          <div className="hidden md:flex justify-between gap-4">
             {Array(7)
               .fill(0)
               .map((_, index) => (
@@ -164,27 +153,23 @@ export default function CategoriesInStore() {
               ))}
           </div>
         ) : (
-          <div className="hidden md:grid md:grid-cols-8 gap-3">
+          <div className="hidden md:flex justify-between gap-4">
             {categories.map((category, index) => (
               <div
                 key={index}
-                style={{
-                  backgroundColor:
-                    backgroundColors[index % backgroundColors.length],
-                }}
                 className={getCardClassName(category.name)}
                 onClick={() => handleCategoryClick(category.name)}
               >
-                <div className="w-12 h-12 mb-1">
+                <div className="w-12 h-12 mb-0 flex justify-center">
                   <Image
                     src={category.image || "/placeholder.svg"}
                     alt={category.name}
                     width={48}
                     height={48}
-                    className="object-contain"
+                    className="object-contain w-auto h-auto"
                   />
                 </div>
-                <span className="text-[#292d32] font-medium text-xs text-center">
+                <span className="text-[#292d32] font-medium text-xs text-center truncate-text">
                   {category.name}
                 </span>
               </div>

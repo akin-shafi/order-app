@@ -79,6 +79,14 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+.rounded-top {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+
 /* Mobile-specific modal styles */
 @media (max-width: 767px) {
   .mobile-modal {
@@ -92,12 +100,12 @@ body {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     animation: slideUp 0.3s ease-out forwards;
-    overflow-y: hidden; /* Enable vertical scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
   }
 
   /* Tiny scrollbar styling for mobile-modal */
   .mobile-modal::-webkit-scrollbar {
-    width: 4px; /* Tiny width */
+    width: 1px; /* Tiny width */
   }
 
   .mobile-modal::-webkit-scrollbar-track {
@@ -105,8 +113,8 @@ body {
   }
 
   .mobile-modal::-webkit-scrollbar-thumb {
-    background: #1A2E20; /* Scrollbar color */
-    border-radius: 2px; /* Rounded edges */
+    background: #9df0b6; /* Scrollbar color */
+    border-radius: 10px; /* Rounded edges */
   }
 
   .mobile-modal::-webkit-scrollbar-thumb:hover {

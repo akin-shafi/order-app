@@ -17,7 +17,7 @@ interface Restaurant {
   rating: string;
   reviews: string;
   tags: string[];
-  category: string; // Added category field
+  category: string;
 }
 
 const SkeletonCard = () => (
@@ -54,16 +54,18 @@ export default function FeaturedStore({
 
   useEffect(() => {
     const fetchRestaurants = async () => {
-      const staticData = Array(6).fill({
-        id: "static",
-        name: "Iya Sharafa Bead and Bread",
-        image: "/images/beans-and-bread.png?height=200&width=300",
-        deliveryTime: "11min - 20min",
-        rating: "4.5",
-        reviews: "62",
-        tags: ["RESTAURANT", "BETA MART"],
-        category: "Food",
-      });
+      const staticData = Array(6)
+        .fill(null)
+        .map((_, index) => ({
+          id: `static-${index}`,
+          name: "Iya Sharafa Bead and Bread",
+          image: "/images/beans-and-bread.png",
+          deliveryTime: "11min - 20min",
+          rating: "4.5",
+          reviews: "62",
+          tags: ["RESTAURANT", "BETA MART"],
+          category: "Food",
+        }));
 
       if (!address) {
         setRestaurants(staticData);
@@ -129,20 +131,17 @@ export default function FeaturedStore({
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredRestaurants.map((restaurant, index) => (
             <div
-              key={restaurant.id || index}
+              key={restaurant.id}
               className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative"
             >
-              <Link
-                href={`/store/id=${restaurant.id || index + 1}`}
-                className="block"
-              >
+              <Link href={`/store/id=${restaurant.id}`} className="block">
                 <div className="relative hover-container">
                   <Image
                     src={restaurant.image || "/placeholder.svg"}
                     alt={restaurant.name}
                     width={280}
-                    height={180}
-                    className="w-full h-40 object-cover"
+                    height={160} // Adjusted to match h-40 (160px)
+                    className="w-full h-40 object-cover w-auto h-auto" // Preserve aspect ratio
                   />
                   <div className="absolute inset-0 bg-black opacity-0 overlay transition-opacity duration-300 ease-in-out"></div>
                 </div>
@@ -178,9 +177,7 @@ export default function FeaturedStore({
                 </div>
               </Link>
               <button
-                onClick={(e) =>
-                  handleHeartClick(e, restaurant.id || `${index}`)
-                }
+                onClick={(e) => handleHeartClick(e, restaurant.id)}
                 className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-10"
               >
                 <Heart className="h-4 w-4 text-red-400 hover:text-gray-500" />

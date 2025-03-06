@@ -14,14 +14,13 @@ export default function FeaturesSection() {
 
           <div className="flex justify-center mb-6">
             <Image
-              src="/betaday-white.png?height=40&width=40"
+              src="/betaday-white.png" // Removed query params for clarity
               alt="Palapolo Logo"
               width={90}
               height={90}
-              className="mr-2"
+              className="mr-2 h-auto w-auto" // Ensure aspect ratio is preserved
               priority // Optional: Preload important images
             />
-            {/* <span className="text-white font-bold text-xl">palapolo</span> */}
           </div>
 
           <div className="flex justify-center space-x-4">

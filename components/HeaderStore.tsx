@@ -58,7 +58,7 @@ export default function HeaderStore() {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/">
+            <Link href="/" className="block border object-contain rounded ">
               <Image
                 src="/beta-icon.png"
                 alt="betaday logo"
@@ -66,7 +66,6 @@ export default function HeaderStore() {
                 height={55}
                 quality={55}
                 priority
-                className="object-contain rounded w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
                 sizes="(max-width: 640px) 16vw, (max-width: 768px) 20vw, (max-width: 1024px) 24vw, 28vw"
               />
             </Link>
@@ -110,12 +109,7 @@ export default function HeaderStore() {
 
             <button
               className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-              onClick={(e) => {
-                e.currentTarget.classList.add("blip-effect");
-                setTimeout(
-                  () => e.currentTarget.classList.remove("blip-effect"),
-                  300
-                );
+              onClick={() => {
                 setIsLoginModalOpen(true);
               }}
             >

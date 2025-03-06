@@ -34,7 +34,7 @@ export default function CategoriesSection() {
                   alt={category.name}
                   width={64}
                   height={64}
-                  className="object-contain"
+                  className="object-contain  w-auto h-auto"
                 />
               </div>
               <span className="text-[#292d32] font-medium text-md md:text-sm text-center">

@@ -8,14 +8,14 @@ export default function FooterStore() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0">
-            <div className=" p-3 rounded-lg">
+            <div className="p-3 rounded-lg">
               <Link href="/" className="flex items-center">
                 <Image
                   src="/betaday-white.png"
                   alt="Palapolo Logo"
                   width={70}
                   height={70}
-                  className=""
+                  className="h-auto w-auto" // Ensure aspect ratio is preserved
                   priority // Optional: Preload important images
                 />
               </Link>

@@ -18,12 +18,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  // Your metadata remains unchanged
   title:
     "Order Quality Nigerian Food Online | Beans, Dodo, Semo, Fura Delivery | BetaDay",
   description:
     "Enjoy real Naija flavors delivered fast! Order from local chefs & restaurants offering fresh Amala, Eba, Pounded Yam, Jollof Rice, Dodo, Suya, and more. Same-day delivery of home-style Nigerian meals.",
-  // ... rest of your metadata
 };
 
 export default function RootLayout({
@@ -32,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta
           name="viewport"
@@ -47,6 +45,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
+        suppressHydrationWarning
       >
         <GoogleMapsScript />
         <AddressProvider>
