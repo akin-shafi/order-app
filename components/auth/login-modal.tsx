@@ -2,7 +2,6 @@
 
 import { useForm, Controller } from "react-hook-form";
 import { X } from "lucide-react";
-import "react-phone-input-2/lib/style.css";
 import PhoneNumberInput from "../PhoneNumberInput";
 
 interface LoginModalProps {
@@ -49,7 +48,7 @@ export default function LoginModal({
     <div className="fixed inset-0 z-50 bg-brand-opacity flex items-center justify-center p-4 md:items-center md:justify-center">
       <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
         <button
-          type="button" // Ensure no form submission
+          type="button"
           onClick={onClose}
           className="absolute right-4 top-4 rounded-md border text-gray-400 hover:text-gray-600 p-2 bg-white"
         >
@@ -74,16 +73,27 @@ export default function LoginModal({
                 name="phoneNumber"
                 control={control}
                 rules={{ required: "Phone number is required" }}
-                render={({ field: { onChange, value } }) => (
-                  <PhoneNumberInput
-                    phoneNo={value || ""} // Ensure value is always a string
-                    setPhoneNo={(val) => {
-                      console.log("PhoneNo changed to:", val);
-                      onChange(val);
-                    }}
-                    onFocus={() => console.log("Phone input focused")}
-                  />
-                )}
+                render={({ field: { onChange, value } }) => {
+                  try {
+                    return (
+                      <PhoneNumberInput
+                        phoneNo={value || ""}
+                        setPhoneNo={(val) => {
+                          console.log("PhoneNo changed to:", val);
+                          onChange(val);
+                        }}
+                        onFocus={() => console.log("Phone input focused")}
+                      />
+                    );
+                  } catch (error) {
+                    console.error("Error rendering PhoneNumberInput:", error);
+                    return (
+                      <div className="text-red-500">
+                        Phone input failed to load
+                      </div>
+                    );
+                  }
+                }}
               />
               {errors.phoneNumber && (
                 <p className="mt-1 text-sm text-red-500">
@@ -103,9 +113,9 @@ export default function LoginModal({
 
           <div className="mt-4 text-center">
             <p className="text-black">
-              Don&apos;t have an Account?{" "}
+              Don’t have an Account?{" "}
               <button
-                type="button" // Prevent form submission
+                type="button"
                 className="text-[#FF6600] cursor-pointer font-medium hover:underline"
                 onClick={onCreateAccount}
               >

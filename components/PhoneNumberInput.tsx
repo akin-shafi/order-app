@@ -1,3 +1,5 @@
+"use client";
+
 import PhoneInput from "react-phone-input-2";
 
 interface Props {
@@ -13,9 +15,9 @@ export default function PhoneNumberInput({
 }: Props) {
   return (
     <PhoneInput
-      country={"ng"}
-      countryCodeEditable={true}
-      value={phoneNo}
+      country="ng"
+      countryCodeEditable={false}
+      value={phoneNo || ""} // Ensure value is always a string
       onChange={setPhoneNo}
       buttonClass="h-full w-fit"
       enableSearch
