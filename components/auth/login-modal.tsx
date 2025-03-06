@@ -32,6 +32,11 @@ export default function LoginModal({
   });
 
   const onSubmit = async (data: LoginFormValues) => {
+    // Final validation before submission
+    if (!/^\+234\d{10}$/.test(data.phoneNumber)) {
+      console.error("Invalid phone number submitted:", data.phoneNumber);
+      return; // Prevent submission if invalid
+    }
     try {
       console.log("Login form submitted:", data);
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -72,28 +77,21 @@ export default function LoginModal({
               <Controller
                 name="phoneNumber"
                 control={control}
-                rules={{ required: "Phone number is required" }}
-                render={({ field: { onChange, value } }) => {
-                  try {
-                    return (
-                      <PhoneNumberInput
-                        phoneNo={value || ""}
-                        setPhoneNo={(val) => {
-                          console.log("PhoneNo changed to:", val);
-                          onChange(val);
-                        }}
-                        onFocus={() => console.log("Phone input focused")}
-                      />
-                    );
-                  } catch (error) {
-                    console.error("Error rendering PhoneNumberInput:", error);
-                    return (
-                      <div className="text-red-500">
-                        Phone input failed to load
-                      </div>
-                    );
-                  }
+                rules={{
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^\+234\d{10}$/,
+                    message:
+                      "Please enter a valid Nigerian phone number (e.g., +2348145360866 or 08098290445)",
+                  },
                 }}
+                render={({ field: { onChange, value } }) => (
+                  <PhoneNumberInput
+                    phoneNo={value || ""}
+                    setPhoneNo={onChange}
+                    onFocus={() => console.log("Phone input focused")}
+                  />
+                )}
               />
               {errors.phoneNumber && (
                 <p className="mt-1 text-sm text-red-500">
