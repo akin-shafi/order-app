@@ -25,9 +25,9 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
     // Handle local (e.g., "08098290445") or international (e.g., "+2348145360866")
     let newValue = cleanedValue;
     if (cleanedValue.startsWith("0") && !cleanedValue.startsWith("+")) {
-      newValue = "+234" + cleanedValue.slice(1); // Convert local to international
-    } else if (!cleanedValue.startsWith("+234") && cleanedValue.length > 0) {
-      newValue = "+234" + cleanedValue; // Prepend +234 if missing
+      newValue = "234" + cleanedValue.slice(1); // Convert local to international
+    } else if (!cleanedValue.startsWith("234") && cleanedValue.length > 0) {
+      newValue = "234" + cleanedValue; // Prepend +234 if missing
     }
 
     // Limit to 13 characters (+234 and 10 digits)
