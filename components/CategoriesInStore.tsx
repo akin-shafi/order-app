@@ -79,7 +79,7 @@ export default function CategoriesInStore() {
 
   const getFilterButtonClassName = (filter: string) => {
     const baseClass =
-      "p-4 rounded-full text-sm font-medium cursor-pointer transition-colors";
+      "p-4 rounded-full text-[#292d32] font-medium text-md md:text-sm text-center truncate-text cursor-pointer transition-colors";
     return selectedFilter?.toLowerCase() === filter.toLowerCase()
       ? `${baseClass} bg-[#1A2E20] text-white`
       : `${baseClass} bg-[#D7F2DF] text-[#292d32] hover:bg-gray-300`;
@@ -133,7 +133,7 @@ export default function CategoriesInStore() {
                         className="object-contain w-auto h-auto"
                       />
                     </div>
-                    <span className="text-[#292d32] font-medium text-xs text-center truncate-text">
+                    <span className="text-[#292d32] font-medium text-md md:text-sm text-center truncate-text">
                       {category.name}
                     </span>
                   </div>
@@ -169,7 +169,7 @@ export default function CategoriesInStore() {
                     className="object-contain w-auto h-auto"
                   />
                 </div>
-                <span className="text-[#292d32] font-medium text-xs text-center truncate-text">
+                <span className="text-[#292d32] font-medium text-md md:text-sm text-center truncate-text">
                   {category.name}
                 </span>
               </div>
