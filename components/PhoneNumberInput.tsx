@@ -14,7 +14,7 @@ export default function PhoneNumberInput({
   onFocus,
   setPhoneNo,
 }: Props) {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: { target: { value: string } }) => {
     let value = e.target.value.trim();
     // Remove non-digits except the leading +
     const cleanedValue = value.replace(/[^+\d]/g, "");
