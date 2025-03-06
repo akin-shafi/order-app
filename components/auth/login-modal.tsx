@@ -1,9 +1,12 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import {
+  useForm,
+  // Controller
+} from "react-hook-form";
 import { X } from "lucide-react";
 import "react-phone-input-2/lib/style.css";
-import PhoneNumberInput from "../PhoneNumberInput";
+// import PhoneNumberInput from "../PhoneNumberInput";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -23,7 +26,7 @@ export default function LoginModal({
   onCreateAccount,
 }: LoginModalProps) {
   const {
-    control,
+    // control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
@@ -69,7 +72,7 @@ export default function LoginModal({
               >
                 Phone Number
               </label>
-              <Controller
+              {/* <Controller
                 name="phoneNumber"
                 control={control}
                 rules={{ required: "Phone number is required" }} // Basic required validation
@@ -83,7 +86,7 @@ export default function LoginModal({
                     onFocus={() => console.log("Phone input focused")}
                   />
                 )}
-              />
+              /> */}
               {errors.phoneNumber && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.phoneNumber.message}
