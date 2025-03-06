@@ -33,7 +33,6 @@ export default function RestaurantPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-
   const getMenuItems = (): MenuItem[] => {
     if (activeCategory === "all") {
       return Object.values(menuItemsByCategory).flat();
@@ -64,7 +63,7 @@ export default function RestaurantPage() {
               className="inline-flex items-center text-gray-600 mb-6"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Restaurant
+              Back to Business
             </Link>
 
             {/* Restaurant info */}
