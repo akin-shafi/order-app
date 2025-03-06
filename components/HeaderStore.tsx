@@ -22,7 +22,6 @@ export default function HeaderStore() {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search input
 
   const { address: contextAddress } = useContext(AddressContext);
   const { address, isLoading, error, debugInfo } = useCurrentLocation({
@@ -45,98 +44,78 @@ export default function HeaderStore() {
 
   const handleAddressClick = () => {
     setIsAddressModalOpen(true);
-  };
-
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent page refresh on form submit
-    if (!searchQuery.trim()) {
-      console.log("Search query is empty");
-      return;
-    }
-    console.log("Searching for:", searchQuery);
-    // Add your search logic here (e.g., API call, navigation, etc.)
-    // Example: router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-    setSearchQuery(""); // Optional: Clear input after search
+    // Removed setError call as it’s not implemented
   };
 
   return (
     <>
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
-        <div className="max-w-6xl mx-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          {/* Top Row: Logo, Location, Cart, User */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="block border object-contain rounded">
-                <Image
-                  src="/beta-icon.png"
-                  alt="betaday logo"
-                  width={55}
-                  height={55}
-                  quality={55}
-                  priority
-                  sizes="(max-width: 640px) 16vw, (max-width: 768px) 20vw, (max-width: 1024px) 24vw, 28vw"
-                />
-              </Link>
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="block border object-contain rounded">
+              <Image
+                src="/beta-icon.png"
+                alt="betaday logo"
+                width={55}
+                height={55}
+                quality={55}
+                priority
+                sizes="(max-width: 640px) 16vw, (max-width: 768px) 20vw, (max-width: 1024px) 24vw, 28vw"
+              />
+            </Link>
 
-              <div className="flex items-center text-gray-600">
-                <span className="flex items-center ml-2 md:ml-5 mr-6">
-                  <button
-                    type="button"
-                    onClick={handleAddressClick}
-                    className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
-                  >
-                    <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
-                    {isLoading ? "Locating..." : address || "Set your location"}
-                  </button>
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.classList.add("blip-effect");
-                  setTimeout(
-                    () => e.currentTarget.classList.remove("blip-effect"),
-                    300
-                  );
-                }}
-              >
-                <ShoppingCart size={24} />
-                <CartBadge />
-              </button>
-
-              <button
-                type="button"
-                className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log("User icon clicked, opening login modal");
-                  setIsLoginModalOpen(true);
-                }}
-              >
-                <User className="h-6 w-6" />
-              </button>
+            <div className="flex items-center text-gray-600">
+              <span className="flex items-center ml-2 md:ml-5 mr-6">
+                <button
+                  type="button"
+                  onClick={handleAddressClick}
+                  className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
+                >
+                  <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
+                  {isLoading ? "Locating..." : address || "Set your location"}
+                </button>
+              </span>
             </div>
           </div>
 
-          {/* Search Input: Bottom on mobile, inline on desktop */}
-          <form
-            onSubmit={handleSearch}
-            className="relative w-full md:w-64 md:flex-shrink-0"
-          >
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="What can we get you?"
-              className="w-full bg-[#f2f2f2] rounded py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A2E20]"
-            />
-          </form>
+          <div className="flex items-center gap-3">
+            <div className="relative hidden md:block">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <input
+                type="text"
+                placeholder="What can we get you?"
+                className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A2E20]"
+              />
+            </div>
+
+            <button
+              type="button"
+              className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              onClick={(e) => {
+                e.preventDefault();
+                e.currentTarget.classList.add("blip-effect");
+                setTimeout(
+                  () => e.currentTarget.classList.remove("blip-effect"),
+                  300
+                );
+              }}
+            >
+              <ShoppingCart size={24} />
+              <CartBadge />
+            </button>
+
+            <button
+              type="button"
+              className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              onClick={(e) => {
+                e.preventDefault();
+                console.log("User icon clicked, opening login modal");
+                setIsLoginModalOpen(true);
+              }}
+            >
+              <User className="h-6 w-6" />
+            </button>
+          </div>
         </div>
       </header>
 
