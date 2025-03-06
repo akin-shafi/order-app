@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-// HeaderStore.tsx
 
 import React, { useState, useContext } from "react";
 import Image from "next/image";
@@ -9,7 +8,6 @@ import { MapPin, Search, ShoppingCart, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
-import { CartIcon } from "./icons";
 import AddressSearchModal from "./modal/address-search-modal";
 import { useCurrentLocation } from "@/utils/useCurrentLocation";
 import Link from "next/link";
@@ -49,7 +47,7 @@ export default function HeaderStore() {
   const handleAddressClick = () => {
     setIsAddressModalOpen(true);
     if (error) {
-      setError(null);
+      setError(null); // Note: This function isn't implemented; consider fixing or removing
     }
   };
 
@@ -58,7 +56,7 @@ export default function HeaderStore() {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="block border object-contain rounded ">
+            <Link href="/" className="block border object-contain rounded">
               <Image
                 src="/beta-icon.png"
                 alt="betaday logo"
@@ -73,6 +71,7 @@ export default function HeaderStore() {
             <div className="flex items-center text-gray-600">
               <span className="flex items-center ml-2 md:ml-5 mr-6">
                 <button
+                  type="button" // Prevent form submission
                   onClick={handleAddressClick}
                   className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
                 >
@@ -94,8 +93,10 @@ export default function HeaderStore() {
             </div>
 
             <button
+              type="button" // Prevent form submission
               className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               onClick={(e) => {
+                e.preventDefault(); // Stop page refresh
                 e.currentTarget.classList.add("blip-effect");
                 setTimeout(
                   () => e.currentTarget.classList.remove("blip-effect"),
@@ -108,8 +109,11 @@ export default function HeaderStore() {
             </button>
 
             <button
+              type="button" // Prevent form submission
               className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault(); // Stop page refresh
+                console.log("User icon clicked, opening login modal"); // Debug
                 setIsLoginModalOpen(true);
               }}
             >
@@ -145,6 +149,8 @@ export default function HeaderStore() {
     </>
   );
 }
-function setError(arg0: null) {
-  throw new Error("Function not implemented.");
+
+// Temporary placeholder for setError until implemented
+function setError(_arg0: null) {
+  console.warn("setError not implemented");
 }

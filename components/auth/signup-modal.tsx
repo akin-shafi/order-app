@@ -55,7 +55,7 @@ export default function SignupModal({
 
   return (
     <div className="fixed inset-0 bg-brand-opacity z-50 flex items-center justify-center p-4 md:items-center md:justify-center">
-      <div className="bg-white rounded-top w-full max-w-md relative md:max-w-md mobile-modal">
+      <div className="bg-white rounded-lg rounded-top w-full max-w-md relative md:max-w-md mobile-modal">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-md border text-gray-400 hover:text-gray-600 p-2 bg-white"

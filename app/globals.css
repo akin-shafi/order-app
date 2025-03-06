@@ -79,16 +79,17 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+
+
+/* Mobile-specific modal styles */
+@media (max-width: 767px) {
+  
 .rounded-top {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
-
-
-/* Mobile-specific modal styles */
-@media (max-width: 767px) {
   .mobile-modal {
     position: fixed;
     bottom: 0;
