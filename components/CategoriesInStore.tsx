@@ -8,7 +8,10 @@ import { Navigation, A11y } from "swiper/modules";
 import { categories } from "@/data/content";
 import "swiper/css";
 import "swiper/css/navigation";
-import { ArrowLeft, Search } from "lucide-react";
+import {
+  ArrowLeft,
+  // Search
+} from "lucide-react";
 import Link from "next/link";
 
 const SkeletonCategoryCard = () => (
@@ -20,7 +23,7 @@ const SkeletonCategoryCard = () => (
 
 export default function CategoriesInStore() {
   const [mounted, setMounted] = useState(false);
-  const [mobileSearch, setMobileSearch] = useState(""); // State for mobile search
+  // const [mobileSearch, setMobileSearch] = useState(""); // State for mobile search
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -68,21 +71,21 @@ export default function CategoriesInStore() {
   };
 
   // Handle search functionality
-  const handleSearch = (query: string) => {
-    if (!query.trim()) {
-      console.log("Mobile search: Empty query");
-      return;
-    }
-    console.log("Mobile search query:", query);
-    // Example: Filter categories or redirect
-    const filteredCategories = categories.filter((cat) =>
-      cat.name.toLowerCase().includes(query.toLowerCase())
-    );
-    console.log("Filtered categories:", filteredCategories);
-    // Optional: Redirect to a search results page
-    // router.push(`/store?search=${encodeURIComponent(query)}`);
-    setMobileSearch(""); // Clear input after search (optional)
-  };
+  // const handleSearch = (query: string) => {
+  //   if (!query.trim()) {
+  //     console.log("Mobile search: Empty query");
+  //     return;
+  //   }
+  //   console.log("Mobile search query:", query);
+  //   // Example: Filter categories or redirect
+  //   const filteredCategories = categories.filter((cat) =>
+  //     cat.name.toLowerCase().includes(query.toLowerCase())
+  //   );
+  //   console.log("Filtered categories:", filteredCategories);
+  //   // Optional: Redirect to a search results page
+  //   // router.push(`/store?search=${encodeURIComponent(query)}`);
+  //   setMobileSearch(""); // Clear input after search (optional)
+  // };
 
   const sectionClassName =
     pathname === "/store"
@@ -113,7 +116,7 @@ export default function CategoriesInStore() {
       </Link>
 
       {/* Mobile/Tablet Search Input */}
-      <div className="relative block md:hidden flex items-center mb-4">
+      {/* <div className="relative block md:hidden flex items-center mb-4">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
         <input
           type="text"
@@ -138,7 +141,7 @@ export default function CategoriesInStore() {
         >
           <Search size={16} />
         </button>
-      </div>
+      </div> */}
 
       <div className="max-w-6xl mx-auto">
         {/* Mobile: Swiper with 2.5 items */}
