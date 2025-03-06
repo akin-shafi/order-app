@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
 import { CartProvider } from "@/contexts/cart-context";
 import GoogleMapsScript from "@/components/google-maps-script";
-import "react-phone-input-2/lib/style.css";
+// import "react-phone-input-2/lib/style.css";
 import "./globals.css";
 
 const geistSans = Geist({
