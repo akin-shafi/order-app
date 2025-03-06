@@ -47,78 +47,77 @@ export default function HeaderStore() {
   const handleAddressClick = () => {
     setIsAddressModalOpen(true);
     if (error) {
-      setError(null); // Note: This function isn't implemented; consider fixing or removing
+      setError(null); // Placeholder until implemented
     }
   };
 
   return (
     <>
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="block border object-contain rounded">
-              <Image
-                src="/beta-icon.png"
-                alt="betaday logo"
-                width={55}
-                height={55}
-                quality={55}
-                priority
-                sizes="(max-width: 640px) 16vw, (max-width: 768px) 20vw, (max-width: 1024px) 24vw, 28vw"
-              />
-            </Link>
+        <div className="max-w-6xl mx-auto flex flex-col gap-3">
+          {/* Top Row: Logo, Location, Cart, User */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/" className="block border object-contain rounded">
+                <Image
+                  src="/beta-icon.png"
+                  alt="betaday logo"
+                  width={55}
+                  height={55}
+                  quality={55}
+                  priority
+                  sizes="(max-width: 640px) 16vw, (max-width: 768px) 20vw, (max-width: 1024px) 24vw, 28vw"
+                />
+              </Link>
 
-            <div className="flex items-center text-gray-600">
-              <span className="flex items-center ml-2 md:ml-5 mr-6">
-                <button
-                  type="button" // Prevent form submission
-                  onClick={handleAddressClick}
-                  className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
-                >
-                  <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
-                  {isLoading ? "Locating..." : address || "Set your location"}
-                </button>
-              </span>
+              <div className="flex items-center text-gray-600">
+                <span className="flex items-center ml-2 md:ml-5 mr-6">
+                  <button
+                    type="button"
+                    onClick={handleAddressClick}
+                    className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
+                  >
+                    <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
+                    {isLoading ? "Locating..." : address || "Set your location"}
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                className="relative border bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <ShoppingCart size={24} />
+                <CartBadge />
+              </button>
+
+              <button
+                type="button"
+                className="relative border bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log("User icon clicked, opening login modal");
+                  setIsLoginModalOpen(true);
+                }}
+              >
+                <User className="h-6 w-6" />
+              </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="text"
-                placeholder="What can we get you?"
-                className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm bg-focus"
-              />
-            </div>
-
-            <button
-              type="button" // Prevent form submission
-              className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-              onClick={(e) => {
-                e.preventDefault(); // Stop page refresh
-                e.currentTarget.classList.add("blip-effect");
-                setTimeout(
-                  () => e.currentTarget.classList.remove("blip-effect"),
-                  300
-                );
-              }}
-            >
-              <ShoppingCart size={24} />
-              <CartBadge />
-            </button>
-
-            <button
-              type="button" // Prevent form submission
-              className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-              onClick={(e) => {
-                e.preventDefault(); // Stop page refresh
-                console.log("User icon clicked, opening login modal"); // Debug
-                setIsLoginModalOpen(true);
-              }}
-            >
-              <User className="h-6 w-6" />
-            </button>
+          {/* Bottom Row: Search Input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder="What can we get you?"
+              className="w-full bg-[#f2f2f2] rounded py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A2E20]"
+            />
           </div>
         </div>
       </header>
