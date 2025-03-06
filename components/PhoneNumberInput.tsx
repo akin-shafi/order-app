@@ -3,49 +3,54 @@
 import React from "react";
 import Image from "next/image";
 
-interface Props {
-  phoneNo: string;
+interface PhoneNumberInputProps {
+  value: string;
+  onChange: (value: string) => void;
   onFocus?: () => void;
-  setPhoneNo: (value: string) => void;
+  onBlur?: (value: string) => void;
+  hasError?: boolean; // Optional prop to style based on errors
 }
 
-export default function PhoneNumberInput({
-  phoneNo,
+const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
+  value,
+  onChange,
   onFocus,
-  setPhoneNo,
-}: Props) {
-  const handleChange = (e: { target: { value: string } }) => {
-    let value = e.target.value.trim();
-    // Remove non-digits except the leading +
-    const cleanedValue = value.replace(/[^+\d]/g, "");
+  onBlur,
+  hasError = false,
+}) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value.trim();
+    const cleanedValue = inputValue.replace(/[^+\d]/g, ""); // Remove non-digits except +
 
-    // Handle local format (e.g., "08098290445") or international (e.g., "+2348098290445")
+    // Handle local (e.g., "08098290445") or international (e.g., "+2348145360866")
+    let newValue = cleanedValue;
     if (cleanedValue.startsWith("0") && !cleanedValue.startsWith("+")) {
-      value = "+234" + cleanedValue.slice(1); // Convert local to international
+      newValue = "+234" + cleanedValue.slice(1); // Convert local to international
     } else if (!cleanedValue.startsWith("+234") && cleanedValue.length > 0) {
-      value = "+234" + cleanedValue; // Prepend +234 if missing
-    } else {
-      value = cleanedValue; // Keep as is if it starts with +234
+      newValue = "+234" + cleanedValue; // Prepend +234 if missing
     }
 
     // Limit to 13 characters (+234 and 10 digits)
-    if (value.length > 13) {
-      value = value.slice(0, 13);
+    if (newValue.length > 13) {
+      newValue = newValue.slice(0, 13);
     }
 
-    console.log("Phone number changed:", value);
-    setPhoneNo(value);
+    console.log("Phone number changed:", newValue);
+    onChange(newValue);
   };
 
-  const handleBlur = () => {
-    // Validation: Check if it's a valid Nigerian number
-    if (phoneNo && !/^\+234\d{10}$/.test(phoneNo)) {
-      console.warn("Invalid Nigerian phone number:", phoneNo);
+  const handleBlurEvent = () => {
+    if (onBlur) {
+      onBlur(value);
     }
   };
 
   return (
-    <div className="flex items-center w-full border border-gray-300 rounded-md h-[38px] overflow-hidden">
+    <div
+      className={`flex items-center w-full border rounded-md h-[38px] overflow-hidden ${
+        hasError ? "border-red-500" : "border-gray-300"
+      }`}
+    >
       {/* Flag and Country Code Prefix */}
       <div className="flex items-center bg-gray-100 border-r border-gray-300 px-2 h-full">
         <Image
@@ -60,14 +65,18 @@ export default function PhoneNumberInput({
       {/* Phone Input */}
       <input
         type="tel"
-        value={phoneNo}
+        value={value}
         onChange={handleChange}
         onFocus={onFocus}
-        onBlur={handleBlur}
+        onBlur={handleBlurEvent}
         placeholder="8098290445"
-        className="flex-1 h-full p-2 text-black focus:outline-none focus:ring-1 focus:ring-[#1A2E20] rounded-r-md"
-        maxLength={13} // +234 and 10 digits
+        className={`flex-1 h-full p-2 text-black focus:outline-none focus:ring-1 focus:ring-[#1A2E20] rounded-r-md ${
+          hasError ? "border-red-500" : ""
+        }`}
+        maxLength={13}
       />
     </div>
   );
-}
+};
+
+export default PhoneNumberInput;

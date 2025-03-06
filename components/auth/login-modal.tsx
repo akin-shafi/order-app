@@ -2,7 +2,7 @@
 
 import { useForm, Controller } from "react-hook-form";
 import { X } from "lucide-react";
-import Image from "next/image";
+import PhoneNumberInput from "../PhoneNumberInput";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -44,31 +44,6 @@ export default function LoginModal({
     } catch (error) {
       console.error("Error submitting form:", error);
     }
-  };
-
-  const handlePhoneChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    onChange: (value: string) => void
-  ) => {
-    let value = e.target.value.trim();
-    const cleanedValue = value.replace(/[^+\d]/g, ""); // Remove non-digits except +
-
-    // Handle local (e.g., "08098290445") or international (e.g., "+2348145360866")
-    if (cleanedValue.startsWith("0") && !cleanedValue.startsWith("+")) {
-      value = "+234" + cleanedValue.slice(1); // Convert local to international
-    } else if (!cleanedValue.startsWith("+234") && cleanedValue.length > 0) {
-      value = "+234" + cleanedValue; // Prepend +234 if missing
-    } else {
-      value = cleanedValue; // Keep as is if it starts with +234
-    }
-
-    // Limit to 13 characters (+234 and 10 digits)
-    if (value.length > 13) {
-      value = value.slice(0, 13);
-    }
-
-    console.log("Phone number changed:", value);
-    onChange(value);
   };
 
   const handlePhoneBlur = (value: string) => {
@@ -116,30 +91,13 @@ export default function LoginModal({
                   },
                 }}
                 render={({ field: { onChange, value } }) => (
-                  <div className="flex items-center w-full border border-gray-300 rounded-md h-[38px] overflow-hidden">
-                    {/* Flag and Country Code Prefix */}
-                    <div className="flex items-center bg-gray-100 border-r border-gray-300 px-2 h-full">
-                      <Image
-                        src="/flags/ng.png" // Nigerian flag in public/flags/ng.png
-                        alt="Nigeria Flag"
-                        width={24}
-                        height={16}
-                        className="mr-1"
-                      />
-                      <span className="text-black font-medium">+234</span>
-                    </div>
-                    {/* Phone Input */}
-                    <input
-                      type="tel"
-                      value={value || ""}
-                      onChange={(e) => handlePhoneChange(e, onChange)}
-                      onFocus={() => console.log("Phone input focused")}
-                      onBlur={() => handlePhoneBlur(value || "")}
-                      placeholder="8098290445"
-                      className="flex-1 h-full p-2 text-black focus:outline-none focus:ring-1 focus:ring-[#1A2E20] rounded-r-md"
-                      maxLength={13}
-                    />
-                  </div>
+                  <PhoneNumberInput
+                    value={value || ""}
+                    onChange={onChange}
+                    onFocus={() => console.log("Phone input focused")}
+                    onBlur={handlePhoneBlur}
+                    hasError={!!errors.phoneNumber}
+                  />
                 )}
               />
               {errors.phoneNumber && (

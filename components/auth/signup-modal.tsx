@@ -1,8 +1,11 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import {
+  useForm,
+  // Controller
+} from "react-hook-form";
 import { Mail, X } from "lucide-react";
-import PhoneNumberInput from "../PhoneNumberInput";
+// import PhoneNumberInput from "../PhoneNumberInput";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -28,7 +31,7 @@ export default function SignupModal({
   const {
     register,
     handleSubmit,
-    control,
+    // control,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormValues>({
     defaultValues: {
@@ -166,7 +169,7 @@ export default function SignupModal({
               >
                 Phone Number
               </label>
-              <Controller
+              {/* <Controller
                 name="phoneNumber"
                 control={control}
                 rules={{ required: "Phone number is required" }}
@@ -180,7 +183,7 @@ export default function SignupModal({
                     onFocus={() => console.log("Phone input focused")}
                   />
                 )}
-              />
+              /> */}
               {errors.phoneNumber && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.phoneNumber.message}
