@@ -7,6 +7,7 @@ import { useCart } from "@/contexts/cart-context";
 
 interface CartItemProps {
   id: string;
+  packId: string;
   name: string;
   description: string;
   price: string;
@@ -16,6 +17,7 @@ interface CartItemProps {
 
 export default function CartItem({
   id,
+  packId,
   name,
   description,
   price,
@@ -49,8 +51,8 @@ export default function CartItem({
             <button
               onClick={() =>
                 dispatch({
-                  type: "UPDATE_QUANTITY",
-                  payload: { id, quantity: quantity - 1 },
+                  type: "UPDATE_ITEM_QUANTITY",
+                  payload: { packId, itemId: id, quantity: quantity - 1 },
                 })
               }
               className="p-1 rounded-md hover:bg-gray-100"
@@ -61,8 +63,8 @@ export default function CartItem({
             <button
               onClick={() =>
                 dispatch({
-                  type: "UPDATE_QUANTITY",
-                  payload: { id, quantity: quantity + 1 },
+                  type: "UPDATE_ITEM_QUANTITY",
+                  payload: { packId, itemId: id, quantity: quantity + 1 },
                 })
               }
               className="p-1 rounded-md hover:bg-gray-100"
@@ -74,7 +76,7 @@ export default function CartItem({
           <div className="flex items-center gap-4">
             <span className="font-bold">{price}</span>
             <button
-              onClick={() => dispatch({ type: "REMOVE_ITEM", payload: id })}
+              onClick={() => dispatch({ type: "REMOVE_PACK", payload: packId })}
               className="p-1 text-red-500 hover:bg-red-50 rounded-md"
             >
               <Trash2 className="w-4 h-4" />
