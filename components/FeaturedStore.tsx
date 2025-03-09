@@ -67,7 +67,7 @@ export default function FeaturedStore({
 
   return (
     <section>
-      <h2 className="text-xl font-medium text-[#292d32] mb-6 mt-6">
+      <h2 className="text-2xl font-bold text-[#1a2e20] mb-6 flex items-center">
         Featured Businesses
       </h2>
 

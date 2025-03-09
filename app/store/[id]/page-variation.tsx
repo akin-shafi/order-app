@@ -9,10 +9,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { useCart } from "@/contexts/cart-context";
-import { useAddress } from "@/contexts/address-context";
+import { useAddress } from "@/contexts/address-context"; // Import address context
 import Cart from "@/components/cart/cart";
-import { Slider } from "antd";
-import ItemModal from "@/components/modal/ItemModal"; // Import the new modal
 import {
   restaurant,
   menuItemsByCategory,
@@ -31,42 +29,30 @@ type MenuItem = {
 export default function RestaurantPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const { dispatch } = useCart();
-  const { address, setAddress, setCoordinates } = useAddress();
+  const { address, setAddress, setCoordinates } = useAddress(); // Get address from context
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [priceRange, setPriceRange] = useState<[number, number]>([500, 10000]);
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null); // State for the selected item
 
-  // Convert price string to number for filtering
-  const parsePrice = (price: string): number => {
-    return parseFloat(price.replace(/[^\d.]/g, "")) || 0;
-  };
-
-  // Filter menu items by category and price range
   const getMenuItems = (): MenuItem[] => {
-    const items =
-      activeCategory === "all"
-        ? Object.values(menuItemsByCategory).flat()
-        : menuItemsByCategory[activeCategory as keyof typeof menuItemsByCategory] || [];
-
-    return items.filter((item) => {
-      const itemPrice = parsePrice(item.price);
-      return itemPrice >= priceRange[0] && itemPrice <= priceRange[1];
-    });
+    if (activeCategory === "all") {
+      return Object.values(menuItemsByCategory).flat();
+    }
+    return (
+      menuItemsByCategory[activeCategory as keyof typeof menuItemsByCategory] ||
+      []
+    );
   };
 
   const getProgressBarPosition = () => {
-    const index = sampleCategories.findIndex((cat) => cat.id === activeCategory);
+    const index = sampleCategories.findIndex(
+      (cat) => cat.id === activeCategory
+    );
     return `${(index / (sampleCategories.length - 1)) * 100}%`;
   };
 
-  // Set fixed price range limits with flexibility
-  const minPrice = 0;
-  const maxPrice = 15000;
-
   return (
     <div className="min-h-screen bg-white">
-      <HeaderStore />
+      <HeaderStore /> {/* No props needed, fetches address internally */}
       <main className="max-w-6xl mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left column - Restaurant details and menu */}
@@ -136,53 +122,28 @@ export default function RestaurantPage() {
             <div className="mb-8 text-[#292d32]">
               <h2 className="text-xl font-bold mb-4">Categories</h2>
 
-              <div className="flex flex-col gap-4">
-                {/* Category Tabs */}
-                <div className="flex overflow-x-auto pb-2 -mx-1 scrollbar-hide">
-                  {sampleCategories.map((category) => (
-                    <button
-                      key={category.id}
-                      onClick={() => setActiveCategory(category.id)}
-                      className={`px-4 py-2 mx-1 rounded-md text-sm whitespace-nowrap transition-colors duration-200 flex items-center justify-center
-                        ${
-                          activeCategory === category.id
-                            ? "bg-[#1A2E20] text-white shadow-md"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }
-                      `}
-                    >
-                      {category.name}
-                      <span className="ml-1 text-xs opacity-60">
-                        ({category.count})
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                {/* Price Filter */}
-                <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-                  <h3 className="text-md font-semibold mb-2 text-[#292d32]">
-                    Filter by Price (Naira)
-                  </h3>
-                  <Slider
-                    range
-                    min={minPrice}
-                    max={maxPrice}
-                    value={priceRange}
-                    onChange={(value) => setPriceRange(value as [number, number])}
-                    tooltip={{ formatter: (value) => `₦${value}` }}
-                    className="w-full"
-                    trackStyle={[{ backgroundColor: "#1A2E20" }]}
-                    handleStyle={[{ borderColor: "#FF6600", borderWidth: 2 }]}
-                    railStyle={{ backgroundColor: "#e0e0e0" }}
-                  />
-                  <div className="mt-2 text-sm text-gray-600">
-                    Price Range: ₦{priceRange[0]} - ₦{priceRange[1]}
-                  </div>
-                </div>
+              <div className="flex overflow-x-auto pb-2 -mx-1">
+                {sampleCategories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => setActiveCategory(category.id)}
+                    className={`px-4 py-2 mx-1 rounded-md text-sm whitespace-nowrap transition-colors relative
+                      ${
+                        category.id === activeCategory
+                          ? "bg-[#1A2E20] text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }
+                    `}
+                  >
+                    {category.name}
+                    <span className="ml-1 text-xs opacity-60">
+                      ({category.count})
+                    </span>
+                  </button>
+                ))}
               </div>
 
-              <div className="mt-4 h-1 bg-gray-200 rounded-full relative">
+              <div className="mt-2 h-1 bg-gray-200 rounded-full relative">
                 <motion.div
                   className="absolute h-full bg-[#1A2E20] rounded-full"
                   initial={false}
@@ -208,37 +169,55 @@ export default function RestaurantPage() {
                 {getMenuItems().map((item) => (
                   <div
                     key={item.id}
-                    className="relative bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 group overflow-hidden cursor-pointer"
-                    onClick={() => setSelectedItem(item)} // Open modal on click
+                    className="relative bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 group overflow-hidden h-48"
                   >
-                    <div className="flex items-start gap-4 p-4">
-                      <div className="relative flex-shrink-0">
-                        <Image
-                          src={item.image || "/images/food.png"}
-                          alt={item.name}
-                          width={120}
-                          height={120}
-                          className="rounded-md object-cover transform group-hover:scale-105 transition-transform duration-300"
-                        />
-                        {item.popular && (
-                          <span className="absolute top-2 left-2 bg-[#ff6600] text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
-                            Popular
-                          </span>
-                        )}
-                      </div>
+                    {/* Gradient Border Effect on Hover */}
+                    <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#ff6600]/50 rounded-lg transition-all duration-300 pointer-events-none" />
 
-                      <div className="flex-1 text-[#292d32]">
-                        <h3 className="font-medium text-lg">{item.name}</h3>
-                        <p className="text-sm text-gray-500 mb-3 line-clamp-2">
-                          {item.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-[#1A2E20]">
-                            {item.price}
-                          </span>
-                          {/* Removed the direct add button */}
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={item.image || "/images/food.png"}
+                        alt={item.name}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-lg transform group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-medium text-lg">{item.name}</h3>
+                            <p className="text-sm text-gray-200 mb-3 line-clamp-2">
+                              {item.description}
+                            </p>
+                            <span className="font-bold text-[#ff6600]">
+                              {item.price}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() =>
+                              dispatch({
+                                type: "ADD_ITEM",
+                                payload: {
+                                  id: item.id,
+                                  name: item.name,
+                                  description: item.description,
+                                  price: item.price,
+                                  image: item.image || "/images/food.png",
+                                },
+                              })
+                            }
+                            className="p-2 rounded-full bg-[#ff6600] text-white hover:bg-[#e65c00] transition-colors shadow-md"
+                          >
+                            <Plus className="h-5 w-5" />
+                          </button>
                         </div>
                       </div>
+                      {item.popular && (
+                        <span className="absolute top-3 left-3 bg-[#ff6600] text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                          Popular
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -247,14 +226,16 @@ export default function RestaurantPage() {
           </div>
 
           {/* Right column - Cart */}
-          <div className="w-full md:w-1/3 mt-8 md:mt-0 hidden md:block">
+          <div className="w-full md:w-1/3 mt-8 md:mt-0">
             <div className="sticky top-24">
               <Cart />
             </div>
           </div>
         </div>
       </main>
+      {/* Footer */}
       <FooterStore />
+      {/* Loading and Error States */}
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="text-white">Fetching your location...</div>
@@ -265,16 +246,6 @@ export default function RestaurantPage() {
           <div className="text-red-500">{error}</div>
         </div>
       )}
-      {/* Item Modal */}
-      <AnimatePresence>
-        {selectedItem && (
-          <ItemModal
-            item={selectedItem}
-            onClose={() => setSelectedItem(null)}
-            key="item-modal"
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }

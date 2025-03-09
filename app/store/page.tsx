@@ -5,6 +5,7 @@ import FooterStore from "@/components/FooterStore";
 import CategoriesInStore from "@/components/CategoriesInStore";
 import FeaturedStore from "@/components/FeaturedStore";
 import { useSearchParams } from "next/navigation";
+import RecommendedForYou from "@/components/RecomendationSection";
 
 export default function StorePage() {
   const searchParams = useSearchParams();
@@ -15,6 +16,7 @@ export default function StorePage() {
       <HeaderStore />
       <main className="max-w-6xl mx-auto px-4 py-8">
         <CategoriesInStore />
+        <RecommendedForYou />
         <FeaturedStore selectedCategory={category} />
       </main>
       <FooterStore />

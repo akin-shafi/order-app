@@ -85,12 +85,13 @@ export default function HeaderStore() {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="block border object-contain rounded">
+            <Link href="/" className="bg-[#e6f0ea] rounded">
               <Image
                 src="/beta-icon.png"
                 alt="betaday logo"
-                width={55}
-                height={55}
+                width={40}
+                height={40}
+                className="w-[40px] h-[40px] md:w-[45px] md:h-[45px] transition-all duration-300 object-contain"
                 quality={55}
                 priority
                 sizes="(max-width: 640px) 16vw, (max-width: 768px) 20vw, (max-width: 1024px) 24vw, 28vw"
@@ -133,7 +134,7 @@ export default function HeaderStore() {
                 );
               }}
             >
-              <ShoppingCart size={24} />
+              <ShoppingCart size={20} />
               <CartBadge />
             </button>
 
@@ -146,8 +147,20 @@ export default function HeaderStore() {
                 setIsLoginModalOpen(true);
               }}
             >
-              <User className="h-6 w-6" />
+              <User className="h-5 w-5" />
             </button>
+          </div>
+        </div>
+
+        {/* Mobile Search Input */}
+        <div className="md:hidden mt-2">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder="What can we get you?"
+              className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-full text-sm focus:outline-none focus:ring-2 focus:ring-[#1A2E20]"
+            />
           </div>
         </div>
       </header>
