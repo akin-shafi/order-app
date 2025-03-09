@@ -18,16 +18,16 @@ export default function CategoriesInStore() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    searchParams.get("category")
+    searchParams?.get("category") || null
   );
   const [selectedFilter, setSelectedFilter] = useState<string | null>(
-    searchParams.get("filter")
+    searchParams?.get("filter") || null
   );
 
   useEffect(() => {
     setMounted(true);
-    setSelectedCategory(searchParams.get("category"));
-    setSelectedFilter(searchParams.get("filter"));
+    setSelectedCategory(searchParams?.get("category") || null);
+    setSelectedFilter(searchParams?.get("filter") || null);
   }, [searchParams]);
 
   const handleCategoryClick = (categoryName: string) => {
@@ -37,7 +37,7 @@ export default function CategoriesInStore() {
         : categoryName;
     setSelectedCategory(newSelectedCategory);
 
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || "");
     if (newSelectedCategory) {
       params.set("category", newSelectedCategory.toLowerCase());
     } else {
@@ -51,7 +51,7 @@ export default function CategoriesInStore() {
       selectedFilter?.toLowerCase() === filter.toLowerCase() ? null : filter;
     setSelectedFilter(newSelectedFilter);
 
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || '');
     if (newSelectedFilter) {
       params.set("filter", newSelectedFilter.toLowerCase());
     } else {

@@ -14,11 +14,11 @@ import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
 
-export default function HeaderStore({
-  restaurantName,
-}: {
-  restaurantName: string;
-}) {
+interface HeaderStoreProps {
+  restaurantName?: string;
+}
+
+const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -88,7 +88,6 @@ export default function HeaderStore({
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
-    console.log("Cart toggled:", !isCartOpen); // Debug log
   };
 
   return (
@@ -137,13 +136,12 @@ export default function HeaderStore({
               <button
                 type="button"
                 onClick={toggleCart}
-                className="relative bg-[#000000] hover:bg-[#000000] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+                className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               >
                 <ShoppingCart size={20} />
                 <CartBadge />
               </button>
 
-              {/* Cart Modal */}
               {isCartOpen && (
                 <CartModal
                   isOpen={isCartOpen}
@@ -202,4 +200,6 @@ export default function HeaderStore({
       {error && <div className="text-red-500 text-center">{error}</div>}
     </>
   );
-}
+};
+
+export default HeaderStore;

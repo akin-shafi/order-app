@@ -63,55 +63,49 @@ const CartModal: React.FC<CartModalProps> = ({
     },
   };
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end"
-          onClick={handleBackdropClick}
-        >
-          <motion.div
-            className="w-full md:w-[480px] bg-white h-full"
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Cart Header */}
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={toggleShoppingList}
-                  className="flex items-center gap-1 text-[#ff6600]"
-                >
-                  Saved Items:{" "}
-                  <span className="bg-[#ff6600] text-white rounded-full px-2 py-0.5 text-xs">
-                    {shoppingListState.savedCarts.length}
-                  </span>
-                </button>
-                <button
-                  className="cursor-pointer rounded-full  p-2 border border-gray-500 hover:text-white hover:bg-[#292d32]"
-                  onClick={() => {
-                    setCartOpen(false);
-                    onClose();
-                  }}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            </div>
-
-            {/* Cart Content */}
-            <Cart restaurantName={restaurantName} />
-
-            {/* Shopping List Modal */}
-            {isShoppingListOpen && <SavedCartsModal />}
-          </motion.div>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end"
+      onClick={handleBackdropClick}
+    >
+      <div
+        className="w-full md:w-[480px] bg-white h-full animate-slide-in"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Cart Header */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={toggleShoppingList}
+              className="flex items-center gap-1 text-[#ff6600]"
+            >
+              Saved Items:{" "}
+              <span className="bg-[#ff6600] text-white rounded-full px-2 py-0.5 text-xs">
+                {shoppingListState.savedCarts.length}
+              </span>
+            </button>
+            <button
+              className="cursor-pointer rounded-full  p-2 border border-gray-500 hover:text-white hover:bg-[#292d32]"
+              onClick={() => {
+                setCartOpen(false);
+                onClose();
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
         </div>
-      )}
-    </AnimatePresence>
+
+        {/* Cart Content */}
+        <Cart restaurantName={restaurantName} />
+
+        {/* Shopping List Modal */}
+        {isShoppingListOpen && <SavedCartsModal />}
+      </div>
+    </div>
   );
 };
 
