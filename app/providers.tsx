@@ -9,7 +9,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <ShoppingListProvider>
       <CartProvider>
         {children}
-        <CartModal />
+        <CartModal
+          isOpen={false}
+          onClose={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+          restaurantName={""}
+        />
       </CartProvider>
     </ShoppingListProvider>
   );
