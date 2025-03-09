@@ -52,7 +52,7 @@ export default function FAQsPage() {
             </h1>
           </div>
           <p className="text-gray-600">
-            Find answers to common questions about BetaDay's services.
+            Find answers to common questions about BetaDay&apos;s services.
           </p>
         </div>
 

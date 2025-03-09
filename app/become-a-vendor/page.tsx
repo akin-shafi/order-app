@@ -48,7 +48,7 @@ export default function BecomeVendorPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Become a Vendor</h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Join BetaDay's network of successful businesses and reach more
+            Join BetaDay&apos;s network of successful businesses and reach more
             customers than ever before.
           </p>
         </div>

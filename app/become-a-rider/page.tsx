@@ -201,7 +201,7 @@ export default function BecomeRiderPage() {
                     htmlFor="license"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Driver's License Number
+                    Driver&apos;s License Number
                   </label>
                   <input
                     type="text"

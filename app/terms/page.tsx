@@ -24,19 +24,19 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold mb-4">2. Definitions</h2>
             <ul className="list-disc pl-6 text-gray-600 space-y-2">
               <li>
-                "Service" refers to the delivery and marketplace services
-                provided by BetaDay
+                {`"Service" refers to the delivery and marketplace services
+                provided by BetaDay`}
               </li>
               <li>
-                "User" refers to any person who accesses or uses our platform
+                {`"User" refers to any person who accesses or uses our platform`}
               </li>
               <li>
-                "Partner" refers to restaurants, stores, and other businesses
-                listed on our platform
+                {`"Partner" refers to restaurants, stores, and other businesses
+                listed on our platform`}
               </li>
               <li>
-                "Rider" refers to delivery partners who provide delivery
-                services
+                {`"Rider" refers to delivery partners who provide delivery
+                services`}
               </li>
             </ul>
           </section>
