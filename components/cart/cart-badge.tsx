@@ -3,13 +3,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/contexts/cart-context";
 
-export default function CartBadge() {
+const CartBadge = () => {
   const { state } = useCart();
 
-  // Calculate total items across all packs
-  const itemCount = state.packs.reduce((sum, pack) => {
+  const itemCount = state.packs.reduce((total, pack) => {
     return (
-      sum + pack.items.reduce((packSum, item) => packSum + item.quantity, 0)
+      total +
+      pack.items.reduce((packTotal, item) => packTotal + item.quantity, 0)
     );
   }, 0);
 
@@ -20,11 +20,13 @@ export default function CartBadge() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0 }}
-          className="absolute -top-2 -right-2 bg-[#f15736] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium"
+          className="absolute -top-2 -right-2 bg-[#ff6600] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
         >
           {itemCount}
         </motion.div>
       )}
     </AnimatePresence>
   );
-}
+};
+
+export default CartBadge;

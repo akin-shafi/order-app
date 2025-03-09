@@ -1,4 +1,5 @@
 // components/modal/ItemModal.tsx
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import { Plus, Minus, ChevronDown } from "lucide-react";
@@ -28,14 +29,16 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
   ];
 
   const handleAddToCart = async () => {
-    // If there's no active pack, create one first
     if (!state.activePackId || state.packs.length === 0) {
       dispatch({ type: "ADD_PACK" });
       // Wait for state to update
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
-    // Add item to the active pack
+    const priceAsNumber = parseFloat(
+      item.price.replace("₦", "").replace(",", "")
+    );
+
     dispatch({
       type: "ADD_ITEM_TO_PACK",
       payload: {
@@ -43,13 +46,13 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
         item: {
           id: item.id,
           name: item.name,
-          price: parseFloat(item.price.replace("₦", "").replace(",", "")),
+          price: priceAsNumber,
           quantity: quantity,
+          image: item.image,
         },
       },
     });
 
-    // Close modal
     onClose();
   };
 

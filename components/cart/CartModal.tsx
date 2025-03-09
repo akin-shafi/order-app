@@ -101,9 +101,8 @@ const CartModal: React.FC<CartModalProps> = ({
 
         {/* Cart Content */}
         <Cart restaurantName={restaurantName} />
-
         {/* Shopping List Modal */}
-        {isShoppingListOpen && <SavedCartsModal />}
+        {isShoppingListOpen && <SavedCartsModal onClose={toggleShoppingList} />}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  image?: string;
 }
 
 interface Pack {
@@ -30,7 +31,8 @@ type CartAction =
     }
   | { type: "SET_ACTIVE_PACK"; payload: string }
   | { type: "TOGGLE_BROWN_BAG" }
-  | { type: "CLEAR_CART" };
+  | { type: "CLEAR_CART" }
+  | { type: "RESTORE_CART"; payload: CartState };
 
 const CartContext = createContext<
   | {
@@ -136,6 +138,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         packs: [],
         activePackId: null,
         includeBrownBag: false,
+      };
+
+    case "RESTORE_CART":
+      return {
+        ...state,
+        ...action.payload,
       };
 
     default:

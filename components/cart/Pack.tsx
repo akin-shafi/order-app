@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
@@ -8,6 +9,7 @@ interface PackItem {
   name: string;
   price: number;
   quantity: number;
+  image?: string;
 }
 
 interface PackProps {
