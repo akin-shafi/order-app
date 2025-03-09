@@ -66,7 +66,7 @@ export const menuItemsByCategory = {
       name: "Super Combo Pack",
       description: "Rice + Beans + Plantain + Chicken",
       price: "₦4,500",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
       popular: true,
     },
     {
@@ -74,7 +74,7 @@ export const menuItemsByCategory = {
       name: "Classic Combo",
       description: "Jollof Rice + Chicken + Coleslaw",
       price: "₦3,500",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
     },
   ],
   beans: [
@@ -83,7 +83,7 @@ export const menuItemsByCategory = {
       name: "Favorite Crispy Beans",
       description: "Oil Beans + Plantain",
       price: "₦2,500",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
       popular: true,
     },
     {
@@ -91,7 +91,7 @@ export const menuItemsByCategory = {
       name: "Beans Porridge",
       description: "Porridge Beans + Plantain + Fish",
       price: "₦2,800",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
     },
   ],
   spaghetti: [
@@ -100,14 +100,14 @@ export const menuItemsByCategory = {
       name: "Spicy Spaghetti",
       description: "Spaghetti + Chicken + Vegetables",
       price: "₦2,800",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
     },
     {
       id: "spaghetti-2",
       name: "Seafood Spaghetti",
       description: "Spaghetti + Mixed Seafood",
       price: "₦3,500",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
       popular: true,
     },
   ],
@@ -117,7 +117,7 @@ export const menuItemsByCategory = {
       name: "Jollof Rice Special",
       description: "Jollof Rice + Chicken + Plantain",
       price: "₦3,000",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
       popular: true,
     },
     {
@@ -125,7 +125,7 @@ export const menuItemsByCategory = {
       name: "Fried Rice Deluxe",
       description: "Fried Rice + Turkey + Coleslaw",
       price: "₦3,200",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
     },
   ],
   swallow: [
@@ -134,22 +134,22 @@ export const menuItemsByCategory = {
       name: "Pounded Yam",
       description: "With Egusi Soup + Goat Meat",
       price: "₦2,500",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
     },
     {
       id: "swallow-2",
       name: "Amala Special",
       description: "With Ewedu + Gbegiri + Fish",
       price: "₦2,300",
-      image: "/images/food.png?height=80&width=120",
+      image: "/images/food.png",
     },
   ],
 };
 
 export const restaurant = {
   id: "iya-sharafa",
-  name: "Iya Sharafa Bead and Bread",
-  image: "/images/food.png?height=120&width=180",
+  name: "Iya Sharafa Bread and Beans ",
+  image: "/images/food.png",
   deliveryTime: "11min - 20min",
   rating: "4.5",
   reviews: "62",

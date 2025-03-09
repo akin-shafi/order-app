@@ -13,7 +13,7 @@ export default function StorePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <HeaderStore />
+      <HeaderStore restaurantName={""} />
       <main className="max-w-6xl mx-auto px-4 py-8">
         <CategoriesInStore />
         <RecommendedForYou />

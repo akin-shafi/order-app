@@ -17,29 +17,39 @@ interface ItemModalProps {
 }
 
 const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
-  const { dispatch } = useCart();
+  const { state, dispatch } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const [selectedBread, setSelectedBread] = useState<string>("Agege Bread"); // Default bread option
+  const [selectedBread, setSelectedBread] = useState<string>("Agege Bread");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const breadOptions = [
     { name: "Agege Bread", price: 200 },
-    { name: "Agege Bread", price: 200 }, // Repeated as per the image
+    { name: "Agege Bread", price: 200 },
   ];
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    // If there's no active pack, create one first
+    if (!state.activePackId || state.packs.length === 0) {
+      dispatch({ type: "ADD_PACK" });
+      // Wait for state to update
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
+    // Add item to the active pack
     dispatch({
-      type: "ADD_ITEM",
+      type: "ADD_ITEM_TO_PACK",
       payload: {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        price: item.price,
-        image: item.image || "/images/food.png",
-        quantity,
-        selectedBread, // Include selected bread in the payload
+        packId: state.activePackId || state.packs[state.packs.length - 1].id,
+        item: {
+          id: item.id,
+          name: item.name,
+          price: parseFloat(item.price.replace("₦", "").replace(",", "")),
+          quantity: quantity,
+        },
       },
     });
+
+    // Close modal
     onClose();
   };
 
@@ -53,13 +63,11 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-brand-opacity  flex items-center justify-center p-4">
-      {/* <div className="bg-white rounded-lg w-full max-w-md relative"> */}
-      <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
-        {/* Close Button */}
+    <div className="fixed inset-0 z-50 bg-black bg-brand-opacity flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg w-full max-w-md relative mobile-modal">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 z-60"
         >
           <svg
             className="h-5 w-5"
@@ -76,20 +84,17 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
           </svg>
         </button>
 
-        {/* Modal Content */}
         <div className="flex flex-col">
-          {/* Image */}
           <div className="relative w-full h-48">
             <Image
               src={item.image || "/images/food.png"}
               alt={item.name}
-              layout="fill"
-              objectFit="cover"
+              fill
+              style={{ objectFit: "cover" }}
               className="rounded-t-lg"
             />
           </div>
 
-          {/* Item Details */}
           <div className="p-4">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-lg font-semibold text-[#292d32]">
@@ -101,7 +106,6 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
             </div>
             <p className="text-gray-500 text-sm mb-4">{item.description}</p>
 
-            {/* Bread Selection */}
             <div className="mb-4">
               <div className="flex justify-between items-center">
                 <label className="text-sm font-medium text-[#292d32]">
@@ -137,12 +141,11 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between bg-gray-100 p-4 rounded-lg gap-4">
-              {/* Quantity Controls */}
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-                  className="p-1 border border-gray-300 rounded hover:bg-gray-200"
+                  className="p-1 border border-gray-300 rounded hover:bg-gray-100"
                 >
                   <Minus className="h-4 w-4 text-gray-700" />
                 </button>
@@ -154,15 +157,12 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
                   <Plus className="h-4 w-4 text-gray-700" />
                 </button>
               </div>
-              {/* Add to Order Button */}
-              <div>
-                <button
-                  onClick={handleAddToCart}
-                  className="flex-1  bg-[#1A2E20] text-white py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors text-sm font-medium"
-                >
-                  Add this item to my order
-                </button>
-              </div>
+              <button
+                onClick={handleAddToCart}
+                className="bg-[#1A2E20] text-white py-2 px-4 rounded-lg hover:bg-[#163e1a] transition-colors text-sm font-medium"
+              >
+                Add this item to my order
+              </button>
             </div>
           </div>
         </div>

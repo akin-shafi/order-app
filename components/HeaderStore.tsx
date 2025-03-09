@@ -12,11 +12,17 @@ import AddressSearchModal from "./modal/address-search-modal";
 import { useCurrentLocation } from "@/utils/useCurrentLocation";
 import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
+import CartModal from "./cart/CartModal";
 
-export default function HeaderStore() {
+export default function HeaderStore({
+  restaurantName,
+}: {
+  restaurantName: string;
+}) {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const {
     address: contextAddress,
@@ -80,6 +86,11 @@ export default function HeaderStore() {
     setIsAddressModalOpen(true);
   };
 
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+    console.log("Cart toggled:", !isCartOpen); // Debug log
+  };
+
   return (
     <>
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
@@ -122,21 +133,25 @@ export default function HeaderStore() {
               />
             </div>
 
-            <button
-              type="button"
-              className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-              onClick={(e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add("blip-effect");
-                setTimeout(
-                  () => e.currentTarget.classList.remove("blip-effect"),
-                  300
-                );
-              }}
-            >
-              <ShoppingCart size={20} />
-              <CartBadge />
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={toggleCart}
+                className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+              >
+                <ShoppingCart size={20} />
+                <CartBadge />
+              </button>
+
+              {/* Cart Modal */}
+              {isCartOpen && (
+                <CartModal
+                  isOpen={isCartOpen}
+                  onClose={() => setIsCartOpen(false)}
+                  restaurantName={restaurantName}
+                />
+              )}
+            </div>
 
             <button
               type="button"

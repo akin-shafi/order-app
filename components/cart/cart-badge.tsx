@@ -5,7 +5,13 @@ import { useCart } from "@/contexts/cart-context";
 
 export default function CartBadge() {
   const { state } = useCart();
-  const itemCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Calculate total items across all packs
+  const itemCount = state.packs.reduce((sum, pack) => {
+    return (
+      sum + pack.items.reduce((packSum, item) => packSum + item.quantity, 0)
+    );
+  }, 0);
 
   return (
     <AnimatePresence>

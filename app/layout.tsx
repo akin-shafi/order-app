@@ -3,6 +3,7 @@ import { AddressProvider } from "@/contexts/address-context";
 import type { Metadata } from "next";
 import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
 import { CartProvider } from "@/contexts/cart-context";
+import { ShoppingListProvider } from "@/contexts/shopping-list-context";
 import GoogleMapsScript from "@/components/google-maps-script";
 // import "react-phone-input-2/lib/style.css";
 import "./globals.css";
@@ -57,7 +58,9 @@ export default function RootLayout({
       >
         <GoogleMapsScript />
         <AddressProvider>
-          <CartProvider>{children}</CartProvider>
+          <ShoppingListProvider>
+            <CartProvider>{children}</CartProvider>
+          </ShoppingListProvider>
         </AddressProvider>
       </body>
     </html>
