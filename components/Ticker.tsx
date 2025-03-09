@@ -69,7 +69,7 @@ export default function Ticker() {
   }, [tickerContent.length]); // Added tickerContent.length to dependencies
 
   return (
-    <div className="bg-gradient-to-r from-[#a5f2bc] to-[#6ACE88] relative">
+    <div className="bg-gradient-to-r from-[#ff8533] to-[#ff6600] relative">
       {/* Animated background pattern */}
       <div
         className="absolute inset-0 opacity-10"
@@ -81,15 +81,15 @@ export default function Ticker() {
       {/* Live Stats Bar */}
       <div className="hidden md:flex justify-between items-center px-6 py-1 bg-black/10">
         <div className="flex items-center space-x-6">
-          <div className="flex items-center text-dark text-xs">
+          <div className="flex items-center text-white text-xs">
             <Clock className="w-3 h-3 mr-1" />
             <span>Avg. Delivery: 20 min</span>
           </div>
-          <div className="flex items-center text-dark text-xs">
+          <div className="flex items-center text-white text-xs">
             <Star className="w-3 h-3 mr-1" />
             <span>4.8/5 Rating</span>
           </div>
-          <div className="flex items-center text-dark text-xs">
+          <div className="flex items-center text-white text-xs">
             <Bell className="w-3 h-3 mr-1" />
             <span>100+ Active Orders</span>
           </div>
@@ -97,7 +97,7 @@ export default function Ticker() {
       </div>
 
       {/* Main Ticker Content */}
-      <div className="py-3 overflow-hidden relative">
+      <div className="relative py-3 px-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -110,7 +110,7 @@ export default function Ticker() {
             <div className="flex items-center">
               {/* Icon for current content type */}
               {createElement(tickerContent[currentIndex].icon, {
-                className: "w-5 h-5 text-dark mr-2",
+                className: "w-5 h-5 text-white mr-2",
               })}
 
               {/* Rotating messages */}
@@ -118,7 +118,7 @@ export default function Ticker() {
                 {tickerContent[currentIndex].messages.map((message, idx) => (
                   <span
                     key={idx}
-                    className="text-dark text-sm font-medium whitespace-nowrap"
+                    className="text-white text-sm font-medium whitespace-nowrap"
                   >
                     {message}
                   </span>

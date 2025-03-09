@@ -24,7 +24,7 @@ export default function Header() {
     {
       name: "Products",
       icon: <Home size={20} />,
-      dropdown: ["BetaSpoon", "ShipazDay"],
+      dropdown: ["BetaPackage", "ShipazDay"],
       href: "/products",
     },
     {
@@ -98,10 +98,10 @@ export default function Header() {
           {/* <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100"></div> */}
           <div className="absolute top-full left-0 mt-5 w-40 bg-white shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100">
             <Link
-              href="/betaspoon"
+              href="/betapackage"
               className="block px-4 py-2 text-sm text-[#000000] hover:bg-[#fff2f1] hover:text-[#f15736] "
             >
-              BetaSpoon
+              BetaPackage
             </Link>
             <Link
               href="/shipazday"
@@ -150,13 +150,13 @@ export default function Header() {
           {/* Dropdown Menu */}
           <div className="absolute top-full right-0 mt-2 w-40 bg-[#F5F5F5] shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100">
             <Link
-              href="/vendor"
+              href="/become-a-vendor"
               className="block px-4 py-2 text-sm text-[#000000] hover:bg-[#fff2f1] hover:text-[#f15736]"
             >
               Become a vendor
             </Link>
             <Link
-              href="/rider"
+              href="/become-a-rider"
               className="block px-4 py-2 text-sm text-[#000000] hover:bg-[#fff2f1] hover:text-[#f15736]"
             >
               Become a Rider

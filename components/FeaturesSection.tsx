@@ -1,50 +1,102 @@
 // components/FeaturesSection.tsx
-import Image from "next/image";
-import { features } from "@/data/content";
+"use client";
+
+import { Store, Clock, CreditCard } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function FeaturesSection() {
-  return (
-    <section className="py-12 px-4 sm:px-6 md:px-12 bg-white">
-      <div className="max-w-6xl mx-auto">
-        {/* Heading */}
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-[#292d32] mb-2">
-          Delicacy with good treat
-        </h2>
+  // Updated features with more locally focused content and Lucide icons
+  const localFeatures = [
+    {
+      title: "Local Favorites",
+      description:
+        "Discover and order from your favorite local restaurants in your neighborhood",
+      icon: Store
+    },
+    {
+      title: "Quick Delivery",
+      description:
+        "Get your food delivered fresh and hot within your area, right to your doorstep",
+      icon: Clock
+    },
+    {
+      title: "Easy Ordering",
+      description:
+        "Simple ordering process with your preferred payment method, including cash on delivery",
+      icon: CreditCard
+    },
+  ];
 
-        {/* Subheading */}
-        <p className="text-center text-[#676767] text-sm md:text-base mb-8 md:mb-12">
-          Welcome to The Biggest Network of Food Ordering & Delivery
-        </p>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  return (
+    <section className="py-16 bg-white">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto mb-12"
+        >
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3">
+            Simple & Convenient
+          </h2>
+          <p className="text-base text-gray-600">
+            Your local food delivery service that makes ordering easy
+          </p>
+        </motion.div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {features.map((feature, index) => (
-            <div
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          {localFeatures.map((feature, index) => (
+            <motion.div
               key={index}
-              className={`p-4 md:p-6 rounded-lg ${
-                index === 0
-                  ? "bg-[#fff2f1]"
-                  : "bg-white border border-[#d9d9d9]"
-              }`}
+              variants={itemVariants}
+              className="group bg-gray-50 hover:bg-white p-6 rounded-lg transition-all duration-300 hover:shadow-md"
             >
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mb-3 md:mb-4">
-                <Image
-                  src={`/icons/${feature.image}`}
-                  alt={feature.title}
-                  width={40} // Intrinsic width
-                  height={40} // Intrinsic height
-                  className="w-auto h-auto max-w-[40px] max-h-[40px]" // Using Tailwind
-                />
+              {/* Icon */}
+              <div className="mb-4">
+                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                  <feature.icon className="w-5 h-5 text-orange-600" />
+                </div>
               </div>
-              <h3 className="text-base md:text-lg font-bold text-[#292d32] mb-1 md:mb-2">
+
+              {/* Content */}
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
                 {feature.title}
               </h3>
-              <p className="text-[#676767] text-xs md:text-sm">
-                {feature.description}
-              </p>
-            </div>
+              <p className="text-sm text-gray-600">{feature.description}</p>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

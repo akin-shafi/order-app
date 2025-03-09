@@ -113,15 +113,14 @@ export default function AddressField() {
               setError(null);
             }}
             onFocus={() => setIsModalOpen(true)}
-            className="bg-white rounded-full border-none outline-none w-full py-2 text-sm text-black placeholder-black"
-            style={{ fontFamily: "inherit", fontSize: "inherit" }}
+            className="bg-white rounded-full border-none outline-none w-full py-2 text-base text-black placeholder-black"
           />
         </div>
         {!inputAddress && (
           <button
             onClick={fetchCurrentLocation}
             disabled={isLoading}
-            className="bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-sm hover:bg-[#d8432c] transition-colors disabled:opacity-70"
+            className="bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-base hover:bg-[#d8432c] transition-colors disabled:opacity-70"
           >
             <Navigation className="h-4 w-4 mr-2" />
             Use current location
@@ -133,7 +132,7 @@ export default function AddressField() {
       {isLoading && (
         <div className="absolute left-0 right-0 text-center mt-2 flex items-center justify-center gap-2 animate-fadeIn z-10">
           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          <span className="text-sm text-black font-bold">
+          <span className="text-base text-black font-bold">
             Fetching your location...
           </span>
         </div>
@@ -141,7 +140,7 @@ export default function AddressField() {
 
       {/* Error State */}
       {(error || locationError) && (
-        <div className="absolute left-0 right-0 text-center mt-2 text-red-500 text-sm animate-fadeIn">
+        <div className="absolute left-0 right-0 text-center mt-2 text-red-500 text-base animate-fadeIn">
           {error || locationError}
         </div>
       )}
@@ -152,7 +151,7 @@ export default function AddressField() {
           <button
             onClick={handlePlaceOrder}
             disabled={isButtonDisabled}
-            className="w-full mt-8 bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-sm hover:bg-[#d8432c] transition-colors disabled:opacity-70"
+            className="w-full mt-8 bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-base hover:bg-[#d8432c] transition-colors disabled:opacity-70"
           >
             {isSending ? (
               <>
@@ -160,7 +159,7 @@ export default function AddressField() {
                 Processing...
               </>
             ) : (
-              "Place your Order"
+              "Order Now"
             )}
           </button>
         </div>
