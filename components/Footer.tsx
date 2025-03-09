@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function FeaturesSection() {
   return (
-    <footer className="bg-[#1A2E20] py-8 px-6 md:px-12">
+    <footer className="bg-[#000000] py-8 px-6 md:px-12">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-6">
           <p className="text-white text-sm mb-4">

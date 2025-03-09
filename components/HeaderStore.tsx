@@ -96,9 +96,9 @@ export default function HeaderStore({
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="bg-[#e6f0ea] rounded">
+            <Link href="/" className="bg-[#000000] rounded">
               <Image
-                src="/beta-icon.png"
+                src="/betaday-logo.png"
                 alt="betaday logo"
                 width={40}
                 height={40}

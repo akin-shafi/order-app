@@ -9,7 +9,7 @@ import RecommendedForYou from "@/components/RecomendationSection";
 
 export default function StorePage() {
   const searchParams = useSearchParams();
-  const category = searchParams.get("category");
+  const category = searchParams?.get("category") ?? null; // Safely handle null with optional chaining and nullish coalescing
 
   return (
     <div className="min-h-screen bg-white">
