@@ -159,7 +159,7 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
               </div>
               <button
                 onClick={handleAddToCart}
-                className="bg-[#1A2E20] text-white py-2 px-4 rounded-lg hover:bg-[#163e1a] transition-colors text-sm font-medium"
+                className="bg-[#000000] text-white py-2 px-4 rounded-lg hover:bg-[#163e1a] transition-colors text-sm font-medium"
               >
                 Add this item to my order
               </button>

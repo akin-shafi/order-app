@@ -70,7 +70,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
         onFocus={onFocus}
         onBlur={handleBlurEvent}
         placeholder="8098290445"
-        className={`flex-1 h-full p-2 text-black focus:outline-none focus:ring-1 focus:ring-[#1A2E20] rounded-r-md ${
+        className={`flex-1 h-full p-2 text-black focus:outline-none focus:ring-1 focus:ring-[#000000] rounded-r-md ${
           hasError ? "border-red-500" : ""
         }`}
         maxLength={13}

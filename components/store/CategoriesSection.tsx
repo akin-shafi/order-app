@@ -69,7 +69,7 @@ export default function CategoriesSection({
               className={`px-4 py-2 mx-1 rounded-md text-sm whitespace-nowrap transition-colors duration-200 flex items-center justify-center
                 ${
                   activeCategory === category.id
-                    ? "bg-[#1A2E20] text-white shadow-md"
+                    ? "bg-[#000000] text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
             >
@@ -100,7 +100,7 @@ export default function CategoriesSection({
       </div>
       <div className="mt-4 h-1 bg-gray-200 rounded-full relative max-w-screen-md mx-auto">
         <motion.div
-          className="absolute h-full bg-[#1A2E20] rounded-full"
+          className="absolute h-full bg-[#000000] rounded-full"
           initial={false}
           animate={{ width: "20%", left: getProgressBarPosition() }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}

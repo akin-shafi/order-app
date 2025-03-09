@@ -111,11 +111,11 @@ export default function CategoriesInStore() {
       const isSelected = selectedFilter?.toLowerCase() === filter.toLowerCase();
       return `${baseClass} ${
         isSelected
-          ? "bg-gradient-to-r from-[#1A2E20] to-[#2E7D32] text-white"
+          ? "bg-gradient-to-r from-[#000000] to-[#2E7D32] text-white"
           : "bg-gray-100 text-gray-800 hover:bg-gray-200"
       } ${
         isSelected
-          ? "shadow-lg shadow-[#1A2E20]/20"
+          ? "shadow-lg shadow-[#000000]/20"
           : "shadow-md hover:shadow-lg"
       } before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#FF6600] before:to-[#FF8F00] before:opacity-0 before:transition-opacity before:duration-300 group-hover:before:opacity-20`;
     };

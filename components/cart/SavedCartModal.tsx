@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
+// import { formatPrice } from "@/lib/utils";
 
 interface SavedCart {
   restaurantName: string;

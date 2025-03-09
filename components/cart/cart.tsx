@@ -135,7 +135,7 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
                 type="checkbox"
                 checked={state.includeBrownBag}
                 onChange={() => dispatch({ type: "TOGGLE_BROWN_BAG" })}
-                className="rounded-full accent-[#1A2E20]"
+                className="rounded-full accent-[#000000]"
               />
             </div>
           </div>
@@ -180,7 +180,7 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
           {/* PIN Confirmation Notice */}
           <div className="bg-green-50 p-3 rounded-lg mb-4">
             <div className="flex items-center gap-2">
-              <span className="text-[#1A2E20]">ℹ</span>
+              <span className="text-[#000000]">ℹ</span>
               <div>
                 <p className="text-sm font-medium text-[#292d32]">
                   Delivery includes PIN confirmation
@@ -214,7 +214,7 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
 
           {/* Action Buttons */}
           <div className="space-y-3 pt-4">
-            <button className="w-full cursor-pointer bg-[#1A2E20] text-white py-3 rounded-md font-medium transition-colors duration-200 hover:bg-[#2A4A34] hover:shadow-md">
+            <button className="w-full cursor-pointer bg-[#000000] text-white py-3 rounded-md font-medium transition-colors duration-200 hover:bg-[#2A4A34] hover:shadow-md">
               Place order
             </button>
             <button

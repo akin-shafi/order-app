@@ -129,7 +129,7 @@ export default function HeaderStore({
               <input
                 type="text"
                 placeholder="What can we get you?"
-                className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A2E20]"
+                className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
               />
             </div>
 
@@ -137,7 +137,7 @@ export default function HeaderStore({
               <button
                 type="button"
                 onClick={toggleCart}
-                className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+                className="relative bg-[#000000] hover:bg-[#000000] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               >
                 <ShoppingCart size={20} />
                 <CartBadge />
@@ -174,7 +174,7 @@ export default function HeaderStore({
             <input
               type="text"
               placeholder="What can we get you?"
-              className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-full text-sm focus:outline-none focus:ring-2 focus:ring-[#1A2E20]"
+              className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-full text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
             />
           </div>
         </div>

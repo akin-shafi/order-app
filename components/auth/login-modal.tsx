@@ -110,7 +110,7 @@ export default function LoginModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1A2E20] text-white py-3 rounded-md hover:bg-[#FF6600] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A2E20] focus:ring-offset-2 disabled:opacity-70"
+              className="w-full bg-[#000000] text-white py-3 rounded-md hover:bg-[#FF6600] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[#000000] focus:ring-offset-2 disabled:opacity-70"
             >
               {isSubmitting ? "Processing..." : "Next"}
             </button>

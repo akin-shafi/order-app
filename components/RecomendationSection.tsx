@@ -70,7 +70,7 @@ export default function RecommendedForYou() {
     <section className="py-8">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#1a2e20] mb-6 flex items-center">
+          <h2 className="text-2xl font-bold text-[#000000] mb-6 flex items-center">
             Recommended for You
             <Heart className="ml-2 h-5 w-5 text-[#ff6600]" />
           </h2>
@@ -95,7 +95,7 @@ export default function RecommendedForYou() {
                           className="w-full h-48 object-cover rounded-t-lg"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-t-lg" />
-                        <div className="absolute top-3 left-3 bg-[#1a2e20]/90 text-white text-xs font-semibold px-2 py-1 rounded-md">
+                        <div className="absolute top-3 left-3 bg-[#000000]/90 text-white text-xs font-semibold px-2 py-1 rounded-md">
                           {item.status}
                         </div>
                         {item.preOrder && (
@@ -146,7 +146,7 @@ export default function RecommendedForYou() {
                           {item.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="text-[#1a2e20] text-xs font-medium bg-[#e6f0ea] px-2 py-1 rounded"
+                              className="text-[#000000] text-xs font-medium bg-[#e6f0ea] px-2 py-1 rounded"
                             >
                               {tag}
                             </span>
@@ -186,7 +186,7 @@ export default function RecommendedForYou() {
                         className="w-full h-48 object-cover rounded-t-lg"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-t-lg" />
-                      <div className="absolute top-3 left-3 bg-[#1a2e20]/90 text-white text-xs font-semibold px-2 py-1 rounded-md">
+                      <div className="absolute top-3 left-3 bg-[#000000]/90 text-white text-xs font-semibold px-2 py-1 rounded-md">
                         {item.status}
                       </div>
                       {item.preOrder && (
@@ -237,7 +237,7 @@ export default function RecommendedForYou() {
                         {item.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="text-[#1a2e20] text-xs font-medium bg-[#e6f0ea] px-2 py-1 rounded"
+                            className="text-[#000000] text-xs font-medium bg-[#e6f0ea] px-2 py-1 rounded"
                           >
                             {tag}
                           </span>

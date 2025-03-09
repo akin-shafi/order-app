@@ -97,7 +97,7 @@ export default function SignupModal({
                   className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                     errors.firstName
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-[#1A2E20]"
+                      : "border-gray-300 focus:ring-[#000000]"
                   }`}
                   {...register("firstName", {
                     required: "First name is required",
@@ -123,7 +123,7 @@ export default function SignupModal({
                   className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                     errors.lastName
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-[#1A2E20]"
+                      : "border-gray-300 focus:ring-[#000000]"
                   }`}
                   {...register("lastName", {
                     required: "Last name is required",
@@ -157,7 +157,7 @@ export default function SignupModal({
                   className={`w-full pl-10 p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                     errors.email
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-[#1A2E20]"
+                      : "border-gray-300 focus:ring-[#000000]"
                   }`}
                   {...register("email", { required: "Email is required" })}
                 />
@@ -217,7 +217,7 @@ export default function SignupModal({
                 id="referralCode"
                 type="text"
                 placeholder="Enter referral code"
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 border-gray-300 focus:ring-[#1A2E20]"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 border-gray-300 focus:ring-[#000000]"
                 {...register("referralCode")}
               />
             </div>
@@ -225,7 +225,7 @@ export default function SignupModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1A2E20] text-white cursor-pointer py-3 rounded-md hover:bg-[#FF6600] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A2E20] focus:ring-offset-2 disabled:opacity-70"
+              className="w-full bg-[#000000] text-white cursor-pointer py-3 rounded-md hover:bg-[#FF6600] transition-colors focus:outline-none focus:ring-2 focus:ring-[#000000] focus:ring-offset-2 disabled:opacity-70"
             >
               {isSubmitting ? "Processing..." : "Next"}
             </button>
