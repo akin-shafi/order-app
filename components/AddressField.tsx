@@ -123,7 +123,10 @@ export default function AddressField() {
             className="bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-base hover:bg-[#d8432c] transition-colors disabled:opacity-70"
           >
             <Navigation className="h-4 w-4 mr-2" />
-            Use current location
+            <span>Use current location</span>
+            <span className="text-xs text-gray-500">
+              Address goes here
+            </span>
           </button>
         )}
       </div>

@@ -33,7 +33,7 @@ export default function AddressSearchModal({
   const [error, setError] = useState<string | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  const { setAddress, setCoordinates, setLocationDetails } = useAddress();
+  const { setAddress, address: currentAddress } = useAddress();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -95,13 +95,13 @@ export default function AddressSearchModal({
         address: formattedAddress,
         coordinates: {
           latitude: lat,
-          longitude: lng
+          longitude: lng,
         },
         locationDetails: {
           state: locationDetails.administrative_area,
           localGovernment: locationDetails.localGovernment,
           locality: locationDetails.locality,
-        }
+        },
       };
 
       console.log("Setting new address data:", newLocationData);
@@ -110,7 +110,7 @@ export default function AddressSearchModal({
       setAddress(formattedAddress, {
         coordinates: newLocationData.coordinates,
         locationDetails: newLocationData.locationDetails,
-        source: 'manual'
+        source: "manual",
       });
 
       // Close the modal after successful address selection
@@ -119,7 +119,7 @@ export default function AddressSearchModal({
       // Trigger any necessary business data fetching here
       document.dispatchEvent(
         new CustomEvent("addressChanged", {
-          detail: newLocationData
+          detail: newLocationData,
         })
       );
     } catch (err) {
@@ -226,19 +226,21 @@ export default function AddressSearchModal({
           <h2 className="text-2xl font-bold mb-6 text-black">
             Add a delivery address
           </h2>
-          <div className="relative mb-4">
+
+          {/* Search Input */}
+          <div className="relative mb-4 bg-gray-50 rounded-lg">
             <Flag
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#f15736]"
               size={20}
             />
             <input
               ref={inputRef}
               type="text"
-              placeholder="Search streets, crescents, etc. in Lagos..."
+              placeholder="Enter a new address"
               value={value}
               onChange={(e) => handleSearch(e.target.value)}
               disabled={!ready || isVerifying}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] focus:border-transparent text-black placeholder-gray-500 disabled:opacity-50"
+              className="w-full pl-10 pr-4 py-4 bg-transparent border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black placeholder-gray-500 disabled:opacity-50"
               autoComplete="off"
             />
             {status === "OK" && data.length > 0 && !isVerifying && (
@@ -261,6 +263,29 @@ export default function AddressSearchModal({
               </div>
             )}
           </div>
+          <div className="border-t border-gray-200 my-4" />
+
+          {/* Current Location Section */}
+          <button
+            onClick={() => {
+              onClose();
+              document.dispatchEvent(new Event("getCurrentLocation"));
+            }}
+            disabled={isVerifying}
+            className="w-full text-left hover:bg-gray-50 p-4 rounded-md cursor-pointer transition-colors"
+          >
+            <div className="flex items-center gap-2 text-[#f15736] mb-2">
+              <Navigation size={20} />
+              <span className="font-medium">Use your current location</span>
+            </div>
+            {currentAddress && (
+              <p className="text-gray-500 text-sm pl-7">{currentAddress}</p>
+            )}
+          </button>
+
+          {/* Visual Separator */}
+
+          {/* Current Address Display */}
         </div>
 
         {/* Content below input */}
@@ -303,20 +328,6 @@ export default function AddressSearchModal({
               </button>
             </div>
           )}
-        </div>
-
-        <div className="p-6 border-t border-gray-200 shrink-0">
-          <button
-            onClick={() => {
-              onClose();
-              document.dispatchEvent(new Event("getCurrentLocation"));
-            }}
-            disabled={isVerifying}
-            className="w-full flex items-center justify-center gap-2 bg-[#e8f5f3] text-[#00a082] py-3 rounded-full hover:bg-[#d7eae7] transition-colors disabled:opacity-50"
-          >
-            <Navigation size={20} />
-            Use current location
-          </button>
         </div>
       </div>
     </div>
