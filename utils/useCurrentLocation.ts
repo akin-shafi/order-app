@@ -17,16 +17,17 @@ interface Coordinates {
 
 interface UseCurrentLocationOptions {
   initialAddress?: string;
+  skipInitialFetch?: boolean;
 }
 
 export function useCurrentLocation(options: UseCurrentLocationOptions = {}) {
-  const { initialAddress } = options;
+  const { initialAddress, skipInitialFetch = false } = options;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(initialAddress || null);
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [locationDetails, setLocationDetails] = useState<LocationDetails | null>(null);
-  const [hasAttemptedFetch, setHasAttemptedFetch] = useState(!!initialAddress);
+  const [hasAttemptedFetch, setHasAttemptedFetch] = useState(true);
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string | null>(null);
   const geocoderRef = useRef<google.maps.Geocoder | null>(null);
@@ -183,13 +184,9 @@ export function useCurrentLocation(options: UseCurrentLocationOptions = {}) {
   };
 
   useEffect(() => {
-    // Only fetch location if no initial address was provided and we haven't attempted to fetch yet
-    if (!address && !isLoading && !hasAttemptedFetch && googleLoaded) {
-      fetchCurrentLocation();
-    }
-
     const handleGetCurrentLocation = () => {
       if (googleLoaded) {
+        console.log("Manual location fetch triggered");
         setHasAttemptedFetch(false);
         fetchCurrentLocation();
       } else {
@@ -199,7 +196,7 @@ export function useCurrentLocation(options: UseCurrentLocationOptions = {}) {
 
     document.addEventListener("getCurrentLocation", handleGetCurrentLocation);
     return () => document.removeEventListener("getCurrentLocation", handleGetCurrentLocation);
-  }, [address, hasAttemptedFetch, googleLoaded, isLoading]);
+  }, [googleLoaded]);
 
   return {
     address,

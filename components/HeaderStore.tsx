@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MapPin, Search, ShoppingCart, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
@@ -23,8 +23,14 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Only use the address context, not the local location state
-  const { address: contextAddress } = useAddress();
+  // Get all necessary data from the address context
+  const { 
+    address: contextAddress, 
+    isAddressValid,
+    isLoading,
+    error,
+    addressSource
+  } = useAddress();
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
@@ -46,6 +52,27 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
+  };
+
+  // Function to render the address text
+  const renderAddressText = () => {
+    if (isLoading) {
+      return "Getting your location...";
+    }
+    if (error) {
+      return "Set your location";
+    }
+    if (isAddressValid && contextAddress) {
+      // Add a small dot indicator for the address source
+      const sourceIndicator = {
+        localStorage: "🔵", // blue dot
+        currentLocation: "📍", // location pin
+        manual: "✏️", // pencil
+        none: "⚪", // white dot
+      }[addressSource];
+      return `${sourceIndicator} ${contextAddress}`;
+    }
+    return "Set your location";
   };
 
   return (
@@ -72,10 +99,11 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
                   type="button"
                   onClick={handleAddressClick}
                   className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
+                  disabled={isLoading}
                 >
                   <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
                   <span className="truncate max-w-[150px] md:max-w-[200px]">
-                    {contextAddress || "Set your location"}
+                    {renderAddressText()}
                   </span>
                 </button>
               </span>

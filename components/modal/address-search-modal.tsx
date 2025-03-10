@@ -87,16 +87,41 @@ export default function AddressSearchModal({
         return;
       }
 
+      // Get the formatted address from Google Places
       const formattedAddress = place.formatted_address || description;
-      setAddress(formattedAddress);
-      setCoordinates({ latitude: lat, longitude: lng });
-      setLocationDetails({
-        state: locationDetails.administrative_area,
-        localGovernment: locationDetails.localGovernment,
-        locality: locationDetails.locality,
+
+      // Create the complete location data
+      const newLocationData = {
+        address: formattedAddress,
+        coordinates: {
+          latitude: lat,
+          longitude: lng
+        },
+        locationDetails: {
+          state: locationDetails.administrative_area,
+          localGovernment: locationDetails.localGovernment,
+          locality: locationDetails.locality,
+        }
+      };
+
+      console.log("Setting new address data:", newLocationData);
+
+      // Update address data with a single call
+      setAddress(formattedAddress, {
+        coordinates: newLocationData.coordinates,
+        locationDetails: newLocationData.locationDetails,
+        source: 'manual'
       });
 
+      // Close the modal after successful address selection
       onClose();
+
+      // Trigger any necessary business data fetching here
+      document.dispatchEvent(
+        new CustomEvent("addressChanged", {
+          detail: newLocationData
+        })
+      );
     } catch (err) {
       setIsVerifying(false);
       setError("Error processing address. Please try again.");
