@@ -79,7 +79,7 @@ export default function CategoriesInStore() {
     <section className={sectionClassName}>
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2 py-4">
             Explore Categories
           </h2>
 

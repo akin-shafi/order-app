@@ -25,7 +25,7 @@ function StoreContentInner() {
       {/* Content */}
       <div className="relative">
         <HeaderStore restaurantName={""} />
-        <main className="max-w-6xl mx-auto px-4 py-2">
+        <main className="max-w-6xl mx-auto px-0 py-2">
           <Suspense fallback={<div>Loading categories...</div>}>
             <CategoriesInStore />
           </Suspense>
