@@ -67,10 +67,10 @@ export default function RecommendedForYou() {
   ];
 
   return (
-    <section className="py-8">
+    <section className="py-2">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#000000] mb-6 flex items-center">
+          <h2 className="text-2xl font-bold text-[#000000] mb-2 flex items-center">
             Recommended for You
             <Heart className="ml-2 h-5 w-5 text-[#ff6600]" />
           </h2>
