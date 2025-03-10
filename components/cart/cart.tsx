@@ -208,7 +208,7 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
               <span>Total</span>
               <span>{formatPrice(calculateTotal())}</span>
             </div>
-          </div>
+      </div>
 
           {/* Action Buttons */}
           <div className="space-y-3 pt-4">

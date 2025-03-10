@@ -9,6 +9,8 @@ import BusinessInfoSection from "@/components/BusinessInfoSection";
 import CategoriesSection from "@/components/store/CategoriesSection";
 import MenuItemsSection from "@/components/store/MenuItemsSection";
 import CartSection from "@/components/store/CartSection";
+import FloatingCheckoutButton from "@/components/cart/FloatingCheckoutButton";
+import CartModal from "@/components/cart/CartModal";
 import {
   restaurant,
   menuItemsByCategory,
@@ -28,6 +30,7 @@ export default function StoreDetailsPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([500, 10000]);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const parsePrice = (price: string): number => {
     return parseFloat(price.replace(/[^\d.]/g, "")) || 0;
@@ -44,6 +47,10 @@ export default function StoreDetailsPage() {
       const itemPrice = parsePrice(item.price);
       return itemPrice >= priceRange[0] && itemPrice <= priceRange[1];
     });
+  };
+
+  const handleCheckout = () => {
+    setIsCartOpen(true);
   };
 
   return (
@@ -70,6 +77,8 @@ export default function StoreDetailsPage() {
         </div>
       </main>
       <FooterStore />
+
+      {/* Modals */}
       <AnimatePresence>
         {selectedItem && (
           <ItemModal
@@ -79,6 +88,15 @@ export default function StoreDetailsPage() {
           />
         )}
       </AnimatePresence>
+
+      <CartModal
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        restaurantName={restaurant.name}
+      />
+
+      {/* Floating Checkout Button */}
+      <FloatingCheckoutButton onCheckout={handleCheckout} />
     </div>
   );
 }

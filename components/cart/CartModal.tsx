@@ -23,7 +23,6 @@ const CartModal: React.FC<CartModalProps> = ({
     useHeaderStore();
   const { state: shoppingListState } = useShoppingList();
 
-  // Close on ESC key
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -32,21 +31,19 @@ const CartModal: React.FC<CartModalProps> = ({
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  // Handle clicking outside
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
-  // Animation variants for sliding in from the right
   const modalVariants = {
     hidden: {
-      x: "100%", // Start off-screen to the right
+      x: "100%",
       opacity: 0,
     },
     visible: {
-      x: 0, // Slide to the visible position
+      x: 0,
       opacity: 1,
       transition: {
         type: "spring",
@@ -55,7 +52,7 @@ const CartModal: React.FC<CartModalProps> = ({
       },
     },
     exit: {
-      x: "100%", // Slide back out to the right
+      x: "100%",
       opacity: 0,
       transition: {
         duration: 0.2,
@@ -92,13 +89,18 @@ const CartModal: React.FC<CartModalProps> = ({
                   </span>
                 </button>
                 <button
-                  className="cursor-pointer rounded-full p-2 border border-gray-500 text-dark hover:bg-[#292d32]"
+                  className="group relative w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
                   onClick={() => {
                     setCartOpen(false);
                     onClose();
                   }}
+                  aria-label="Close modal"
                 >
-                  <X size={16} />
+                  <X
+                    size={24}
+                    className="transition-transform group-hover:scale-110"
+                  />
+                  <span className="absolute inset-0 rounded-full bg-gray-200 opacity-0 group-hover:opacity-20 transition-opacity"></span>
                 </button>
               </div>
             </div>

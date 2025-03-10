@@ -72,8 +72,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         items: [...packToDuplicate.items],
       };
 
-      return {
-        ...state,
+        return {
+          ...state,
         packs: [...state.packs, newPack],
         activePackId: newPack.id,
       };
@@ -84,7 +84,22 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         packs: state.packs.map((pack) =>
           pack.id === action.payload.packId
-            ? { ...pack, items: [...pack.items, action.payload.item] }
+            ? {
+                ...pack,
+                items: pack.items.some(
+                  (item) => item.id === action.payload.item.id
+                )
+                  ? pack.items.map((item) =>
+                      item.id === action.payload.item.id
+                        ? {
+                            ...item,
+                            quantity:
+                              item.quantity + action.payload.item.quantity,
+                          }
+                        : item
+                    )
+                  : [...pack.items, action.payload.item],
+              }
             : pack
         ),
       };
@@ -128,8 +143,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       };
 
     case "TOGGLE_BROWN_BAG":
-      return {
-        ...state,
+        return {
+          ...state,
         includeBrownBag: !state.includeBrownBag,
       };
 
