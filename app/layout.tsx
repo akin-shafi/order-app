@@ -1,18 +1,14 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
+import { DM_Sans as DMSans } from "next/font/google";
 import GoogleMapsScript from "@/components/google-maps-script";
 import Providers from "./providers";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DMSans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -50,7 +46,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
+        className={`${dmSans.variable} antialiased bg-white`}
         suppressHydrationWarning
       >
         <GoogleMapsScript />

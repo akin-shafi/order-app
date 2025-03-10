@@ -67,12 +67,12 @@ export default function RecommendedForYou() {
   ];
 
   return (
-    <section className="py-2">
+    <section className="py-4 md:py-8">
       <div className="container mx-auto px-4">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#000000] mb-2 flex items-center">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-xl md:text-2xl font-bold text-[#292d32] mb-3 md:mb-6 flex items-center">
             Recommended for You
-            <Heart className="ml-2 h-5 w-5 text-[#ff6600]" />
+            <Heart className="ml-2 h-4 md:h-5 w-4 md:w-5 text-[#ff6600]" />
           </h2>
 
           {/* Mobile: Horizontal scrolling container */}
@@ -170,8 +170,8 @@ export default function RecommendedForYou() {
             )}
           </div>
 
-          {/* Desktop: Grid layout */}
-          <div className="hidden md:grid md:grid-cols-3 gap-4">
+          {/* Desktop: Updated grid layout */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6">
             {mounted
               ? recommendedItems.map((item) => (
                   <div

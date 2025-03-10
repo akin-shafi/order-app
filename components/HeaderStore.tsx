@@ -2,14 +2,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { MapPin, Search, ShoppingCart, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
 import AddressSearchModal from "./modal/address-search-modal";
-import { useCurrentLocation } from "@/utils/useCurrentLocation";
 import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
@@ -24,49 +23,8 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const {
-    address: contextAddress,
-    setAddress,
-    setCoordinates,
-    setLocationDetails,
-  } = useAddress();
-
-  const {
-    address,
-    isLoading,
-    error,
-    coordinates,
-    locationDetails,
-    fetchCurrentLocation,
-  } = useCurrentLocation({ initialAddress: contextAddress });
-
-  // Update context when location data changes
-  useEffect(() => {
-    if (address && address !== contextAddress) {
-      setAddress(address);
-    }
-    if (coordinates) {
-      setCoordinates(coordinates);
-    }
-    if (locationDetails) {
-      setLocationDetails(locationDetails);
-    }
-  }, [
-    address,
-    coordinates,
-    locationDetails,
-    contextAddress,
-    setAddress,
-    setCoordinates,
-    setLocationDetails,
-  ]);
-
-  // Fetch location on mount if not already in context
-  useEffect(() => {
-    if (!contextAddress) {
-      fetchCurrentLocation();
-    }
-  }, [contextAddress, fetchCurrentLocation]);
+  // Only use the address context, not the local location state
+  const { address: contextAddress } = useAddress();
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
@@ -116,7 +74,9 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
                   className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
                 >
                   <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
-                  {isLoading ? "Locating..." : address || "Set your location"}
+                  <span className="truncate max-w-[150px] md:max-w-[200px]">
+                    {contextAddress || "Set your location"}
+                  </span>
                 </button>
               </span>
             </div>
@@ -126,7 +86,8 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
             <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
-                type="text"
+                type="search"
+                inputMode="search"
                 placeholder="What can we get you?"
                 className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
               />
@@ -154,28 +115,12 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
             <button
               type="button"
               className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-              onClick={(e) => {
-                e.preventDefault();
-                console.log("User icon clicked, opening login modal");
-                setIsLoginModalOpen(true);
-              }}
+              onClick={openLoginModal}
             >
               <User className="h-5 w-5" />
             </button>
           </div>
         </div>
-
-        {/* Mobile Search Input */}
-        {/* <div className="md:hidden mt-2">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <input
-              type="text"
-              placeholder="What can we get you?"
-              className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-full text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
-            />
-          </div>
-        </div> */}
       </header>
 
       <SignupModal
@@ -196,8 +141,6 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
         isOpen={isAddressModalOpen}
         onClose={() => setIsAddressModalOpen(false)}
       />
-
-      {error && <div className="text-red-500 text-center">{error}</div>}
     </>
   );
 };

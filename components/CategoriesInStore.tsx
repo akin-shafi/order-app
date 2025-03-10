@@ -44,14 +44,9 @@ export default function CategoriesInStore() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const sectionClassName =
-    pathname === "/store"
-      ? "mb-2"
-      : "py-12 px-4 sm:px-6 md:px-12 bg-[#fafafa] mb-2";
-
   const getCardClassName = (categoryName: string, index: number) => {
     const baseClass =
-      "flex flex-col items-center justify-center p-3 rounded-lg cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md w-32 h-28 flex-shrink-0"; // Increased from w-24 to w-32
+      "flex flex-col items-center justify-center p-2 rounded-lg cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md w-24 h-24 flex-shrink-0"; // Reduced size for mobile
     const isSelected =
       selectedCategory?.toLowerCase() === categoryName.toLowerCase();
 
@@ -76,20 +71,23 @@ export default function CategoriesInStore() {
   };
 
   return (
-    <section className={sectionClassName}>
+    <section className="py-4 md:py-8">
       <div className="container mx-auto px-4">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2 py-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-xl md:text-2xl font-bold text-[#292d32] mb-3 md:mb-6">
             Explore Categories
           </h2>
 
           {/* Mobile: Swiper for small screens */}
-          <div className="md:hidden">
+          <div className="md:hidden -mx-4">
             {mounted ? (
               <Swiper
-                slidesPerView={2.5} // Show 2.5 items at a glance
-                spaceBetween={16} // Gap between slides
-                className="py-4 px-2"
+                slidesPerView={3.5}
+                spaceBetween={12}
+                className="px-4"
+                style={{
+                  paddingLeft: "16px", // Add extra padding to align with banner
+                }}
               >
                 {categories.map((category, index) => (
                   <SwiperSlide key={index}>
@@ -97,16 +95,16 @@ export default function CategoriesInStore() {
                       className={getCardClassName(category.name, index)}
                       onClick={() => handleCategoryClick(category.name)}
                     >
-                      <div className="w-12 h-12 mb-2 flex justify-center">
+                      <div className="w-10 h-10 mb-1 flex justify-center">
                         <Image
                           src={category.image || "/placeholder.svg"}
                           alt={category.name}
-                          width={48}
-                          height={48}
+                          width={32}
+                          height={32}
                           className="object-contain"
                         />
                       </div>
-                      <span className="text-gray-800 font-medium text-sm text-center whitespace-nowrap">
+                      <span className="text-gray-800 font-medium text-xs text-center whitespace-nowrap">
                         {category.name}
                       </span>
                     </div>
@@ -115,9 +113,12 @@ export default function CategoriesInStore() {
               </Swiper>
             ) : (
               <Swiper
-                slidesPerView={2.5}
-                spaceBetween={16}
-                className="py-4 px-2"
+                slidesPerView={3.5}
+                spaceBetween={12}
+                className="px-4"
+                style={{
+                  paddingLeft: "16px", // Add extra padding to align with banner
+                }}
               >
                 {Array(7)
                   .fill(0)
@@ -130,8 +131,8 @@ export default function CategoriesInStore() {
             )}
           </div>
 
-          {/* Desktop: Evenly spaced grid */}
-          <div className="hidden md:flex justify-between gap-4">
+          {/* Desktop: Categories */}
+          <div className="hidden md:grid md:grid-cols-8 gap-4">
             {mounted
               ? categories.map((category, index) => (
                   <div
@@ -156,30 +157,6 @@ export default function CategoriesInStore() {
               : Array(7)
                   .fill(0)
                   .map((_, index) => <SkeletonCategoryCard key={index} />)}
-          </div>
-
-          <div className="container mx-auto px-0 py-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-green-800 rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src="/images/advert-1.png"
-                  alt="Chow Combo Offer"
-                  width={600}
-                  height={192}
-                  className="w-full object-cover"
-                  priority
-                />
-              </div>
-              <div className="bg-red-900 rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src="/images/advert-2.png"
-                  alt="Relay Package Delivery"
-                  width={600}
-                  height={192}
-                  className="w-full object-cover"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>

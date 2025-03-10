@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { motion, AnimatePresence } from "framer-motion";
 import { useHeaderStore } from "@/stores/header-store";
 import Cart from "./cart";
 import SavedCartsModal from "./SavedCartsModal";
@@ -49,7 +49,7 @@ const CartModal: React.FC<CartModalProps> = ({
       x: 0, // Slide to the visible position
       opacity: 1,
       transition: {
-        type: "spring", // Smooth spring animation
+        type: "spring",
         stiffness: 300,
         damping: 30,
       },
@@ -63,48 +63,56 @@ const CartModal: React.FC<CartModalProps> = ({
     },
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end"
-      onClick={handleBackdropClick}
-    >
-      <div
-        className="w-full md:w-[480px] bg-white h-full animate-slide-in"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Cart Header */}
-        <div className="flex items-center justify-between p-4  border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={toggleShoppingList}
-              className="flex items-center gap-1 text-[#ff6600]"
-            >
-              Saved Items:{" "}
-              <span className="bg-[#ff6600] text-white rounded-full px-2 py-0.5 text-xs">
-                {shoppingListState.savedCarts.length}
-              </span>
-            </button>
-            <button
-              className="cursor-pointer rounded-full p-2 border border-gray-500 text-dark hover:bg-[#292d32]"
-              onClick={() => {
-                setCartOpen(false);
-                onClose();
-              }}
-            >
-              <X size={16} />
-            </button>
-          </div>
-        </div>
+    <AnimatePresence>
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end"
+          onClick={handleBackdropClick}
+        >
+          <motion.div
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="w-full md:w-[480px] bg-white h-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cart Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={toggleShoppingList}
+                  className="flex items-center gap-1 text-[#ff6600]"
+                >
+                  Saved Items:{" "}
+                  <span className="bg-[#ff6600] text-white rounded-full px-2 py-0.5 text-xs">
+                    {shoppingListState.savedCarts.length}
+                  </span>
+                </button>
+                <button
+                  className="cursor-pointer rounded-full p-2 border border-gray-500 text-dark hover:bg-[#292d32]"
+                  onClick={() => {
+                    setCartOpen(false);
+                    onClose();
+                  }}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
 
-        {/* Cart Content */}
-        <Cart restaurantName={restaurantName} />
-        {/* Shopping List Modal */}
-        {isShoppingListOpen && <SavedCartsModal onClose={toggleShoppingList} />}
-      </div>
-    </div>
+            {/* Cart Content */}
+            <Cart restaurantName={restaurantName} />
+            {/* Shopping List Modal */}
+            {isShoppingListOpen && (
+              <SavedCartsModal onClose={toggleShoppingList} />
+            )}
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 };
 

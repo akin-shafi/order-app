@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import RecommendedForYou from "@/components/RecomendationSection";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Suspense } from "react";
+import AdvertBanners from "@/components/AdvertBanners";
 
 function StoreContentInner() {
   const searchParams = useSearchParams();
@@ -25,10 +26,20 @@ function StoreContentInner() {
       {/* Content */}
       <div className="relative">
         <HeaderStore restaurantName={""} />
-        <main className="max-w-6xl mx-auto px-0 py-2">
+        <main className="max-w-6xl mx-auto px-4 py-8">
           <Suspense fallback={<div>Loading categories...</div>}>
             <CategoriesInStore />
           </Suspense>
+
+          {/* Animated Advert Banners */}
+          <Suspense
+            fallback={
+              <div className="h-[200px] animate-pulse bg-gray-200 rounded-xl"></div>
+            }
+          >
+            <AdvertBanners />
+          </Suspense>
+
           <Suspense fallback={<div>Loading recommendations...</div>}>
             <RecommendedForYou />
           </Suspense>
