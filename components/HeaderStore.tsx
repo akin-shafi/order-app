@@ -97,7 +97,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
           <div className="flex items-center gap-4">
             <Link href="/" className="bg-[#000000] rounded">
               <Image
-                src="/betaday-logo.png"
+                src="/images/betaday-logo.png"
                 alt="betaday logo"
                 width={40}
                 height={40}
@@ -166,7 +166,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
         </div>
 
         {/* Mobile Search Input */}
-        <div className="md:hidden mt-2">
+        {/* <div className="md:hidden mt-2">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <input
@@ -175,7 +175,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
               className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-full text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
             />
           </div>
-        </div>
+        </div> */}
       </header>
 
       <SignupModal

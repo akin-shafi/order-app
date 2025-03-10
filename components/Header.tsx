@@ -7,12 +7,12 @@ import {
   X,
   ShoppingCart,
   ChevronDown,
-  Home,
   Info,
   HelpCircle,
   Phone,
-  User,
   Utensils,
+  Package,
+  Truck,
 } from "lucide-react";
 import { CartIcon } from "./icons";
 
@@ -23,33 +23,33 @@ export default function Header() {
   const mobileMenuItems = [
     {
       name: "Products",
-      icon: <Home size={20} />,
+      icon: <Package size={24} className="text-purple-500" />,
       dropdown: ["BetaPackage", "ShipazDay"],
       href: "/products",
     },
     {
       name: "Know Us",
-      icon: <Info size={20} />,
+      icon: <Info size={24} className="text-blue-500" />,
       href: "/know-us",
     },
     {
       name: "FAQs",
-      icon: <HelpCircle size={20} />,
+      icon: <HelpCircle size={24} className="text-green-500" />,
       href: "/faqs",
     },
     {
       name: "Contact",
-      icon: <Phone size={20} />,
+      icon: <Phone size={24} className="text-yellow-500" />,
       href: "/contact",
     },
     {
       name: "Become a vendor",
-      icon: <Utensils size={20} />,
+      icon: <Utensils size={24} className="text-pink-500" />,
       href: "/become-a-vendor",
     },
     {
       name: "Become a Rider",
-      icon: <User size={20} />,
+      icon: <Truck size={24} className="text-orange-500" />,
       href: "/become-a-rider",
     },
   ];
@@ -189,31 +189,27 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
-          onClick={() => setIsMenuOpen(false)}
-        />
-      )}
-
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform z-50
-        ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 md:hidden`}
+        className={`fixed inset-0 bg-black/95 z-50 transform transition-transform duration-300 md:hidden ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
-        <div className="p-6">
-          <h2 className="text-xl font-bold text-[#000000] mb-6 flex items-center gap-2">
-            <Menu size={24} /> Menu
-          </h2>
+        {/* Close button */}
+        <button
+          onClick={() => setIsMenuOpen(false)}
+          className="absolute top-6 right-6 text-white p-2 hover:bg-white/10 rounded-full"
+        >
+          <X size={32} />
+        </button>
 
-          <nav className="space-y-4">
+        {/* Menu content */}
+        <div className="h-full flex flex-col pt-20 px-6">
+          <nav className="space-y-6">
             {mobileMenuItems.map((item) => (
-              <div key={item.name} className="border-b border-[#f1f1f1] pb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+              <div key={item.name} className="border-b border-white/10">
+                <div className="flex items-center justify-between py-4">
+                  <div className="flex items-center gap-4 flex-1">
                     {item.icon}
                     {item.dropdown ? (
                       <button
@@ -222,36 +218,36 @@ export default function Header() {
                             openDropdown === item.name ? null : item.name
                           )
                         }
-                        className="text-[#000000] hover:text-[#f15736] flex items-center gap-2"
+                        className="text-white text-xl font-medium flex items-center gap-2 w-full"
                       >
                         {item.name}
+                        <ChevronDown
+                          className={`ml-auto transform transition-transform ${
+                            openDropdown === item.name ? "rotate-180" : ""
+                          }`}
+                          size={24}
+                        />
                       </button>
                     ) : (
                       <Link
                         href={item.href}
-                        className="text-[#000000] hover:text-[#f15736]"
+                        className="text-white text-xl font-medium w-full"
+                        onClick={() => setIsMenuOpen(false)}
                       >
                         {item.name}
                       </Link>
                     )}
                   </div>
-                  {item.dropdown && (
-                    <ChevronDown
-                      className={`transform transition-transform ${
-                        openDropdown === item.name ? "rotate-180" : ""
-                      }`}
-                      size={16}
-                    />
-                  )}
                 </div>
 
                 {item.dropdown && openDropdown === item.name && (
-                  <div className="ml-8 mt-2 space-y-2">
+                  <div className="ml-12 mb-4 space-y-4">
                     {item.dropdown.map((subItem) => (
                       <Link
                         key={subItem}
-                        href="#"
-                        className="block text-sm text-[#000000] hover:text-[#f15736]"
+                        href={`/${subItem.toLowerCase()}`}
+                        className="block text-white/80 text-xl font-medium hover:text-white"
+                        onClick={() => setIsMenuOpen(false)}
                       >
                         {subItem}
                       </Link>

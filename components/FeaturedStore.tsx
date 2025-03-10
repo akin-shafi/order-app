@@ -63,7 +63,7 @@ export default function FeaturedStore({
     console.log(`Heart clicked for business: ${businessId}`);
   };
 
-  console.log("FeaturedStore - Filtered businesses:", filteredBusinesses);
+  // console.log("FeaturedStore - Filtered businesses:", filteredBusinesses);
 
   return (
     <section>

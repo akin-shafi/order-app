@@ -24,9 +24,18 @@
 }
 
 body {
-  color: var(--foreground);
+  --tw-text-opacity: 1 !important;
+  color: #292d32 !important;
   background: var(--background);
   font-family: 'DM Sans', Arial, Helvetica, sans-serif; /* Changed to DM Sans with fallbacks */
+}
+
+.text-dark {
+  color: #292d32 !important;
+}
+
+.text-gray {
+  color: #6b7280 !important;
 }
 
 .bg-custom-white { background-color: #FFFFFF; }

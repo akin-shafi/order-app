@@ -1,11 +1,8 @@
 import type React from "react";
-import { AddressProvider } from "@/contexts/address-context";
 import type { Metadata } from "next";
 import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
-import { CartProvider } from "@/contexts/cart-context";
-import { ShoppingListProvider } from "@/contexts/shopping-list-context";
 import GoogleMapsScript from "@/components/google-maps-script";
-// import "react-phone-input-2/lib/style.css";
+import Providers from "./providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -57,11 +54,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <GoogleMapsScript />
-        <AddressProvider>
-          <ShoppingListProvider>
-            <CartProvider>{children}</CartProvider>
-          </ShoppingListProvider>
-        </AddressProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -18,6 +18,12 @@ module.exports = {
         border: "rgb(var(--border) / <alpha-value>)",
         background: "rgb(var(--background) / <alpha-value>)",
         foreground: "rgb(var(--foreground) / <alpha-value>)",
+        FF6600: "#FF6600",
+        FF8F00: "#FF8F00",
+        FFA726: "#FFA726",
+        FFF5E6: "#FFF5E6",
+        FFE0B2: "#FFE0B2",
+        FFCC80: "#FFCC80",
       },
       keyframes: {
         "slide-in": {

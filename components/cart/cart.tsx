@@ -30,11 +30,7 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
 
   if (state.packs.length === 0) {
     return (
-      <div className="bg-white border border-gray-100 rounded-lg p-6">
-        <h2 className="text-xl text-[#292d32] dark:text-white font-bold text-center mb-4">
-          Your cart is empty. Add items to get started
-        </h2>
-
+      <div className="bg-white  border-gray-100 rounded-lg p-6 mt-24">
         <div className="flex justify-center mb-6">
           <Image
             src="/images/takeaway.png"
@@ -44,11 +40,13 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
             className="opacity-80"
           />
         </div>
-
-        <p className="text-center text-gray-500 text-sm  dark:text-white">
+        <h2 className="text-xl text-[#292d32] font-bold text-center mb-4">
+          Your cart has no items yet. <br /> Start by adding some!
+        </h2>
+        {/* <p className="text-center text-gray-500 text-sm">
           You&apos;ve not added any products yet. When you do, you&apos;ll see
           them here!
-        </p>
+        </p> */}
       </div>
     );
   }
@@ -210,7 +208,7 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
               <span>Total</span>
               <span>{formatPrice(calculateTotal())}</span>
             </div>
-      </div>
+          </div>
 
           {/* Action Buttons */}
           <div className="space-y-3 pt-4">

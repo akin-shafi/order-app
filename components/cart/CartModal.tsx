@@ -75,7 +75,7 @@ const CartModal: React.FC<CartModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Cart Header */}
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between p-4  border-b border-gray-200">
           <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
           <div className="flex items-center gap-4">
             <button
@@ -88,7 +88,7 @@ const CartModal: React.FC<CartModalProps> = ({
               </span>
             </button>
             <button
-              className="cursor-pointer rounded-full  p-2 border border-gray-500 hover:text-white hover:bg-[#292d32]"
+              className="cursor-pointer rounded-full p-2 border border-gray-500 text-dark hover:bg-[#292d32]"
               onClick={() => {
                 setCartOpen(false);
                 onClose();
