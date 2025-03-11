@@ -217,10 +217,14 @@ export default function AddressSearchModal({
 
   const handleJoinWaitlistClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent any form submission
+    e.stopPropagation(); // Stop event bubbling
     if (inputRef.current) {
       inputRef.current.blur(); // Ensure input loses focus
     }
-    onJoinWaitlist(undeliverableAddress);
+    // Small delay to ensure input blur happens before modal transition
+    setTimeout(() => {
+      onJoinWaitlist(undeliverableAddress);
+    }, 50);
   };
 
   const handleUseCurrentLocation = async () => {

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { X, Loader2 } from "lucide-react";
 import Image from "next/image";
 
@@ -14,30 +14,22 @@ export default function JoinWaitlistModal({
   address,
 }: JoinWaitlistModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
-  // Reset form when modal opens
+  // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
-      setEmail("");
-      setPhone("");
       setSubmitted(false);
     }
   }, [isOpen]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent any default behavior
     setIsSubmitting(true);
 
     try {
-      await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, phone, address }),
-      });
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setSubmitted(true);
     } catch (error) {
       console.error("Error joining waitlist:", error);
@@ -80,45 +72,11 @@ export default function JoinWaitlistModal({
           </div>
 
           {!submitted ? (
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
-                  placeholder="Enter your email"
-                  autoComplete="email"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
-                  placeholder="Enter your phone number"
-                  autoComplete="tel"
-                />
-              </div>
+            <div className="space-y-4">
+              {/* Temporarily removed form inputs for debugging */}
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 disabled={isSubmitting}
                 className="w-full bg-[#f15736] text-white py-3 rounded-lg hover:bg-[#d8432c] transition-colors disabled:opacity-50 flex items-center justify-center"
               >
@@ -131,7 +89,7 @@ export default function JoinWaitlistModal({
                   "Join Waitlist"
                 )}
               </button>
-            </form>
+            </div>
           ) : (
             <div className="text-center">
               <div className="mb-4">✨</div>
