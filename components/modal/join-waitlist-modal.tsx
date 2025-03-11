@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { X, Loader2 } from "lucide-react";
 import Image from "next/image";
+import PhoneNumberInput from "../PhoneNumberInput";
+import { useForm, Controller } from "react-hook-form";
 
 interface JoinWaitlistModalProps {
   isOpen: boolean;
   onClose: () => void;
   address: string;
+}
+
+interface FormData {
+  email: string;
+  phoneNumber: string;
 }
 
 export default function JoinWaitlistModal({
@@ -14,19 +21,44 @@ export default function JoinWaitlistModal({
   address,
 }: JoinWaitlistModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      email: "",
+      phoneNumber: "",
+    },
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      // Ensure inputs don't have focus on mount
+      if (emailInputRef.current) {
+        emailInputRef.current.blur();
+      }
+      if (phoneInputRef.current) {
+        phoneInputRef.current.blur();
+      }
+    }
+  }, [isOpen]);
+
+  const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-
     try {
       await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, phone, address }),
+        body: JSON.stringify({
+          email: data.email,
+          phone: data.phoneNumber,
+          address,
+        }),
       });
       setSubmitted(true);
     } catch (error) {
@@ -63,13 +95,13 @@ export default function JoinWaitlistModal({
               Join our Waitlist
             </h2>
             <p className="text-sm text-gray-500">
-              We&apos;ll notify you as soon as we start delivering to:
+              {`We'll notify you as soon as we start delivering to:`}
             </p>
             <p className="text-sm font-medium text-black mt-1">{address}</p>
           </div>
 
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <label
                   htmlFor="email"
@@ -77,32 +109,61 @@ export default function JoinWaitlistModal({
                 >
                   Email Address
                 </label>
-                <input
-                  type="email"
-                  id="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
-                  placeholder="Enter your email"
+                <Controller
+                  name="email"
+                  control={control}
+                  rules={{ required: "Email is required" }}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      ref={emailInputRef}
+                      type="email"
+                      id="email"
+                      autoFocus={false}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
+                      placeholder="Enter your email"
+                    />
+                  )}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
               <div>
                 <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="phoneNumber"
+                  className="block text-sm font-medium mb-1 text-black"
                 >
                   Phone Number
                 </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
-                  placeholder="Enter your phone number"
+                <Controller
+                  name="phoneNumber"
+                  control={control}
+                  rules={{
+                    required: "Phone number is required",
+                    pattern: {
+                      value: /^\+234\d{10}$/,
+                      message:
+                        "Please enter a valid Nigerian phone number (e.g., +2348145360866)",
+                    },
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <PhoneNumberInput
+                      value={value || ""}
+                      onChange={onChange}
+                      ref={phoneInputRef}
+                      autoFocus={false}
+                      hasError={!!errors.phoneNumber}
+                    />
+                  )}
                 />
+                {errors.phoneNumber && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.phoneNumber.message}
+                  </p>
+                )}
               </div>
               <button
                 type="submit"
@@ -126,7 +187,7 @@ export default function JoinWaitlistModal({
                 {`You're on the list!`}
               </h3>
               <p className="text-sm text-gray-500 mb-4">
-                {` We'll notify you as soon as we start delivering to your area.`}
+                {`We'll notify you as soon as we start delivering to your area.`}
               </p>
               <button
                 onClick={onClose}
