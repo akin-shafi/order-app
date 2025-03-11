@@ -9,7 +9,7 @@ interface PhoneNumberInputProps {
   onFocus?: () => void;
   onBlur?: (value: string) => void;
   hasError?: boolean;
-  autoFocus?: boolean; // Added autoFocus prop
+  autoFocus?: boolean;
 }
 
 const PhoneNumberInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(
@@ -19,17 +19,31 @@ const PhoneNumberInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(
   ) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value.trim();
-      const cleanedValue = inputValue.replace(/[^+\d]/g, "");
+      // Remove all non-digit characters
+      const cleanedValue = inputValue.replace(/\D/g, "");
 
       let newValue = cleanedValue;
-      if (cleanedValue.startsWith("0") && !cleanedValue.startsWith("+")) {
-        newValue = "234" + cleanedValue.slice(1);
-      } else if (!cleanedValue.startsWith("234") && cleanedValue.length > 0) {
-        newValue = "234" + cleanedValue;
+
+      // Handle different input formats
+      if (cleanedValue.length <= 10) {
+        // If input is 10 digits or less, treat as 10-digit number
+        newValue = cleanedValue;
+      } else if (cleanedValue.length <= 13) {
+        // If input is 11-13 digits, check if it starts with 234
+        if (cleanedValue.startsWith("234")) {
+          newValue = cleanedValue;
+        } else {
+          // If it doesn't start with 234, prepend it
+          newValue = "234" + cleanedValue;
+        }
+      } else {
+        // If longer than 13 digits, truncate to 13
+        newValue = cleanedValue.slice(0, 13);
       }
 
-      if (newValue.length > 13) {
-        newValue = newValue.slice(0, 13);
+      // Ensure the value is either 10 or 13 digits
+      if (newValue.length > 10 && !newValue.startsWith("234")) {
+        newValue = "234" + newValue.slice(-10);
       }
 
       console.log("Phone number changed:", newValue);
@@ -41,6 +55,9 @@ const PhoneNumberInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(
         onBlur(value);
       }
     };
+
+    // Format the display value
+    const displayValue = value.startsWith("234") ? value.slice(3) : value;
 
     return (
       <div
@@ -59,13 +76,13 @@ const PhoneNumberInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(
           <span className="text-black font-medium">+234</span>
         </div>
         <input
-          ref={ref} // Added ref prop
+          ref={ref}
           type="tel"
-          value={value}
+          value={displayValue}
           onChange={handleChange}
           onFocus={onFocus}
           onBlur={handleBlurEvent}
-          autoFocus={autoFocus} // Added autoFocus prop
+          autoFocus={autoFocus}
           placeholder="8098290445"
           className={`flex-1 h-full p-2 text-black focus:outline-none focus:ring-1 focus:ring-[#000000] rounded-r-md ${
             hasError ? "border-red-500" : ""

@@ -48,18 +48,34 @@ export default function JoinWaitlistModal({
     }
   }, [isOpen]);
 
-  const onSubmit = async (data: JoinWaitlistFormValues) => {
-    if (!/^\+234\d{10}$/.test(data.phoneNumber)) {
-      console.error("Invalid phone number submitted:", data.phoneNumber);
-      return;
+  const validateNigerianPhoneNumber = (phoneNumber: string) => {
+    // Remove any non-digit characters
+    const cleanNumber = phoneNumber.replace(/\D/g, "");
+
+    // Check if it's a valid 10-digit or 13-digit (with 234) number
+    if (cleanNumber.length === 10) {
+      return true;
+    } else if (cleanNumber.length === 13 && cleanNumber.startsWith("234")) {
+      return true;
     }
+    return false;
+  };
+
+  const onSubmit = async (data: JoinWaitlistFormValues) => {
+    // Clean the phone number
+    const cleanPhone = data.phoneNumber.replace(/\D/g, "");
+
+    // Format the phone number to include 234 if it doesn't
+    const formattedPhone =
+      cleanPhone.length === 10 ? `234${cleanPhone}` : cleanPhone;
+
     try {
       await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: data.email,
-          phone: data.phoneNumber,
+          phone: formattedPhone,
           address,
         }),
       });
@@ -70,7 +86,7 @@ export default function JoinWaitlistModal({
   };
 
   const handlePhoneBlur = (value: string) => {
-    if (value && !/^\+234\d{10}$/.test(value)) {
+    if (value && !validateNigerianPhoneNumber(value)) {
       console.warn("Invalid Nigerian phone number:", value);
     }
   };
@@ -157,11 +173,9 @@ export default function JoinWaitlistModal({
                   control={control}
                   rules={{
                     required: "Phone number is required",
-                    pattern: {
-                      value: /^\+234\d{10}$/,
-                      message:
-                        "Please enter a valid Nigerian phone number (e.g., +2348145360866)",
-                    },
+                    validate: (value) =>
+                      validateNigerianPhoneNumber(value) ||
+                      "Please enter a valid Nigerian phone number (e.g., 8145360866 or 2348145360866)",
                   }}
                   render={({ field: { onChange, value } }) => (
                     <PhoneNumberInput
@@ -185,12 +199,12 @@ export default function JoinWaitlistModal({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#000000] text-white cursor-pointer py-3 rounded-md hover:bg-[#FF6600] transition-colors focus:outline-none focus:ring-2 focus:ring-[#000000] focus:ring-offset-2 disabled:opacity-70 flex items-center justify-center"
+                className="w-full bg-[#f15736] text-white py-3 rounded-lg hover:bg-[#d8432c] transition-colors disabled:opacity-50 flex items-center justify-center"
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="animate-spin mr-2" size={20} />
-                    Processing...
+                    Joining...
                   </>
                 ) : (
                   "Join Waitlist"
