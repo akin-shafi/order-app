@@ -8,6 +8,7 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 import { useAddress } from "@/contexts/address-context";
+import { useCurrentLocation } from "@/utils/useCurrentLocation";
 import Image from "next/image";
 
 interface AddressSearchModalProps {
@@ -33,7 +34,15 @@ export default function AddressSearchModal({
   const [error, setError] = useState<string | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  const { setAddress, address: currentAddress } = useAddress();
+  const { setAddress } = useAddress();
+  const {
+    address: currentLocationAddress,
+    coordinates: currentLocationCoords,
+    locationDetails: currentLocationDetails,
+    isLoading: isLocationLoading,
+    error: locationError,
+    fetchCurrentLocation,
+  } = useCurrentLocation({ skipInitialFetch: true });
   const inputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -210,6 +219,43 @@ export default function AddressSearchModal({
     // Example: window.location.href = "/waitlist";
   };
 
+  const handleUseCurrentLocation = async () => {
+    try {
+      await fetchCurrentLocation();
+
+      if (
+        currentLocationAddress &&
+        currentLocationCoords &&
+        currentLocationDetails
+      ) {
+        // Update address data with current location
+        setAddress(currentLocationAddress, {
+          coordinates: currentLocationCoords,
+          locationDetails: currentLocationDetails,
+          source: "currentLocation",
+        });
+
+        // Trigger address changed event
+        document.dispatchEvent(
+          new CustomEvent("addressChanged", {
+            detail: {
+              address: currentLocationAddress,
+              coordinates: currentLocationCoords,
+              locationDetails: currentLocationDetails,
+            },
+          })
+        );
+
+        onClose();
+      }
+    } catch (err) {
+      console.error("Error getting current location:", err);
+      setError(
+        "Could not get your current location. Please try again or enter address manually."
+      );
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -267,19 +313,31 @@ export default function AddressSearchModal({
 
           {/* Current Location Section */}
           <button
-            onClick={() => {
-              onClose();
-              document.dispatchEvent(new Event("getCurrentLocation"));
-            }}
-            disabled={isVerifying}
+            onClick={handleUseCurrentLocation}
+            disabled={isVerifying || isLocationLoading}
             className="w-full text-left hover:bg-gray-50 p-4 rounded-md cursor-pointer transition-colors"
           >
             <div className="flex items-center gap-2 text-[#f15736] mb-2">
-              <Navigation size={20} />
-              <span className="font-medium">Use your current location</span>
+              {isLocationLoading ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : (
+                <Navigation size={20} />
+              )}
+              <span className="font-medium">
+                {isLocationLoading
+                  ? "Getting your location..."
+                  : "Use your current location"}
+              </span>
             </div>
-            {currentAddress && (
-              <p className="text-gray-500 text-sm pl-7">{currentAddress}</p>
+            {currentLocationAddress && (
+              <p className="text-gray-500 text-sm pl-7">
+                {currentLocationAddress}
+              </p>
+            )}
+            {locationError && (
+              <p className="text-red-500 text-sm pl-7 mt-1">
+                Error getting location. Please try again.
+              </p>
             )}
           </button>
 
