@@ -17,19 +17,14 @@ export default function JoinWaitlistModal({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const emailInputRef = useRef<HTMLInputElement>(null);
-  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  // Prevent autofocus when modal opens
+  // Reset form when modal opens
   useEffect(() => {
     if (isOpen) {
-      // Blur inputs to prevent autofocus
-      if (emailInputRef.current) {
-        emailInputRef.current.blur();
-      }
-      if (phoneInputRef.current) {
-        phoneInputRef.current.blur();
-      }
+      setEmail("");
+      setPhone("");
+      setSubmitted(false);
     }
   }, [isOpen]);
 
@@ -54,9 +49,10 @@ export default function JoinWaitlistModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-brand-opacity flex items-center justify-center p-4 md:items-center md:justify-center">
-      <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
+    <div className="fixed inset-0 bg-brand-opacity z-[150] flex items-center justify-center animate-in fade-in duration-300">
+      <div className="bg-white rounded-lg w-full max-w-md mx-4 relative animate-in slide-in-from-bottom duration-500">
         <button
+          type="button"
           onClick={onClose}
           className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
         >
@@ -78,13 +74,13 @@ export default function JoinWaitlistModal({
               Join our Waitlist
             </h2>
             <p className="text-sm text-gray-500">
-              {`We'll notify you as soon as we start delivering to:`}
+              We&apos;ll notify you as soon as we start delivering to:
             </p>
             <p className="text-sm font-medium text-black mt-1">{address}</p>
           </div>
 
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
                   htmlFor="email"
@@ -93,15 +89,14 @@ export default function JoinWaitlistModal({
                   Email Address
                 </label>
                 <input
-                  ref={emailInputRef}
                   type="email"
                   id="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  autoFocus={false} // Explicitly disable autofocus
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
                   placeholder="Enter your email"
+                  autoComplete="email"
                 />
               </div>
               <div>
@@ -112,15 +107,14 @@ export default function JoinWaitlistModal({
                   Phone Number
                 </label>
                 <input
-                  ref={phoneInputRef}
                   type="tel"
                   id="phone"
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  autoFocus={false} // Explicitly disable autofocus
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
                   placeholder="Enter your phone number"
+                  autoComplete="tel"
                 />
               </div>
               <button
@@ -142,12 +136,14 @@ export default function JoinWaitlistModal({
             <div className="text-center">
               <div className="mb-4">✨</div>
               <h3 className="text-lg font-semibold text-black mb-2">
-                {`You're on the list!`}
+                You&apos;re on the list!
               </h3>
               <p className="text-sm text-gray-500 mb-4">
-                {`We'll notify you as soon as we start delivering to your area.`}
+                We&apos;ll notify you as soon as we start delivering to your
+                area.
               </p>
               <button
+                type="button"
                 onClick={onClose}
                 className="w-full bg-[#f15736] text-white py-3 rounded-lg hover:bg-[#d8432c] transition-colors"
               >

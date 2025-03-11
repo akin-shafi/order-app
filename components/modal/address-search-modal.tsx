@@ -215,10 +215,11 @@ export default function AddressSearchModal({
     setIsVerifying(false);
   };
 
-  const handleJoinWaitlistClick = () => {
-    // if (inputRef.current) {
-    //   inputRef.current.blur(); // Ensure input loses focus
-    // }
+  const handleJoinWaitlistClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent any form submission
+    if (inputRef.current) {
+      inputRef.current.blur(); // Ensure input loses focus
+    }
     onJoinWaitlist(undeliverableAddress);
   };
 
@@ -420,6 +421,7 @@ export default function AddressSearchModal({
                 our waitlist
               </p>
               <button
+                type="button" // Explicitly set button type
                 onClick={handleJoinWaitlistClick}
                 className="bg-[#f15736] text-white px-6 py-2 rounded-full hover:bg-[#d8432c] transition-colors"
               >

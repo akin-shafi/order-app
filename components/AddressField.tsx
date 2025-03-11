@@ -8,6 +8,7 @@ import { useAddress } from "@/contexts/address-context";
 import AddressSearchModal from "./modal/address-search-modal";
 import { useRouter } from "next/navigation";
 import { useCurrentLocation } from "@/utils/useCurrentLocation";
+import JoinWaitlistModal from "./modal/join-waitlist-modal";
 
 export default function AddressField() {
   const {
@@ -30,7 +31,7 @@ export default function AddressField() {
   const [inputAddress, setInputAddress] = useState<string>("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [undeliverableAddress, setUndeliverableAddress] = useState("");
   const router = useRouter();
@@ -99,8 +100,16 @@ export default function AddressField() {
 
   const handleJoinWaitlist = (address: string) => {
     setUndeliverableAddress(address);
-    setIsModalOpen(false);
-    setIsWaitlistModalOpen(true);
+    setIsAddressModalOpen(false);
+    // Small delay to ensure smooth transition
+    setTimeout(() => {
+      setIsWaitlistModalOpen(true);
+    }, 100);
+  };
+
+  const closeWaitlistModal = () => {
+    setIsWaitlistModalOpen(false);
+    setUndeliverableAddress("");
   };
 
   const isButtonDisabled = isLoading || isSending || !inputAddress.trim();
@@ -120,7 +129,7 @@ export default function AddressField() {
               setAddress(e.target.value);
               setError(null);
             }}
-            onFocus={() => setIsModalOpen(true)}
+            onFocus={() => setIsAddressModalOpen(true)}
             className="bg-white rounded-full border-none outline-none w-full py-2 text-base text-black placeholder-black"
           />
         </div>
@@ -132,9 +141,7 @@ export default function AddressField() {
           >
             <Navigation className="h-4 w-4 mr-2" />
             <span>Use current location</span>
-            <span className="text-xs text-gray-500">
-              Address goes here
-            </span>
+            <span className="text-xs text-gray-500">Address goes here</span>
           </button>
         )}
       </div>
@@ -178,9 +185,16 @@ export default function AddressField() {
 
       {/* Address Search Modal */}
       <AddressSearchModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
         onJoinWaitlist={handleJoinWaitlist}
+      />
+
+      {/* Waitlist Modal */}
+      <JoinWaitlistModal
+        isOpen={isWaitlistModalOpen}
+        onClose={closeWaitlistModal}
+        address={undeliverableAddress}
       />
     </div>
   );
