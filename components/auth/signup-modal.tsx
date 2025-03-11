@@ -25,6 +25,7 @@ export default function SignupModal({
   onSuccess,
   onLogin,
 }: SignupModalProps) {
+  
   const {
     register,
     handleSubmit,
