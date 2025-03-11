@@ -14,6 +14,7 @@ import Image from "next/image";
 interface AddressSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onJoinWaitlist: (address: string) => void;
 }
 
 interface LocationDetails {
@@ -30,20 +31,21 @@ interface LocationDetails {
 export default function AddressSearchModal({
   isOpen,
   onClose,
+  onJoinWaitlist,
 }: AddressSearchModalProps) {
   const [error, setError] = useState<string | null>(null);
-  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isExplicitlyFetching, setIsExplicitlyFetching] = useState(false);
   const { setAddress } = useAddress();
   const {
     address: currentLocationAddress,
     coordinates: currentLocationCoords,
     locationDetails: currentLocationDetails,
-    isLoading: isLocationLoading,
     error: locationError,
     fetchCurrentLocation,
   } = useCurrentLocation({ skipInitialFetch: true });
   const inputRef = useRef<HTMLInputElement>(null);
+  const [undeliverableAddress, setUndeliverableAddress] = useState<string>("");
 
   const {
     ready,
@@ -53,22 +55,35 @@ export default function AddressSearchModal({
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-      componentRestrictions: { country: "NG" }, // Restrict to Nigeria
+      componentRestrictions: { country: "NG" },
     },
-    debounce: 300, // Debounce for mobile performance
+    debounce: 300,
   });
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    if (isOpen) {
+      // Only prefetch location, don't focus input automatically
+      const prefetchLocation = async () => {
+        try {
+          await fetchCurrentLocation();
+        } catch (err: unknown) {
+          console.error("Error prefetching location:", err);
+        }
+      };
+
+      prefetchLocation();
+
+      // Blur the input if it has focus when showing error
+      if (error && inputRef.current) {
+        inputRef.current.blur();
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, fetchCurrentLocation, error]);
 
   const handleAddressSelect = async (suggestion: any) => {
     const description = suggestion.description;
     setValue(description, false);
     clearSuggestions();
-    setSelectedAddress(description);
     setError(null);
 
     try {
@@ -77,8 +92,10 @@ export default function AddressSearchModal({
       const place = results[0];
 
       const locationDetails = extractLocationDetails(place.address_components);
+      const formattedAddress = place.formatted_address || description;
 
       if (locationDetails.administrative_area !== "Lagos") {
+        setUndeliverableAddress(formattedAddress);
         setError("We don't deliver to your location yet.");
         return;
       }
@@ -88,6 +105,7 @@ export default function AddressSearchModal({
       setIsVerifying(false);
 
       if (!isDeliverable) {
+        setUndeliverableAddress(formattedAddress);
         setError(
           `We don't deliver to ${
             locationDetails.formattedAddress || description
@@ -96,16 +114,9 @@ export default function AddressSearchModal({
         return;
       }
 
-      // Get the formatted address from Google Places
-      const formattedAddress = place.formatted_address || description;
-
-      // Create the complete location data
       const newLocationData = {
         address: formattedAddress,
-        coordinates: {
-          latitude: lat,
-          longitude: lng,
-        },
+        coordinates: { latitude: lat, longitude: lng },
         locationDetails: {
           state: locationDetails.administrative_area,
           localGovernment: locationDetails.localGovernment,
@@ -113,23 +124,15 @@ export default function AddressSearchModal({
         },
       };
 
-      console.log("Setting new address data:", newLocationData);
-
-      // Update address data with a single call
       setAddress(formattedAddress, {
         coordinates: newLocationData.coordinates,
         locationDetails: newLocationData.locationDetails,
         source: "manual",
       });
 
-      // Close the modal after successful address selection
       onClose();
-
-      // Trigger any necessary business data fetching here
       document.dispatchEvent(
-        new CustomEvent("addressChanged", {
-          detail: newLocationData,
-        })
+        new CustomEvent("addressChanged", { detail: newLocationData })
       );
     } catch (err) {
       setIsVerifying(false);
@@ -209,58 +212,101 @@ export default function AddressSearchModal({
   const handleSearch = (input: string) => {
     setValue(input);
     setError(null);
-    setSelectedAddress(null);
     setIsVerifying(false);
   };
 
-  const handleJoinWaitlist = () => {
-    // Replace with your waitlist logic (e.g., redirect to a form or API call)
-    console.log("Joining waitlist for:", selectedAddress);
-    // Example: window.location.href = "/waitlist";
+  const handleJoinWaitlistClick = () => {
+    if (inputRef.current) {
+      inputRef.current.blur(); // Ensure input loses focus
+    }
+    onJoinWaitlist(undeliverableAddress);
   };
 
   const handleUseCurrentLocation = async () => {
     try {
-      await fetchCurrentLocation();
+      setIsExplicitlyFetching(true);
+      setError(null);
 
       if (
-        currentLocationAddress &&
-        currentLocationCoords &&
-        currentLocationDetails
+        !currentLocationAddress ||
+        !currentLocationCoords ||
+        !currentLocationDetails
       ) {
-        // Update address data with current location
-        setAddress(currentLocationAddress, {
-          coordinates: currentLocationCoords,
-          locationDetails: currentLocationDetails,
-          source: "currentLocation",
-        });
-
-        // Trigger address changed event
-        document.dispatchEvent(
-          new CustomEvent("addressChanged", {
-            detail: {
-              address: currentLocationAddress,
-              coordinates: currentLocationCoords,
-              locationDetails: currentLocationDetails,
-            },
-          })
-        );
-
-        onClose();
+        await fetchCurrentLocation();
       }
+
+      if (
+        !currentLocationAddress ||
+        !currentLocationCoords ||
+        !currentLocationDetails
+      ) {
+        throw new Error("Could not get your current location");
+      }
+
+      if (currentLocationDetails.state !== "Lagos") {
+        setUndeliverableAddress(currentLocationAddress);
+        setError("We don't deliver to your location yet.");
+        return;
+      }
+
+      setIsVerifying(true);
+      const isDeliverable = await verifyDeliveryZone({
+        administrative_area: currentLocationDetails.state,
+        localGovernment: currentLocationDetails.localGovernment,
+        locality: currentLocationDetails.locality,
+        street_number: "",
+        route: "",
+        sublocality: "",
+        country: "Nigeria",
+        formattedAddress: currentLocationAddress,
+      });
+      setIsVerifying(false);
+
+      if (!isDeliverable) {
+        setUndeliverableAddress(currentLocationAddress);
+        setError(`We don't deliver to ${currentLocationAddress} yet.`);
+        return;
+      }
+
+      setAddress(currentLocationAddress, {
+        coordinates: currentLocationCoords,
+        locationDetails: currentLocationDetails,
+        source: "currentLocation",
+      });
+
+      document.dispatchEvent(
+        new CustomEvent("addressChanged", {
+          detail: {
+            address: currentLocationAddress,
+            coordinates: currentLocationCoords,
+            locationDetails: currentLocationDetails,
+          },
+        })
+      );
+
+      onClose();
     } catch (err) {
       console.error("Error getting current location:", err);
       setError(
         "Could not get your current location. Please try again or enter address manually."
       );
+    } finally {
+      setIsExplicitlyFetching(false);
+      setIsVerifying(false);
+    }
+  };
+
+  const handleInputClick = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-brand-opacity z-50 flex items-start justify-center">
-      <div className="bg-white rounded-lg w-full h-full relative flex flex-col">
+    <div className="fixed inset-0 bg-brand-opacity z-[100] flex items-start justify-center animate-in fade-in duration-300">
+      <div className="bg-white rounded-lg w-full h-full relative flex flex-col animate-in slide-in-from-bottom duration-500">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 z-10"
@@ -268,13 +314,14 @@ export default function AddressSearchModal({
           <X size={24} />
         </button>
         <div className="p-6">
-          {/* Always at the top */}
           <h2 className="text-2xl font-bold mb-6 text-black">
             Add a delivery address
           </h2>
 
-          {/* Search Input */}
-          <div className="relative mb-4 bg-gray-50 rounded-lg">
+          <div
+            className="relative mb-4 bg-gray-50 rounded-lg"
+            onClick={handleInputClick}
+          >
             <Flag
               className="absolute left-3 top-1/2 -translate-y-1/2 text-[#f15736]"
               size={20}
@@ -311,42 +358,36 @@ export default function AddressSearchModal({
           </div>
           <div className="border-t border-gray-200 my-4" />
 
-          {/* Current Location Section */}
           <button
             onClick={handleUseCurrentLocation}
-            disabled={isVerifying || isLocationLoading}
+            disabled={isVerifying || isExplicitlyFetching}
             className="w-full text-left hover:bg-gray-50 p-4 rounded-md cursor-pointer transition-colors"
           >
             <div className="flex items-center gap-2 text-[#f15736] mb-2">
-              {isLocationLoading ? (
+              {isExplicitlyFetching ? (
                 <Loader2 className="animate-spin" size={20} />
               ) : (
                 <Navigation size={20} />
               )}
               <span className="font-medium">
-                {isLocationLoading
+                {isExplicitlyFetching
                   ? "Getting your location..."
                   : "Use your current location"}
               </span>
             </div>
-            {currentLocationAddress && (
+            {currentLocationAddress && !isExplicitlyFetching && (
               <p className="text-gray-500 text-sm pl-7">
                 {currentLocationAddress}
               </p>
             )}
-            {locationError && (
+            {locationError && !isExplicitlyFetching && (
               <p className="text-red-500 text-sm pl-7 mt-1">
                 Error getting location. Please try again.
               </p>
             )}
           </button>
-
-          {/* Visual Separator */}
-
-          {/* Current Address Display */}
         </div>
 
-        {/* Content below input */}
         <div className="flex-grow overflow-y-auto flex flex-col items-center justify-center">
           {!ready && (
             <div className="flex items-center justify-center gap-2 text-gray-500 my-4">
@@ -357,7 +398,7 @@ export default function AddressSearchModal({
           {isVerifying && (
             <div className="flex items-center justify-center gap-2 text-gray-500 my-4">
               <Loader2 className="animate-spin" size={20} />
-              <span>Processing...</span>
+              <span>Validating delievery zone...</span>
             </div>
           )}
           {error && !isVerifying && (
@@ -372,14 +413,14 @@ export default function AddressSearchModal({
                 />
               </div>
               <h3 className="text-2xl font-bold text-black mb-2">
-                We don&apos;t deliver to your location yet
+                We don&apos;t deliver to that location yet
               </h3>
               <p className="text-sm text-gray-500 mb-4">
                 You can get notified when we are live in your city by joining
                 our waitlist
               </p>
               <button
-                onClick={handleJoinWaitlist}
+                onClick={handleJoinWaitlistClick}
                 className="bg-[#f15736] text-white px-6 py-2 rounded-full hover:bg-[#d8432c] transition-colors"
               >
                 Join the waitlist

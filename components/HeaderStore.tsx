@@ -9,6 +9,7 @@ import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
 import AddressSearchModal from "./modal/address-search-modal";
+import JoinWaitlistModal from "./modal/join-waitlist-modal"; // Added import
 import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
@@ -22,6 +23,8 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false); // Added state
+  const [undeliverableAddress, setUndeliverableAddress] = useState(""); // Added state
 
   // Get all necessary data from the address context
   const { 
@@ -63,12 +66,11 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
       return "Set your location";
     }
     if (isAddressValid && contextAddress) {
-      // Add a small dot indicator for the address source
       const sourceIndicator = {
-        localStorage: "🔵", // blue dot
-        currentLocation: "📍", // location pin
-        manual: "✏️", // pencil
-        none: "⚪", // white dot
+        localStorage: "🔵",
+        currentLocation: "📍",
+        manual: "✏️",
+        none: "⚪",
       }[addressSource];
       return `${sourceIndicator} ${contextAddress}`;
     }
@@ -168,6 +170,20 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
       <AddressSearchModal
         isOpen={isAddressModalOpen}
         onClose={() => setIsAddressModalOpen(false)}
+        onJoinWaitlist={(address: string) => {
+          setUndeliverableAddress(address);
+          setIsAddressModalOpen(false);
+          setIsWaitlistModalOpen(true);
+        }}
+      />
+
+      <JoinWaitlistModal
+        isOpen={isWaitlistModalOpen}
+        onClose={() => {
+          setIsWaitlistModalOpen(false);
+          setUndeliverableAddress("");
+        }}
+        address={undeliverableAddress}
       />
     </>
   );

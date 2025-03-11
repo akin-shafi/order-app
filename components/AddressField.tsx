@@ -31,6 +31,8 @@ export default function AddressField() {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [undeliverableAddress, setUndeliverableAddress] = useState("");
   const router = useRouter();
 
   // Set initial input value from context or current location
@@ -93,6 +95,12 @@ export default function AddressField() {
       setError("Error processing request");
       setIsSending(false);
     }
+  };
+
+  const handleJoinWaitlist = (address: string) => {
+    setUndeliverableAddress(address);
+    setIsModalOpen(false);
+    setIsWaitlistModalOpen(true);
   };
 
   const isButtonDisabled = isLoading || isSending || !inputAddress.trim();
@@ -172,6 +180,7 @@ export default function AddressField() {
       <AddressSearchModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onJoinWaitlist={handleJoinWaitlist}
       />
     </div>
   );
