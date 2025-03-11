@@ -14,38 +14,57 @@ export default function JoinWaitlistModal({
   address,
 }: JoinWaitlistModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
+      setEmail("");
+      setPhone("");
       setSubmitted(false);
     }
   }, [isOpen]);
 
-  const handleSubmit = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent any default behavior
-    setIsSubmitting(true);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent form submission
+    e.stopPropagation(); // Stop event bubbling
 
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setSubmitted(true);
-    } catch (error) {
-      console.error("Error joining waitlist:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    const submit = async () => {
+      setIsSubmitting(true);
+      try {
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setSubmitted(true);
+      } catch (error) {
+        console.error("Error joining waitlist:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+
+    submit();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-brand-opacity z-[150] flex items-center justify-center animate-in fade-in duration-300">
-      <div className="bg-white rounded-lg w-full max-w-md mx-4 relative animate-in slide-in-from-bottom duration-500">
+    <div
+      className="fixed inset-0 bg-brand-opacity z-[150] flex items-center justify-center animate-in fade-in duration-300"
+      onClick={(e) => e.stopPropagation()} // Prevent click from bubbling
+    >
+      <div
+        className="bg-white rounded-lg w-full max-w-md mx-4 relative animate-in slide-in-from-bottom duration-500"
+        onClick={(e) => e.stopPropagation()} // Prevent click from bubbling
+      >
         <button
           type="button"
-          onClick={onClose}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onClose();
+          }}
           className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
         >
           <X size={24} />
@@ -72,11 +91,61 @@ export default function JoinWaitlistModal({
           </div>
 
           {!submitted ? (
-            <div className="space-y-4">
-              {/* Temporarily removed form inputs for debugging */}
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4"
+              onClick={(e) => e.stopPropagation()} // Prevent click from bubbling
+            >
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
+                  placeholder="Enter your email"
+                  autoComplete="email"
+                  autoFocus={false}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f15736] text-black"
+                  placeholder="Enter your phone number"
+                  autoComplete="tel"
+                  autoFocus={false}
+                />
+              </div>
               <button
-                type="button"
-                onClick={handleSubmit}
+                type="submit"
                 disabled={isSubmitting}
                 className="w-full bg-[#f15736] text-white py-3 rounded-lg hover:bg-[#d8432c] transition-colors disabled:opacity-50 flex items-center justify-center"
               >
@@ -89,7 +158,7 @@ export default function JoinWaitlistModal({
                   "Join Waitlist"
                 )}
               </button>
-            </div>
+            </form>
           ) : (
             <div className="text-center">
               <div className="mb-4">✨</div>
@@ -102,7 +171,11 @@ export default function JoinWaitlistModal({
               </p>
               <button
                 type="button"
-                onClick={onClose}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onClose();
+                }}
                 className="w-full bg-[#f15736] text-white py-3 rounded-lg hover:bg-[#d8432c] transition-colors"
               >
                 Close
