@@ -65,7 +65,7 @@ export default function AddressSearchModal({
       // Only prefetch location, don't focus input automatically
       const prefetchLocation = async () => {
         try {
-          await fetchCurrentLocation();
+          fetchCurrentLocation();
         } catch (err: unknown) {
           console.error("Error prefetching location:", err);
         }
@@ -216,9 +216,9 @@ export default function AddressSearchModal({
   };
 
   const handleJoinWaitlistClick = () => {
-    if (inputRef.current) {
-      inputRef.current.blur(); // Ensure input loses focus
-    }
+    // if (inputRef.current) {
+    //   inputRef.current.blur(); // Ensure input loses focus
+    // }
     onJoinWaitlist(undeliverableAddress);
   };
 
