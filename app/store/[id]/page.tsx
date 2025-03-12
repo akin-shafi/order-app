@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
-import ItemModal from "@/components/modal/ItemModal";
+import ItemModal from "@/components/modal/Item-modal";
 import BusinessInfoSection from "@/components/BusinessInfoSection";
 import CategoriesSection from "@/components/store/CategoriesSection";
 import MenuItemsSection from "@/components/store/MenuItemsSection";

@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+
+import { useState, useEffect,  } from "react";
 
 interface Business {
+  businessType: string;
+  productCategories: string[];
   id: string;
   name: string;
   image: string;
   city: string;
-  categories: string[];
   priceRange: string | null;
   deliveryTimeRange: string | null;
   rating: string;
@@ -26,7 +28,7 @@ export const useBusiness = ({ address, localGovernment, state, category }: UseBu
 
   useEffect(() => {
     const fetchBusinesses = async () => {
-      console.log("useBusiness inputs:", { address, localGovernment, state, category });
+      // console.log("useBusiness inputs:", { address, localGovernment, state, category });
 
       // Only fetch if all required fields are present
       if (!address || !localGovernment || !state) {
@@ -53,7 +55,7 @@ export const useBusiness = ({ address, localGovernment, state, category }: UseBu
         params.set("category", category);
       }
       const url = `${baseUrl}?${params.toString()}`;
-      console.log("Fetching businesses from:", url);
+      // console.log("Fetching businesses from:", url);
 
       try {
         const response = await fetch(url);
@@ -63,7 +65,7 @@ export const useBusiness = ({ address, localGovernment, state, category }: UseBu
           throw new Error(`Failed to fetch businesses: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log("Fetched data:", data);
+        // console.log("Fetched data:", data);
 
         const businessesData = data.businesses.map((b: Business, index: number) => ({
           ...b,

@@ -4,6 +4,20 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
+import { useAddress } from "@/contexts/address-context";
+
+interface RecommendedBusiness {
+  id: string;
+  name: string;
+  image: string;
+  rating: number | null;
+  deliveryTime: string;
+  tags: string[];
+  status: string;
+  preOrder?: boolean;
+  businessType: string;
+  productCategories: string[];
+}
 
 const SkeletonRecommendedCard = () => (
   <div className="rounded-lg animate-pulse bg-gray-100 w-64 h-80 flex-shrink-0">
@@ -16,13 +30,53 @@ const SkeletonRecommendedCard = () => (
 );
 
 export default function RecommendedForYou() {
-  const [mounted, setMounted] = useState(false);
   const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
+  const [recommendations, setRecommendations] = useState<RecommendedBusiness[]>(
+    []
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { address, locationDetails } = useAddress();
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    const fetchRecommendations = async () => {
+      if (!address || !locationDetails) {
+        setError("Location not set");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/recommendations", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            address,
+            localGovernment: locationDetails.localGovernment,
+            state: locationDetails.state,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch recommendations");
+        }
+
+        const data = await response.json();
+        setRecommendations(data.recommendations);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to load recommendations"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecommendations();
+  }, [address, locationDetails]);
 
   const toggleFavorite = (itemId: string) => {
     setFavorites((prev) => ({
@@ -35,37 +89,6 @@ export default function RecommendedForYou() {
     router.push(`/store/${id}`);
   };
 
-  const recommendedItems = [
-    {
-      id: "1",
-      name: "Omojesu Foods",
-      image: "/images/omojesu-foods.jpg",
-      rating: 4.4,
-      deliveryTime: "66 – 76 mins",
-      tags: ["African Meals", "Chowsmart"],
-      status: "Opens Tomorrow at 9:00 AM",
-    },
-    {
-      id: "2",
-      name: "Destiny Stomach Care",
-      image: "/images/destiny-stomach-care.jpg",
-      rating: 4.2,
-      deliveryTime: "42 – 52 mins",
-      tags: ["African Meals"],
-      status: "Opens Tomorrow at 9:00 AM",
-      preOrder: true,
-    },
-    {
-      id: "3",
-      name: "Jjora Local Market",
-      image: "/images/jjora-local-market.jpg",
-      rating: null,
-      deliveryTime: "54 – 64 mins",
-      tags: ["Local Market", "Market"],
-      status: "Opens Tomorrow at 9:00 AM",
-    },
-  ];
-
   return (
     <section className="py-4 md:py-8">
       <div className="container mx-auto px-4">
@@ -75,12 +98,31 @@ export default function RecommendedForYou() {
             <Heart className="ml-2 h-4 md:h-5 w-4 md:w-5 text-[#ff6600]" />
           </h2>
 
+          {error && (
+            <div className="text-center py-4">
+              <p className="text-red-500">{error}</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Please set your location to see recommendations
+              </p>
+            </div>
+          )}
+
           {/* Mobile: Horizontal scrolling container */}
           <div className="md:hidden">
-            {mounted ? (
+            {loading ? (
               <div className="overflow-x-auto scrollbar-hide py-4 px-2 snap-x snap-mandatory">
                 <div className="flex space-x-4 w-[calc(256px*1.25)]">
-                  {recommendedItems.map((item) => (
+                  {Array(3)
+                    .fill(0)
+                    .map((_, index) => (
+                      <SkeletonRecommendedCard key={index} />
+                    ))}
+                </div>
+              </div>
+            ) : (
+              <div className="overflow-x-auto scrollbar-hide py-4 px-2 snap-x snap-mandatory">
+                <div className="flex space-x-4 w-[calc(256px*1.25)]">
+                  {recommendations.map((item) => (
                     <div
                       key={item.id}
                       className="w-64 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer flex-shrink-0 snap-start"
@@ -88,7 +130,7 @@ export default function RecommendedForYou() {
                     >
                       <div className="relative">
                         <Image
-                          src={item.image}
+                          src={item.image || "/placeholder.svg"}
                           alt={item.name}
                           width={256}
                           height={192}
@@ -105,7 +147,7 @@ export default function RecommendedForYou() {
                         )}
                         <button
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent card click from triggering
+                            e.stopPropagation();
                             toggleFavorite(item.id);
                           }}
                           className="absolute top-3 right-3 p-1 rounded-full bg-white/80 hover:bg-white"
@@ -157,23 +199,16 @@ export default function RecommendedForYou() {
                   ))}
                 </div>
               </div>
-            ) : (
-              <div className="overflow-x-auto scrollbar-hide py-4 px-2 snap-x snap-mandatory">
-                <div className="flex space-x-4 w-[calc(256px*1.25)]">
-                  {Array(3)
-                    .fill(0)
-                    .map((_, index) => (
-                      <SkeletonRecommendedCard key={index} />
-                    ))}
-                </div>
-              </div>
             )}
           </div>
 
-          {/* Desktop: Updated grid layout */}
+          {/* Desktop: Grid layout */}
           <div className="hidden md:grid md:grid-cols-3 gap-6">
-            {mounted
-              ? recommendedItems.map((item) => (
+            {loading
+              ? Array(3)
+                  .fill(0)
+                  .map((_, index) => <SkeletonRecommendedCard key={index} />)
+              : recommendations.map((item) => (
                   <div
                     key={item.id}
                     className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
@@ -181,7 +216,7 @@ export default function RecommendedForYou() {
                   >
                     <div className="relative">
                       <Image
-                        src={item.image}
+                        src={item.image || "/placeholder.svg"}
                         alt={item.name}
                         width={256}
                         height={192}
@@ -198,7 +233,7 @@ export default function RecommendedForYou() {
                       )}
                       <button
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent card click from triggering
+                          e.stopPropagation();
                           toggleFavorite(item.id);
                         }}
                         className="absolute top-3 right-3 p-1 rounded-full bg-white/80 hover:bg-white"
@@ -247,10 +282,7 @@ export default function RecommendedForYou() {
                       </div>
                     </div>
                   </div>
-                ))
-              : Array(3)
-                  .fill(0)
-                  .map((_, index) => <SkeletonRecommendedCard key={index} />)}
+                ))}
           </div>
         </div>
       </div>

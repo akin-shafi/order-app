@@ -12,9 +12,10 @@ import { useBusiness } from "@/hooks/useBusiness";
 interface Business {
   id: string;
   name: string;
-  image: string;
+  image: string | null;
   city: string;
-  categories: string[];
+  productCategories: string[];
+  businessType: string;
   priceRange: string | null;
   deliveryTimeRange: string | null;
   rating: string;
@@ -58,7 +59,6 @@ export default function FeaturedStore({
   });
 
   const filteredBusinesses = businesses;
-
   const handleHeartClick = (e: React.MouseEvent, businessId: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -167,14 +167,19 @@ export default function FeaturedStore({
                       </div>
 
                       <div className="flex flex-wrap gap-3 mt-1">
-                        {business.categories.map((category, index) => (
-                          <span
-                            key={index}
-                            className="text-[#FF6600] text-xs py-0.5 rounded"
-                          >
-                            {category}
-                          </span>
-                        ))}
+                        <span className="text-[#FF6600] text-xs py-0.5 rounded">
+                          {business.businessType}
+                        </span>
+                        {business.productCategories.map(
+                          (category: string, index: number) => (
+                            <span
+                              key={index}
+                              className="text-[#FF6600] text-xs py-0.5 rounded"
+                            >
+                              {category}
+                            </span>
+                          )
+                        )}
                       </div>
                     </div>
                   </Link>

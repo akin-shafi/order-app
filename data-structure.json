@@ -1,0 +1,109 @@
+{
+    "businesses": [
+        {
+            "name": "Taste Haven",
+            "image": "https://res.cloudinary.com/dhcikhvpu/image/upload/v1741601953/unjanq9kykg9rb4wszfl.jpg",
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Restaurant",
+            "productCategories": [
+                "Taste Haven Special Combo"
+            ]
+        },
+        {
+            "name": "Food Delight",
+            "image": null,
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Restaurant",
+            "productCategories": [
+                "Food Delight Special Combo"
+            ]
+        },
+        {
+            "name": "Spicy Corner",
+            "image": null,
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Restaurant",
+            "productCategories": [
+                "Spicy Corner Special Combo"
+            ]
+        },
+        {
+            "name": "Savor Palace",
+            "image": null,
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Restaurant",
+            "productCategories": [
+                "Savor Palace Special Combo"
+            ]
+        },
+        {
+            "name": "Meal Magic",
+            "image": null,
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Restaurant",
+            "productCategories": [
+                "Meal Magic Special Combo"
+            ]
+        },
+        {
+            "name": "Health Plus",
+            "image": null,
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Pharmacy",
+            "productCategories": [
+                "Health Plus Health Pack"
+            ]
+        },
+        {
+            "name": "Medi Care",
+            "image": null,
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Pharmacy",
+            "productCategories": [
+                "Medi Care Health Pack"
+            ]
+        },
+        {
+            "name": "Pharma Zone",
+            "image": null,
+            "city": "Ajeromi-Ifelodun",
+            "rating": "0.0",
+            "ratingCount": 0,
+            "priceRange": "Unknown",
+            "deliveryTimeRange": "Not specified",
+            "businessType": "Pharmacy",
+            "productCategories": [
+                "Pharma Zone Health Pack"
+            ]
+        }
+    ],
+    "message": "Businesses retrieved successfully"
+}
