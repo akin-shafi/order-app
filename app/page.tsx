@@ -8,7 +8,7 @@ import CategoriesSection from "@/components/CategoriesSection";
 import FeaturesSection from "@/components/FeaturesSection";
 // import AppShowCaseSection from "@/components/AppShowCaseSection";
 // import CTASection from "@/components/CTASection";
-import Ticker from "@/components/Ticker";
+// import Ticker from "@/components/Ticker";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
       <FeaturesSection />
       {/* <AppShowCaseSection /> */}
       {/* <CTASection /> */}
-      <Ticker />
+      {/* <Ticker /> */}
       <Footer />
     </div>
   );
