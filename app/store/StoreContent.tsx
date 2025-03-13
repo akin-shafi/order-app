@@ -31,6 +31,10 @@ function StoreContentInner() {
             <CategoriesInStore />
           </Suspense>
 
+          <Suspense fallback={<div>Loading recommendations...</div>}>
+            <RecommendedForYou />
+          </Suspense>
+
           {/* Animated Advert Banners */}
           <Suspense
             fallback={
@@ -38,10 +42,6 @@ function StoreContentInner() {
             }
           >
             <AdvertBanners />
-          </Suspense>
-
-          <Suspense fallback={<div>Loading recommendations...</div>}>
-            <RecommendedForYou />
           </Suspense>
           <Suspense fallback={<div>Loading featured items...</div>}>
             <FeaturedStore selectedCategory={category} />

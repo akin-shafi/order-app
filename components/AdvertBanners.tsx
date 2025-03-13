@@ -1,7 +1,15 @@
+// components/AdvertBanners.tsx
 "use client";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
-import AnimatedBanner from "./AnimatedBanner";
+import Image from "next/image";
+import Link from "next/link";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
 
 const container = {
   hidden: { opacity: 0 },
@@ -17,30 +25,79 @@ const container = {
 const AdvertBanners = () => {
   const banners = [
     {
-      imageUrl: "/images/advert-1.png",
+      imageUrl: "/images/advert-2.png",
       alt: "Chow Combo Offer",
       href: "/offers/special",
       bgColor: "bg-green-800",
+      title: "Chow Combo Offer",
+      description: "Get 20% off on combo meals this weekend!",
     },
     {
-      imageUrl: "/images/advert-2.png",
+      imageUrl: "/images/advert-1.png",
       alt: "Relay Package Delivery",
       href: "/restaurants/new",
       bgColor: "bg-red-900",
+      title: "Relay Package Delivery",
+      description: "Fast and reliable delivery for your meals.",
+    },
+    {
+      imageUrl: "/images/advert-3.png",
+      alt: "New Restaurant Opening",
+      href: "/restaurants/new-opening",
+      bgColor: "bg-blue-900",
+      title: "New Restaurant Opening",
+      description: "Discover Pasta Paradise in your area!",
     },
   ];
 
   return (
     <div className="mt-2 container mx-auto px-4">
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-center"
-      >
-        {banners.map((banner, index) => (
-          <AnimatedBanner key={banner.href} {...banner} delay={index * 0.2} />
-        ))}
+      <motion.div variants={container} initial="hidden" animate="show">
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          spaceBetween={16}
+          slidesPerView={1.5} // Small screens: 1.5 slides
+          breakpoints={{
+            768: {
+              slidesPerView: 2, // Large screens: 2 slides
+            },
+          }}
+          autoplay={{
+            delay: 3000, // Auto-swipe every 3 seconds
+            disableOnInteraction: false,
+          }}
+          pagination={{ clickable: true }}
+          className="mySwiper"
+        >
+          {banners.map((banner) => (
+            <SwiperSlide key={banner.href}>
+              <Link href={banner.href}>
+                <div
+                  className={`${banner.bgColor} rounded-lg overflow-hidden shadow-lg transition-all`}
+                >
+                  <div className="relative w-full">
+                    <Image
+                      src={banner.imageUrl}
+                      alt={banner.alt}
+                      width={600}
+                      height={192}
+                      className="w-full object-cover"
+                      priority
+                    />
+                  </div>
+                  {/* <div className="p-4 text-white">
+                    <h3 className="font-semibold text-lg md:text-xl lg:text-2xl truncate-text">
+                      {banner.title}
+                    </h3>
+                    <p className="text-sm md:text-base lg:text-lg">
+                      {banner.description}
+                    </p>
+                  </div> */}
+                </div>
+              </Link>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </motion.div>
     </div>
   );
