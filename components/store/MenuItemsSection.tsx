@@ -1,3 +1,4 @@
+// components/store/MenuItemsSection.tsx
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -6,7 +7,7 @@ interface MenuItem {
   name: string;
   description: string;
   price: string;
-  image: string;
+  image: string | null; // Changed to match page.tsx
   popular?: boolean;
 }
 
@@ -14,7 +15,7 @@ interface MenuItemsSectionProps {
   activeCategory: string;
   menuItems: MenuItem[];
   setSelectedItem: (item: MenuItem | null) => void;
-  isLoading?: boolean; // Add isLoading prop
+  isLoading?: boolean;
 }
 
 export default function MenuItemsSection({
@@ -23,6 +24,7 @@ export default function MenuItemsSection({
   setSelectedItem,
   isLoading = false,
 }: MenuItemsSectionProps) {
+  
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -65,7 +67,7 @@ export default function MenuItemsSection({
             <div className="flex items-start gap-4 p-4">
               <div className="relative flex-shrink-0 w-[120px] h-[120px]">
                 <Image
-                  src={item.image || "/images/food.png"}
+                  src={item.image || "/images/food.png"} // item.image can be null, handled by fallback
                   alt={item.name}
                   fill
                   style={{ objectFit: "cover" }}

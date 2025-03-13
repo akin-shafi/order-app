@@ -51,7 +51,7 @@ const AdvertBanners = () => {
   ];
 
   return (
-    <div className="mt-2 container mx-auto px-1">
+    <div className="mt-2 container mx-auto px-4">
       <motion.div variants={container} initial="hidden" animate="show">
         <Swiper
           modules={[Autoplay, Pagination]}

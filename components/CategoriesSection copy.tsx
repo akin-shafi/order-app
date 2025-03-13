@@ -88,7 +88,7 @@ export default function CategoriesSection() {
                 <div className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow duration-300 cursor-pointer group/item">
                   <div className="relative w-full aspect-square mb-0 flex justify-center items-center">
                     <Image
-                      src={category.image || "/placeholder.svg"}
+                      src={category.image || "/food_placeholder.jpg"}
                       alt={category.name}
                       width={100}
                       height={100}

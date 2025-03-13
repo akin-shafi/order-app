@@ -139,7 +139,7 @@ export default function FeaturedStore({
                   <Link href={`/store/id=${business.id}`} className="block">
                     <div className="relative hover-container">
                       <Image
-                        src={business.image || "/placeholder.svg"}
+                        src={business.image || "/food_placeholder.jpg"}
                         alt={business.name}
                         width={280}
                         height={160}

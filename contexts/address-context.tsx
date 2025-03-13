@@ -162,7 +162,6 @@ export function AddressProvider({ children }: { children: ReactNode }) {
     if (currentAddress && currentCoordinates && currentLocationDetails) {
       const hasValidAddress = checkAddressValid();
       if (!hasValidAddress || addressSource === "none") {
-        console.log("Updating with current location:", currentAddress);
         setAddressState(currentAddress);
         setCoordinatesState({
           latitude: currentCoordinates.latitude,

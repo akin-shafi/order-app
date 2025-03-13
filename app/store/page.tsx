@@ -1,5 +1,10 @@
 import StoreContent from "./StoreContent";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 export default function StorePage() {
-  return <StoreContent />;
+  return (
+    <QueryProvider>
+      <StoreContent />
+    </QueryProvider>
+  );
 }

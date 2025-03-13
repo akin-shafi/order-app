@@ -1,289 +1,152 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ClockIcon, StarIcon } from "@/components/icons";
 import { Heart } from "lucide-react";
-import { useAddress } from "@/contexts/address-context";
+import { useRecommendations } from "@/hooks/useRecommendations";
 
-interface RecommendedBusiness {
-  id: string;
-  name: string;
-  image: string;
-  rating: number | null;
-  deliveryTime: string;
-  tags: string[];
-  status: string;
-  preOrder?: boolean;
-  businessType: string;
-  productCategories: string[];
-}
-
-const SkeletonRecommendedCard = () => (
-  <div className="rounded-lg animate-pulse bg-gray-100 w-64 h-80 flex-shrink-0">
-    <div className="w-full h-48 bg-gray-200 rounded-t-lg" />
-    <div className="p-4">
-      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-      <div className="h-3 bg-gray-200 rounded w-1/2" />
+const SkeletonCard = () => (
+  <div className="bg-white rounded-lg overflow-hidden border border-gray-100 animate-pulse flex-shrink-0 w-[280px]">
+    <div className="w-full h-40 bg-gray-200" />
+    <div className="p-3">
+      <div className="flex items-center justify-between mb-1">
+        <div className="h-5 bg-gray-200 rounded w-3/4" />
+        <div className="flex items-center">
+          <div className="h-3 bg-gray-200 rounded w-10" />
+        </div>
+      </div>
+      <div className="flex items-center text-gray-500 text-xs">
+        <div className="h-3 w-3 bg-gray-200 rounded mr-1" />
+        <div className="h-3 bg-gray-200 rounded w-16" />
+      </div>
+      <div className="flex flex-wrap gap-3 mt-2">
+        <div className="h-3 bg-gray-200 rounded w-12" />
+        <div className="h-3 bg-gray-200 rounded w-16" />
+      </div>
     </div>
   </div>
 );
 
 export default function RecommendedForYou() {
-  const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
-  const [recommendations, setRecommendations] = useState<RecommendedBusiness[]>(
-    []
-  );
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-  const { address, locationDetails } = useAddress();
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const { data: recommendations, isLoading, error } = useRecommendations();
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      if (!address || !locationDetails) {
-        setError("Location not set");
-        setLoading(false);
-        return;
+  const handleHeartClick = (e: React.MouseEvent, businessId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFavorites((prev) => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(businessId)) {
+        newFavorites.delete(businessId);
+      } else {
+        newFavorites.add(businessId);
       }
-
-      try {
-        const response = await fetch("/api/recommendations", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            address,
-            localGovernment: locationDetails.localGovernment,
-            state: locationDetails.state,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch recommendations");
-        }
-
-        const data = await response.json();
-        setRecommendations(data.recommendations);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load recommendations"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRecommendations();
-  }, [address, locationDetails]);
-
-  const toggleFavorite = (itemId: string) => {
-    setFavorites((prev) => ({
-      ...prev,
-      [itemId]: !prev[itemId],
-    }));
+      return newFavorites;
+    });
   };
 
-  const handleItemClick = (id: string) => {
-    router.push(`/store/${id}`);
-  };
+  if (error) {
+    return (
+      <div className="text-red-500 text-center py-4">
+        {error.message === "Location not set"
+          ? "Please set your location to see recommendations"
+          : "Error loading recommendations. Please try again later."}
+      </div>
+    );
+  }
 
   return (
     <section className="py-4 md:py-8">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold text-[#292d32] mb-3 md:mb-6 flex items-center">
+          <h2 className="text-xl md:text-2xl font-bold text-[#292d32] mb-3 md:mb-6">
             Recommended for You
-            <Heart className="ml-2 h-4 md:h-5 w-4 md:w-5 text-[#ff6600]" />
           </h2>
 
-          {error && (
-            <div className="text-center py-4">
-              <p className="text-red-500">{error}</p>
-              <p className="text-sm text-gray-500 mt-2">
-                Please set your location to see recommendations
-              </p>
+          {isLoading ? (
+            <div className="flex gap-6 overflow-x-auto pb-4">
+              {Array(3)
+                .fill(0)
+                .map((_, index) => (
+                  <SkeletonCard key={index} />
+                ))}
             </div>
-          )}
-
-          {/* Mobile: Horizontal scrolling container */}
-          <div className="md:hidden">
-            {loading ? (
-              <div className="overflow-x-auto scrollbar-hide py-4 px-2 snap-x snap-mandatory">
-                <div className="flex space-x-4 w-[calc(256px*1.25)]">
-                  {Array(3)
-                    .fill(0)
-                    .map((_, index) => (
-                      <SkeletonRecommendedCard key={index} />
-                    ))}
-                </div>
-              </div>
-            ) : (
-              <div className="overflow-x-auto scrollbar-hide py-4 px-2 snap-x snap-mandatory">
-                <div className="flex space-x-4 w-[calc(256px*1.25)]">
-                  {recommendations.map((item) => (
-                    <div
-                      key={item.id}
-                      className="w-64 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer flex-shrink-0 snap-start"
-                      onClick={() => handleItemClick(item.id)}
-                    >
-                      <div className="relative">
+          ) : recommendations?.length === 0 ? (
+            <div className="text-center py-4 text-gray-500">
+              No recommendations available at the moment
+            </div>
+          ) : (
+            <div className="relative">
+              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                {recommendations?.map((business) => (
+                  <div
+                    key={business.id}
+                    className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative flex-shrink-0 w-[280px]"
+                  >
+                    <Link href={`/store/${business.id}`} className="block">
+                      <div className="relative hover-container">
                         <Image
-                          src={item.image || "/placeholder.svg"}
-                          alt={item.name}
-                          width={256}
-                          height={192}
-                          className="w-full h-48 object-cover rounded-t-lg"
+                          src={business.image || "/food_placeholder.jpg"}
+                          alt={business.name}
+                          width={280}
+                          height={160}
+                          className="w-full h-40 object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-t-lg" />
-                        <div className="absolute top-3 left-3 bg-[#000000]/90 text-white text-xs font-semibold px-2 py-1 rounded-md">
-                          {item.status}
-                        </div>
-                        {item.preOrder && (
-                          <button className="absolute bottom-3 right-3 bg-[#ff6600] text-white text-xs font-semibold px-3 py-1 rounded-full hover:bg-[#e65c00] transition-colors">
-                            Pre-order
-                          </button>
-                        )}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFavorite(item.id);
-                          }}
-                          className="absolute top-3 right-3 p-1 rounded-full bg-white/80 hover:bg-white"
-                        >
-                          <Heart
-                            className={`h-4 w-4 ${
-                              favorites[item.id]
-                                ? "text-[#ff6600] fill-[#ff6600]"
-                                : "text-gray-600"
-                            }`}
-                          />
-                        </button>
+                        <div className="absolute inset-0 bg-black opacity-0 overlay transition-opacity duration-300 ease-in-out"></div>
                       </div>
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-800 truncate">
-                          {item.name}
-                        </h3>
-                        <div className="flex items-center mt-1">
-                          {item.rating ? (
-                            <>
-                              <span className="text-[#ff6600] text-sm mr-1">
-                                ★
-                              </span>
-                              <span className="text-gray-700 text-sm">
-                                {item.rating}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-gray-500 text-sm">
-                              No rating
+
+                      <div className="p-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <h3 className="font-medium text-[#292d32] text-base mb-0 text-truncate hover:underline truncate-text-300">
+                            {business.name}
+                          </h3>
+                          <div className="flex items-center">
+                            <span className="text-xs mr-1 text-[#292d32]">
+                              {business.rating}
                             </span>
-                          )}
-                          <span className="text-gray-500 text-sm ml-2">
-                            • {item.deliveryTime}
-                          </span>
+                            <StarIcon className="text-yellow-400 w-4 h-4" />
+                          </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {item.tags.map((tag) => (
+
+                        <div className="flex items-center text-gray-500 text-xs">
+                          <ClockIcon className="text-[#FF6600] mr-1 w-4 h-4" />
+                          {business.deliveryTime}
+                        </div>
+
+                        <div className="flex flex-wrap gap-3 mt-1">
+                          <span className="text-[#FF6600] text-xs py-0.5 rounded">
+                            {business.businessType}
+                          </span>
+                          {business.productCategories.map((category, index) => (
                             <span
-                              key={tag}
-                              className="text-[#000000] text-xs font-medium bg-[#e6f0ea] px-2 py-1 rounded"
+                              key={index}
+                              className="text-[#FF6600] text-xs py-0.5 rounded"
                             >
-                              {tag}
+                              {category}
                             </span>
                           ))}
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Desktop: Grid layout */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6">
-            {loading
-              ? Array(3)
-                  .fill(0)
-                  .map((_, index) => <SkeletonRecommendedCard key={index} />)
-              : recommendations.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-                    onClick={() => handleItemClick(item.id)}
-                  >
-                    <div className="relative">
-                      <Image
-                        src={item.image || "/placeholder.svg"}
-                        alt={item.name}
-                        width={256}
-                        height={192}
-                        className="w-full h-48 object-cover rounded-t-lg"
+                    </Link>
+                    <button
+                      onClick={(e) => handleHeartClick(e, business.id)}
+                      className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-10"
+                    >
+                      <Heart
+                        className={`h-4 w-4 ${
+                          favorites.has(business.id)
+                            ? "text-red-500 fill-current"
+                            : "text-gray-400 hover:text-gray-500"
+                        }`}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-t-lg" />
-                      <div className="absolute top-3 left-3 bg-[#000000]/90 text-white text-xs font-semibold px-2 py-1 rounded-md">
-                        {item.status}
-                      </div>
-                      {item.preOrder && (
-                        <button className="absolute bottom-3 right-3 bg-[#ff6600] text-white text-xs font-semibold px-3 py-1 rounded-full hover:bg-[#e65c00] transition-colors">
-                          Pre-order
-                        </button>
-                      )}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(item.id);
-                        }}
-                        className="absolute top-3 right-3 p-1 rounded-full bg-white/80 hover:bg-white"
-                      >
-                        <Heart
-                          className={`h-4 w-4 ${
-                            favorites[item.id]
-                              ? "text-[#ff6600] fill-[#ff6600]"
-                              : "text-gray-600"
-                          }`}
-                        />
-                      </button>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold text-gray-800 truncate">
-                        {item.name}
-                      </h3>
-                      <div className="flex items-center mt-1">
-                        {item.rating ? (
-                          <>
-                            <span className="text-[#ff6600] text-sm mr-1">
-                              ★
-                            </span>
-                            <span className="text-gray-700 text-sm">
-                              {item.rating}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-gray-500 text-sm">
-                            No rating
-                          </span>
-                        )}
-                        <span className="text-gray-500 text-sm ml-2">
-                          • {item.deliveryTime}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {item.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-[#000000] text-xs font-medium bg-[#e6f0ea] px-2 py-1 rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                    </button>
                   </div>
                 ))}
-          </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

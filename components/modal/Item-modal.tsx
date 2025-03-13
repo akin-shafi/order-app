@@ -11,7 +11,7 @@ interface ItemModalProps {
     name: string;
     description: string;
     price: string;
-    image: string;
+    image: string | null; // Changed to match page.tsx
     popular?: boolean;
   };
   onClose: () => void;
@@ -29,6 +29,7 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
   ];
 
   const handleAddToCart = async () => {
+    // First, ensure we have a pack
     if (!state.activePackId || state.packs.length === 0) {
       dispatch({ type: "ADD_PACK" });
       // Wait for state to update
@@ -39,16 +40,26 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
       item.price.replace("₦", "").replace(",", "")
     );
 
+    // Get the current pack ID, either from activePackId or the last pack
+    const currentPackId =
+      state.activePackId ||
+      (state.packs.length > 0 ? state.packs[state.packs.length - 1].id : null);
+
+    if (!currentPackId) {
+      console.error("No pack available to add item to");
+      return;
+    }
+
     dispatch({
       type: "ADD_ITEM_TO_PACK",
       payload: {
-        packId: state.activePackId || state.packs[state.packs.length - 1].id,
+        packId: currentPackId,
         item: {
           id: item.id,
           name: item.name,
           price: priceAsNumber,
           quantity: quantity,
-          image: item.image,
+          image: item.image || "/images/food.png",
         },
       },
     });
@@ -90,7 +101,7 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
         <div className="flex flex-col">
           <div className="relative w-full h-48">
             <Image
-              src={item.image || "/images/food.png"}
+              src={item.image || "/images/food.png"} // Already handles null case
               alt={item.name}
               fill
               style={{ objectFit: "cover" }}

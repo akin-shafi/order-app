@@ -1,20 +1,15 @@
-// import { useState } from "react";
+// components/store/CategoriesSection.tsx
 import { Slider } from "antd";
 import { motion } from "framer-motion";
-
-interface Category {
-  id: string;
-  name: string;
-  count: number;
-}
 
 interface CategoriesSectionProps {
   activeCategory: string;
   setActiveCategory: (category: string) => void;
   priceRange: [number, number];
   setPriceRange: (range: [number, number]) => void;
-  categories: Category[];
-  isLoading?: boolean; // Add isLoading prop
+  categories: string[];
+  categoryCounts: { [category: string]: number }; // Added prop for counts
+  isLoading?: boolean;
 }
 
 export default function CategoriesSection({
@@ -23,14 +18,18 @@ export default function CategoriesSection({
   priceRange,
   setPriceRange,
   categories,
+  categoryCounts,
   isLoading = false,
 }: CategoriesSectionProps) {
   const minPrice = 0;
   const maxPrice = 15000;
 
   const getProgressBarPosition = () => {
-    const index = categories.findIndex((cat) => cat.id === activeCategory);
-    return `${(index / (categories.length - 1)) * 100}%`;
+    // Adjust for "all" category if you want to include it in the progress bar
+    const allCategories = ["all", ...categories];
+    const index = allCategories.findIndex((cat) => cat === activeCategory);
+    if (index === -1) return "0%";
+    return `${(index / (allCategories.length - 1)) * 100}%`;
   };
 
   if (isLoading) {
@@ -62,21 +61,23 @@ export default function CategoriesSection({
       <h2 className="text-xl font-bold mb-4">Categories</h2>
       <div className="flex flex-col gap-4">
         <div className="flex overflow-x-auto pb-2 -mx-1 scrollbar-hide">
-          {categories.map((category) => (
+          {["all", ...categories].map((category) => (
             <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
+              key={category}
+              onClick={() => setActiveCategory(category)}
               className={`px-4 py-2 mx-1 rounded-md text-sm whitespace-nowrap transition-colors duration-200 flex items-center justify-center
                 ${
-                  activeCategory === category.id
+                  activeCategory === category
                     ? "bg-[#000000] text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
             >
-              {category.name}
-              <span className="ml-1 text-xs opacity-60">
-                ({category.count})
-              </span>
+              {category === "all"
+                ? `All (${Object.values(categoryCounts).reduce(
+                    (a, b) => a + b,
+                    0
+                  )})`
+                : `${category} (${categoryCounts[category] || 0})`}
             </button>
           ))}
         </div>

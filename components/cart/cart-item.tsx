@@ -35,7 +35,7 @@ export default function CartItem({
       className="flex gap-4 py-4 border-b last:border-b-0"
     >
       <Image
-        src={image || "/placeholder.svg"}
+        src={image || "/food_placeholder.jpg"}
         alt={name}
         width={80}
         height={80}

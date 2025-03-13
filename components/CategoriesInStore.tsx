@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { categories } from "@/data/content";
+import { useCategories } from "@/hooks/useCategories";
 
 const SkeletonCategoryCard = () => (
   <div className="p-3 rounded-lg flex flex-col items-center animate-pulse bg-gray-100 w-32 h-28 flex-shrink-0">
@@ -22,6 +22,8 @@ export default function CategoriesInStore() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     searchParams?.get("category") || null
   );
+
+  const { data: categories, isLoading, error } = useCategories();
 
   useEffect(() => {
     setMounted(true);
@@ -44,6 +46,14 @@ export default function CategoriesInStore() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  if (error) {
+    return (
+      <div className="text-red-500 text-center py-4">
+        Error loading categories. Please try again later.
+      </div>
+    );
+  }
+
   return (
     <section className="py-4 md:py-8">
       <div className="container mx-auto px-4">
@@ -55,15 +65,15 @@ export default function CategoriesInStore() {
           {/* Mobile Swiper */}
           <div className="md:hidden -mx-4">
             <Swiper slidesPerView={2.5} spaceBetween={12} className="px-4">
-              {mounted
-                ? categories.map((category, index) => (
+              {mounted && !isLoading
+                ? categories?.map((category, index) => (
                     <SwiperSlide key={index}>
                       <div
                         className="p-2 rounded-lg cursor-pointer bg-gray-100 flex flex-col items-center justify-center w-24 h-24"
                         onClick={() => handleCategoryClick(category.name)}
                       >
                         <Image
-                          src={category.image || "/placeholder.svg"}
+                          src={category.image || "/food_placeholder.jpg"}
                           alt={category.name}
                           width={32}
                           height={32}
@@ -88,15 +98,15 @@ export default function CategoriesInStore() {
           {/* Desktop Swiper */}
           <div className="hidden md:block -mx-4">
             <Swiper slidesPerView={7.5} spaceBetween={16} className="px-4">
-              {mounted
-                ? categories.map((category, index) => (
+              {mounted && !isLoading
+                ? categories?.map((category, index) => (
                     <SwiperSlide key={index}>
                       <div
                         className="p-2 rounded-lg cursor-pointer bg-gray-100 flex flex-col items-center justify-center w-28 h-28"
                         onClick={() => handleCategoryClick(category.name)}
                       >
                         <Image
-                          src={category.image || "/placeholder.svg"}
+                          src={category.image || "/food_placeholder.jpg"}
                           alt={category.name}
                           width={48}
                           height={48}

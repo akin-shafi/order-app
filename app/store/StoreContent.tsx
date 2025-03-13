@@ -5,7 +5,7 @@ import FooterStore from "@/components/FooterStore";
 import CategoriesInStore from "@/components/CategoriesInStore";
 import FeaturedStore from "@/components/FeaturedStore";
 import { useSearchParams } from "next/navigation";
-import RecommendedForYou from "@/components/RecomendationSection";
+import RecomendationSection from "@/components/RecomendationSection";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Suspense } from "react";
 import AdvertBanners from "@/components/AdvertBanners";
@@ -13,7 +13,6 @@ import AdvertBanners from "@/components/AdvertBanners";
 function StoreContentInner() {
   const searchParams = useSearchParams();
   const category = searchParams?.get("category") ?? null;
-
   return (
     <div className="min-h-screen relative">
       {/* Background with brand color gradient */}
@@ -41,7 +40,7 @@ function StoreContentInner() {
           </Suspense>
 
           <Suspense fallback={<div>Loading recommendations...</div>}>
-            <RecommendedForYou />
+            <RecomendationSection />
           </Suspense>
 
           <Suspense fallback={<div>Loading featured items...</div>}>

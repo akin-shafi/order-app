@@ -1,23 +1,32 @@
+// components/BusinessInfoSection.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-type Restaurant = {
+type BusinessDetails = {
+  id: string;
   name: string;
-  image: string;
-  deliveryTime: string;
-  rating: string;
-  reviews: string;
+  description: string;
+  address: string;
+  city: string;
+  state: string;
+  deliveryOptions: string[]; // Corrected property name
+  image: string | null;
   openingTime: string;
+  closingTime: string;
+  contactNumber: string;
+  rating: string;
+  totalRatings: number;
+  isActive: boolean;
 };
 
 interface BusinessInfoSectionProps {
-  restaurant: Restaurant;
-  isLoading?: boolean; // Add isLoading prop
+  business: BusinessDetails;
+  isLoading?: boolean;
 }
 
 export default function BusinessInfoSection({
-  restaurant,
+  business,
   isLoading = false,
 }: BusinessInfoSectionProps) {
   if (isLoading) {
@@ -60,8 +69,8 @@ export default function BusinessInfoSection({
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-8">
         <div className="col-span-1 lg:col-span-2">
           <Image
-            src={restaurant.image || "/images/food.png"}
-            alt={restaurant.name}
+            src={business.image || "/images/food.png"}
+            alt={business.name}
             width={256}
             height={256}
             className="rounded-md object-cover w-full h-full"
@@ -82,10 +91,10 @@ export default function BusinessInfoSection({
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            {restaurant.deliveryTime}
+            Delivery Options: {business.deliveryOptions.join(", ")}
           </div>
           <h1 className="text-2xl font-bold mb-1 text-[#292d32]">
-            {restaurant.name}
+            {business.name}
           </h1>
           <div className="flex items-center mb-2">
             <svg
@@ -95,12 +104,12 @@ export default function BusinessInfoSection({
               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
             </svg>
             <span className="text-sm ml-1 text-[#292d32]">
-              {restaurant.rating}({restaurant.reviews})
+              {business.rating} ({business.totalRatings} reviews)
             </span>
           </div>
           <div className="text-sm text-gray-600">
             Opening Time:{" "}
-            <span className="font-medium">{restaurant.openingTime}</span>
+            <span className="font-medium">{business.openingTime}</span>
           </div>
         </div>
       </div>

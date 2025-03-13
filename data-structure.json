@@ -1,109 +1,177 @@
+// http://localhost:8500/businesses/6a21418e-75f5-4615-ab34-bf065e8337e6
 {
-    "businesses": [
-        {
-            "name": "Taste Haven",
-            "image": "https://res.cloudinary.com/dhcikhvpu/image/upload/v1741601953/unjanq9kykg9rb4wszfl.jpg",
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Restaurant",
-            "productCategories": [
-                "Taste Haven Special Combo"
-            ]
-        },
-        {
-            "name": "Food Delight",
-            "image": null,
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Restaurant",
-            "productCategories": [
-                "Food Delight Special Combo"
-            ]
-        },
-        {
-            "name": "Spicy Corner",
-            "image": null,
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Restaurant",
-            "productCategories": [
-                "Spicy Corner Special Combo"
-            ]
-        },
-        {
-            "name": "Savor Palace",
-            "image": null,
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Restaurant",
-            "productCategories": [
-                "Savor Palace Special Combo"
-            ]
-        },
-        {
-            "name": "Meal Magic",
-            "image": null,
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Restaurant",
-            "productCategories": [
-                "Meal Magic Special Combo"
-            ]
-        },
-        {
-            "name": "Health Plus",
-            "image": null,
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Pharmacy",
-            "productCategories": [
-                "Health Plus Health Pack"
-            ]
-        },
-        {
-            "name": "Medi Care",
-            "image": null,
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Pharmacy",
-            "productCategories": [
-                "Medi Care Health Pack"
-            ]
-        },
-        {
-            "name": "Pharma Zone",
-            "image": null,
-            "city": "Ajeromi-Ifelodun",
-            "rating": "0.0",
-            "ratingCount": 0,
-            "priceRange": "Unknown",
-            "deliveryTimeRange": "Not specified",
-            "businessType": "Pharmacy",
-            "productCategories": [
-                "Pharma Zone Health Pack"
-            ]
-        }
-    ],
-    "message": "Businesses retrieved successfully"
+  "business": {
+      "id": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+      "name": "Food Delight",
+      "description": "Food Delight offers quality services.",
+      "address": "2 Ajeromi St",
+      "city": "Ajeromi-Ifelodun",
+      "state": "Lagos",
+      "location": null,
+      "image": null,
+      "zone": null,
+      "subZone": null,
+      "openingTime": "08:00:00",
+      "closingTime": "22:00:00",
+      "deliveryOptions": [
+          "pickup",
+          "delivery"
+      ],
+      "contactNumber": "08012345678",
+      "website": null,
+      "priceRange": null,
+      "deliveryTimeRange": null,
+      "rating": "0.0",
+      "totalRatings": 0,
+      "isActive": true,
+      "createdAt": "2025-03-08T16:08:46.698Z",
+      "updatedAt": "2025-03-08T16:08:46.698Z",
+      "ratings": [
+          {
+              "id": "00f50bf5-88f1-43d5-8326-a6ae5cf24ff6",
+              "rating": 2,
+              "comment": "Great service at Food Delight!"
+          }
+      ],
+      "products": [
+          {
+              "id": "74aeb061-685b-4b1c-af4f-527052ac5ecc",
+              "name": "Food Delight Combo",
+              "description": "Special meal",
+              "price": "3000.00",
+              "image": null,
+              "categories": [
+                  "Food Delight Special Combo"
+              ],
+              "isAvailable": true,
+              "isActive": true,
+              "businessId": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+              "createdAt": "2025-03-08T16:08:48.041Z",
+              "updatedAt": "2025-03-08T16:08:48.041Z"
+          },
+          {
+              "id": "9f607715-6a12-4964-869b-14780d74c48c",
+              "name": "Fried Rice",
+              "description": "Intercontinental delight",
+              "price": "2000.00",
+              "image": null,
+              "categories": [
+                  "Rice Combo"
+              ],
+              "isAvailable": true,
+              "isActive": true,
+              "businessId": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+              "createdAt": "2025-03-08T16:08:48.041Z",
+              "updatedAt": "2025-03-08T16:08:48.041Z"
+          },
+          {
+              "id": "f69585ed-9f3f-4d31-81a5-fa23a9920297",
+              "name": "Eba and Egusi",
+              "description": "Traditional dish",
+              "price": "1500.00",
+              "image": null,
+              "categories": [
+                  "Swallow"
+              ],
+              "isAvailable": true,
+              "isActive": true,
+              "businessId": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+              "createdAt": "2025-03-08T16:08:48.041Z",
+              "updatedAt": "2025-03-08T16:08:48.041Z"
+          }
+      ],
+      "orders": [
+          {
+              "id": "52c18aad-583d-4a65-ae14-7dc58485b554",
+              "businessId": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+              "items": [
+                  {
+                      "name": "Eba and Egusi",
+                      "price": "1500.00",
+                      "quantity": 2,
+                      "productId": "f69585ed-9f3f-4d31-81a5-fa23a9920297",
+                      "specialInstructions": "No onions"
+                  }
+              ],
+              "subtotal": "3000.00",
+              "deliveryFee": "500.00",
+              "serviceFee": "200.00",
+              "totalAmount": "3700.00",
+              "status": "delivered",
+              "deliveryAddress": {
+                  "city": "Ajeromi-Ifelodun",
+                  "state": "Lagos",
+                  "street": "10 Customer St"
+              },
+              "paymentDetails": {
+                  "method": "card",
+                  "status": "completed",
+                  "paymentDate": "2025-03-08T17:10:08.806Z",
+                  "transactionId": "txn_xtywqvs83s"
+              },
+              "timeline": {
+                  "ordered": "2025-03-06T17:10:08.806Z",
+                  "delivered": "2025-03-08T17:10:08.806Z"
+              },
+              "rating": null,
+              "feedback": null,
+              "isRefunded": false,
+              "createdAt": "2025-03-08T16:10:08.562Z",
+              "updatedAt": "2025-03-08T16:10:08.562Z"
+          }
+      ]
+  },
+  "message": "Business retrieved successfully"
+},
+
+// http://localhost:8500/products/business/6a21418e-75f5-4615-ab34-bf065e8337e6
+{
+  "products": [
+      {
+          "id": "74aeb061-685b-4b1c-af4f-527052ac5ecc",
+          "name": "Food Delight Combo",
+          "description": "Special meal",
+          "price": "3000.00",
+          "image": null,
+          "categories": [
+              "Food Delight Special Combo"
+          ],
+          "isAvailable": true,
+          "isActive": true,
+          "businessId": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+          "createdAt": "2025-03-08T16:08:48.041Z",
+          "updatedAt": "2025-03-08T16:08:48.041Z"
+      },
+      {
+          "id": "9f607715-6a12-4964-869b-14780d74c48c",
+          "name": "Fried Rice",
+          "description": "Intercontinental delight",
+          "price": "2000.00",
+          "image": null,
+          "categories": [
+              "Rice Combo"
+          ],
+          "isAvailable": true,
+          "isActive": true,
+          "businessId": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+          "createdAt": "2025-03-08T16:08:48.041Z",
+          "updatedAt": "2025-03-08T16:08:48.041Z"
+      },
+      {
+          "id": "f69585ed-9f3f-4d31-81a5-fa23a9920297",
+          "name": "Eba and Egusi",
+          "description": "Traditional dish",
+          "price": "1500.00",
+          "image": null,
+          "categories": [
+              "Swallow"
+          ],
+          "isAvailable": true,
+          "isActive": true,
+          "businessId": "6a21418e-75f5-4615-ab34-bf065e8337e6",
+          "createdAt": "2025-03-08T16:08:48.041Z",
+          "updatedAt": "2025-03-08T16:08:48.041Z"
+      }
+  ],
+  "message": "Products retrieved successfully"
 }

@@ -1,5 +1,4 @@
-
-import { useState, useEffect,  } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 interface Business {
   businessType: string;
@@ -21,68 +20,54 @@ interface UseBusinessProps {
   category?: string;
 }
 
-export const useBusiness = ({ address, localGovernment, state, category }: UseBusinessProps) => {
-  const [businesses, setBusinesses] = useState<Business[]>([]);
-  const [loading, setLoading] = useState(true); // Start as true to indicate initial load
-  const [error, setError] = useState<string | null>(null);
+const fetchBusinesses = async ({ localGovernment, state, category }: Omit<UseBusinessProps, 'address'>): Promise<Business[]> => {
+  if (!localGovernment || !state) {
+    throw new Error("Waiting for location data...");
+  }
 
-  useEffect(() => {
-    const fetchBusinesses = async () => {
-      // console.log("useBusiness inputs:", { address, localGovernment, state, category });
+  const normalizedCity = localGovernment
+    .replace(/\s+/g, "-")
+    .replace(/\//g, "-");
 
-      // Only fetch if all required fields are present
-      if (!address || !localGovernment || !state) {
-        setBusinesses([]);
-        setError("Waiting for location data...");
-        setLoading(false); // Stop loading if data is incomplete
-        return;
-      }
+  const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/businesses/filter`;
+  const params = new URLSearchParams({
+    city: encodeURIComponent(normalizedCity),
+    state: encodeURIComponent(state),
+  });
+  
+  if (category) {
+    params.set("category", category);
+  }
+  
+  const url = `${baseUrl}?${params.toString()}`;
 
-      setLoading(true);
-      setError(null);
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch businesses: ${response.statusText}`);
+  }
 
-      const normalizedCity = localGovernment
-        .replace(/\s+/g, "-")
-        .replace(/\//g, "-");
-      console.log("Normalized city:", normalizedCity);
-
-      const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/businesses/filter`;
-      const params = new URLSearchParams({
-        city: encodeURIComponent(normalizedCity),
-        state: encodeURIComponent(state),
-      });
-      if (category) {
-        params.set("category", category);
-      }
-      const url = `${baseUrl}?${params.toString()}`;
-      // console.log("Fetching businesses from:", url);
-
-      try {
-        const response = await fetch(url);
-        console.log("Response status:", response.status, response.statusText);
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch businesses: ${response.statusText}`);
-        }
-        const data = await response.json();
-        // console.log("Fetched data:", data);
-
-        const businessesData = data.businesses.map((b: Business, index: number) => ({
-          ...b,
-          id: b.id || `temp-id-${index}`,
-        }));
-        setBusinesses(businessesData);
-      } catch (err) {
-        setError("Error loading featured businesses");
-        setBusinesses([]);
-        console.error("Fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBusinesses();
-  }, [address, localGovernment, state, category]);
-
-  return { businesses, loading, error };
+  const data = await response.json();
+  return data.businesses.map((b: Business, index: number) => ({
+    ...b,
+    id: b.id || `temp-id-${index}`,
+  }));
 };
+
+export const useBusiness = ({ address, localGovernment, state, category }: UseBusinessProps) => {
+  const query = useQuery({
+    queryKey: ['businesses', localGovernment, state, category],
+    queryFn: () => fetchBusinesses({ localGovernment, state, category }),
+    enabled: !!address && !!localGovernment && !!state,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
+  });
+
+  return {
+    businesses: query.data || [],
+    loading: query.isLoading,
+    error: query.error instanceof Error ? query.error.message : null,
+  };
+};
+
+
+
