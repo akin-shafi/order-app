@@ -801,22 +801,32 @@ img.filter {
   color: #6b7280;
 }
 
-
-/* styles/globals.css or a dedicated CSS file */
-.mySwiper {
-  padding-bottom: 40px; /* Space for pagination dots */
+/* styles/globals.css */
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.mySwiper .swiper-slide {
-  transition: opacity 0.3s ease;
+.swiper-slide div {
+  width: 100%; /* Ensure cards fill their slide space */
+  height: 100%; /* Maintain aspect ratio */
 }
 
-.mySwiper .swiper-pagination-bullet {
-  background: #fff;
-  opacity: 0.5;
+@media (min-width: 1024px) {
+  .swiper-slide {
+    width: calc(100% / 7.5 - 12px); /* Adjust for spaceBetween (12px) */
+  }
 }
 
-.mySwiper .swiper-pagination-bullet-active {
-  background: #fff;
-  opacity: 1;
+@media (max-width: 768px) {
+  .swiper-slide {
+    width: calc(100% / 5.5 - 12px); /* Adjust for tablet landscape */
+  }
+}
+
+@media (max-width: 480px) {
+  .swiper-slide {
+    width: calc(100% / 3.5 - 12px); /* Adjust for mobile landscape */
+  }
 }

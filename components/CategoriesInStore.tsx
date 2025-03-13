@@ -44,32 +44,6 @@ export default function CategoriesInStore() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const getCardClassName = (categoryName: string, index: number) => {
-    const baseClass =
-      "flex flex-col items-center justify-center p-2 rounded-lg cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md w-24 h-24 flex-shrink-0"; // Reduced size for mobile
-    const isSelected =
-      selectedCategory?.toLowerCase() === categoryName.toLowerCase();
-
-    const bgColors = [
-      "bg-pink-100",
-      "bg-orange-100",
-      "bg-blue-100",
-      "bg-green-100",
-      "bg-yellow-100",
-      "bg-teal-100",
-      "bg-purple-100",
-      "bg-indigo-100",
-      "bg-red-100",
-      "bg-cyan-100",
-    ];
-
-    const bgColor = bgColors[index % bgColors.length] || "bg-gray-100";
-
-    return `${baseClass} ${bgColor} ${
-      isSelected ? "ring-2 ring-[#FF6600] bg-[#FFF5E6]" : ""
-    }`;
-  };
-
   return (
     <section className="py-4 md:py-8">
       <div className="container mx-auto px-4">
@@ -78,87 +52,70 @@ export default function CategoriesInStore() {
             Explore Categories
           </h2>
 
-          {/* Mobile: Swiper for small screens */}
+          {/* Mobile Swiper */}
           <div className="md:hidden -mx-4">
-            {mounted ? (
-              <Swiper
-                slidesPerView={2.5}
-                spaceBetween={12}
-                className="px-4"
-                style={{
-                  paddingLeft: "16px", // Add extra padding to align with banner
-                }}
-              >
-                {categories.map((category, index) => (
-                  <SwiperSlide key={index}>
-                    <div
-                      className={getCardClassName(category.name, index)}
-                      onClick={() => handleCategoryClick(category.name)}
-                    >
-                      <div className="w-10 h-10 mb-1 flex justify-center">
+            <Swiper slidesPerView={2.5} spaceBetween={12} className="px-4">
+              {mounted
+                ? categories.map((category, index) => (
+                    <SwiperSlide key={index}>
+                      <div
+                        className="p-2 rounded-lg cursor-pointer bg-gray-100 flex flex-col items-center justify-center w-24 h-24"
+                        onClick={() => handleCategoryClick(category.name)}
+                      >
                         <Image
                           src={category.image || "/placeholder.svg"}
                           alt={category.name}
                           width={32}
                           height={32}
-                          className="object-contain w-auto h-auto"
-                          style={{ width: "auto", height: "auto" }}
+                          className="w-10 h-10 mb-1"
                         />
+                        <span className="text-gray-800 font-medium text-xs text-center">
+                          {category.name}
+                        </span>
                       </div>
-                      <span className="text-gray-800 font-medium text-xs text-center whitespace-nowrap">
-                        {category.name}
-                      </span>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ) : (
-              <Swiper
-                slidesPerView={3.5}
-                spaceBetween={12}
-                className="px-4"
-                style={{
-                  paddingLeft: "16px", // Add extra padding to align with banner
-                }}
-              >
-                {Array(7)
-                  .fill(0)
-                  .map((_, index) => (
-                    <SwiperSlide key={index}>
-                      <SkeletonCategoryCard />
                     </SwiperSlide>
-                  ))}
-              </Swiper>
-            )}
+                  ))
+                : Array(5)
+                    .fill(0)
+                    .map((_, index) => (
+                      <SwiperSlide key={index}>
+                        <SkeletonCategoryCard />
+                      </SwiperSlide>
+                    ))}
+            </Swiper>
           </div>
 
-          {/* Desktop: Categories */}
-          <div className="hidden md:grid md:grid-cols-8 gap-4">
-            {mounted
-              ? categories.map((category, index) => (
-                  <div
-                    key={index}
-                    className={getCardClassName(category.name, index)}
-                    onClick={() => handleCategoryClick(category.name)}
-                  >
-                    <div className="w-12 h-12 mb-2 flex justify-center">
-                      <Image
-                        src={category.image || "/placeholder.svg"}
-                        alt={category.name}
-                        width={48}
-                        height={48}
-                        className="object-contain w-auto h-auto"
-                        style={{ width: "auto", height: "auto" }}
-                      />
-                    </div>
-                    <span className="text-gray-800 font-medium text-sm text-center whitespace-nowrap">
-                      {category.name}
-                    </span>
-                  </div>
-                ))
-              : Array(7)
-                  .fill(0)
-                  .map((_, index) => <SkeletonCategoryCard key={index} />)}
+          {/* Desktop Swiper */}
+          <div className="hidden md:block -mx-4">
+            <Swiper slidesPerView={7.5} spaceBetween={16} className="px-4">
+              {mounted
+                ? categories.map((category, index) => (
+                    <SwiperSlide key={index}>
+                      <div
+                        className="p-2 rounded-lg cursor-pointer bg-gray-100 flex flex-col items-center justify-center w-28 h-28"
+                        onClick={() => handleCategoryClick(category.name)}
+                      >
+                        <Image
+                          src={category.image || "/placeholder.svg"}
+                          alt={category.name}
+                          width={48}
+                          height={48}
+                          className="w-12 h-12 mb-2"
+                        />
+                        <span className="text-gray-800 font-medium text-sm text-center">
+                          {category.name}
+                        </span>
+                      </div>
+                    </SwiperSlide>
+                  ))
+                : Array(7)
+                    .fill(0)
+                    .map((_, index) => (
+                      <SwiperSlide key={index}>
+                        <SkeletonCategoryCard />
+                      </SwiperSlide>
+                    ))}
+            </Swiper>
           </div>
         </div>
       </div>
