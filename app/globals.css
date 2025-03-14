@@ -422,7 +422,7 @@ img.filter {
 }
 
 .hover-container:hover .overlay {
-  opacity: 0.5; /* Darkens on hover */
+  opacity: 0.6; /* Darkens on hover */
 }
 
 @media (max-width: 767px) {
