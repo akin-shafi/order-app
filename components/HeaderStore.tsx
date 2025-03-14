@@ -156,15 +156,11 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
       <SignupModal
         isOpen={isSignupModalOpen}
         onClose={() => setIsSignupModalOpen(false)}
-        onSuccess={handleAuthSuccess}
-        onLogin={openLoginModal}
       />
 
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        onSuccess={handleAuthSuccess}
-        onCreateAccount={openSignupModal}
       />
 
       <AddressSearchModal

@@ -7,6 +7,9 @@ import { ClockIcon, StarIcon } from "@/components/icons";
 import { Heart } from "lucide-react";
 import { useRecommendations } from "@/hooks/useRecommendations";
 import ClosedBusinessModal from "@/components/modal/closed-business-modal";
+import { useFavorites } from "@/hooks/useFavorites";
+import { saveToFavorite } from "@/services/businessService";
+// import { useModal } from "@/contexts/modal-context";
 
 const SkeletonCard = () => (
   <div className="bg-white rounded-lg overflow-hidden border border-gray-100 animate-pulse flex-shrink-0 w-[280px]">
@@ -31,28 +34,17 @@ const SkeletonCard = () => (
 );
 
 export default function RecommendedForYou() {
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: recommendations, isLoading, error } = useRecommendations();
+  // const { openModal } = useModal();
+  const { favorites, handleHeartClick } = useFavorites({
+    onSaveToFavorite: saveToFavorite,
+  });
 
   const getBusinessKey = (business: { name: string; businessType: string }) =>
     `${business.name
       .toLowerCase()
       .replace(/\s+/g, "-")}-${business.businessType.toLowerCase()}`;
-
-  const handleHeartClick = (e: React.MouseEvent, businessKey: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setFavorites((prev) => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(businessKey)) {
-        newFavorites.delete(businessKey);
-      } else {
-        newFavorites.add(businessKey);
-      }
-      return newFavorites;
-    });
-  };
 
   const handleBusinessClick = (e: React.MouseEvent, isOpen: boolean) => {
     if (!isOpen) {
@@ -177,13 +169,15 @@ export default function RecommendedForYou() {
                           </div>
                         </Link>
                         <button
-                          onClick={(e) => handleHeartClick(e, businessKey)}
+                          onClick={(e) =>
+                            handleHeartClick(e, business.id.toString())
+                          }
                           className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-10"
                           disabled={!isOpen}
                         >
                           <Heart
                             className={`h-4 w-4 ${
-                              favorites.has(businessKey)
+                              favorites.has(business.id.toString())
                                 ? "text-red-500 fill-current"
                                 : "text-gray-400 hover:text-gray-500"
                             }`}

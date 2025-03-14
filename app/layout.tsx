@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { DM_Sans as DMSans } from "next/font/google";
 import GoogleMapsScript from "@/components/google-maps-script";
 import Providers from "./providers";
+import ModalContainer from "@/components/auth/modal-container";
 import "./globals.css";
 
 const dmSans = DMSans({
@@ -50,7 +51,10 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <GoogleMapsScript />
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ModalContainer />
+        </Providers>
       </body>
     </html>
   );

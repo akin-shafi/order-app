@@ -46,7 +46,7 @@ const PhoneNumberInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(
         newValue = "234" + newValue.slice(-10);
       }
 
-      console.log("Phone number changed:", newValue);
+      // console.log("Phone number changed:", newValue);
       onChange(newValue);
     };
 

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 interface Business {
+  status: string;
   businessType: string;
   productCategories: string[];
   id: string;
