@@ -136,7 +136,8 @@ export default function FeaturedStore({
                   key={business.id}
                   className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative"
                 >
-                  <Link href={`/store/id=${business.id}`} className="block">
+                  <Link href={`/store/${business.id}`} className="block">
+                    {/* {business.id} */}
                     <div className="relative hover-container">
                       <Image
                         src={business.image || "/food_placeholder.jpg"}

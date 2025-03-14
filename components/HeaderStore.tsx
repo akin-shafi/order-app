@@ -27,12 +27,12 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
   const [undeliverableAddress, setUndeliverableAddress] = useState(""); // Added state
 
   // Get all necessary data from the address context
-  const { 
-    address: contextAddress, 
+  const {
+    address: contextAddress,
     isAddressValid,
     isLoading,
     error,
-    addressSource
+    addressSource,
   } = useAddress();
 
   const openSignupModal = () => {
@@ -127,7 +127,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
               <button
                 type="button"
                 onClick={toggleCart}
-                className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+                className="relative bg-[#000000] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               >
                 <ShoppingCart size={20} />
                 <CartBadge />

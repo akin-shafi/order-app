@@ -56,7 +56,7 @@ const AdvertBanners = () => {
         <Swiper
           modules={[Autoplay, Pagination]}
           spaceBetween={16}
-          slidesPerView={1.5} // Small screens: 1.5 slides
+          slidesPerView={1.9} // Small screens: 1.5 slides
           breakpoints={{
             768: {
               slidesPerView: 2, // Large screens: 2 slides

@@ -3,6 +3,7 @@ import { useAddress } from "@/contexts/address-context";
 
 // Adjusted interface to match the desired output
 interface RecommendedBusiness {
+  id: number;
   name: string;
   image: string | null;
   rating: string;
@@ -15,7 +16,11 @@ interface RecommendedBusiness {
 }
 
 // Adjusted interface to match the updated payload structure
+
+// .toLowerCase()
+// .replace(/\s+/g, "-")
 interface APIBusiness {
+  id: number;
   name: string;
   image: string | null;
   city: string;
@@ -82,6 +87,7 @@ const fetchRecommendations = async (city: string, state: string): Promise<Recomm
 
   // Transform the API response to match RecommendedBusiness interface
   return data.data.businesses.map((business: APIBusiness) => ({
+    id: business.id,
     name: business.name,
     image: business.image,
     rating: business.rating,

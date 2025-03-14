@@ -104,9 +104,7 @@ export default function RecommendedForYou() {
                         className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative flex-shrink-0 w-[280px]"
                       >
                         <Link
-                          href={`/store/${business.name
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")}`}
+                          href={`/store/${business.id}`}
                           className="block"
                           onClick={(e) => handleBusinessClick(e, isOpen)}
                         >
