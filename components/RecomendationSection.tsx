@@ -59,7 +59,7 @@ export default function RecommendedForYou() {
 
   return (
     <section className="py-4 md:py-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-2">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-xl md:text-2xl font-bold text-[#292d32] mb-3 md:mb-6">
             Recommended for You
@@ -116,13 +116,13 @@ export default function RecommendedForYou() {
                         </div>
 
                         <div className="flex flex-wrap gap-3 mt-1">
-                          <span className="text-[#FF6600] text-xs py-0.5 rounded">
+                          <span className="text-black text-xs px-1 py-0.5 rounded bg-gray-100">
                             {business.businessType}
                           </span>
                           {business.productCategories.map((category, index) => (
                             <span
                               key={index}
-                              className="text-[#FF6600] text-xs py-0.5 rounded"
+                              className="text-black text-xs px-1 py-0.5 rounded bg-gray-100"
                             >
                               {category}
                             </span>

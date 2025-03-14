@@ -56,14 +56,14 @@ export default function CategoriesInStore() {
 
   return (
     <section className="py-4 md:py-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-1">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-xl md:text-2xl font-bold text-[#292d32] mb-3 md:mb-6">
             Explore Categories
           </h2>
 
           {/* Mobile Swiper */}
-          <div className="md:hidden -mx-4">
+          <div className="md:hidden mx-1">
             <Swiper slidesPerView={2.5} spaceBetween={12} className="px-4">
               {mounted && !isLoading
                 ? categories?.map((category, index) => (
