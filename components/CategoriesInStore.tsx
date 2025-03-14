@@ -96,7 +96,7 @@ export default function CategoriesInStore() {
           </div>
 
           {/* Desktop Swiper */}
-          <div className="hidden md:block -mx-4">
+          <div className="hidden md:block mx-2">
             <Swiper slidesPerView={7.5} spaceBetween={16} className="px-4">
               {mounted && !isLoading
                 ? categories?.map((category, index) => (
