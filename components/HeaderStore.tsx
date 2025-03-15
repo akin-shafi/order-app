@@ -4,12 +4,12 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { MapPin, Search, ShoppingCart, User } from "lucide-react";
+import { Search, ShoppingCart, User } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
 import AddressSearchModal from "./modal/address-search-modal";
-import JoinWaitlistModal from "./modal/join-waitlist-modal"; // Added import
+import JoinWaitlistModal from "./modal/join-waitlist-modal";
 import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
@@ -23,8 +23,8 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false); // Added state
-  const [undeliverableAddress, setUndeliverableAddress] = useState(""); // Added state
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [undeliverableAddress, setUndeliverableAddress] = useState("");
 
   // Get all necessary data from the address context
   const {
@@ -67,12 +67,34 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
     }
     if (isAddressValid && contextAddress) {
       const sourceIndicator = {
-        localStorage: "🔵",
+        localStorage: (
+          <svg
+            className="inline-block h-4 w-4 mr-1"
+            fill="blue"
+            stroke="blue"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+          </svg>
+        ),
         currentLocation: "📍",
-        manual: "✏️",
+        manual: (
+          <svg
+            className="inline-block h-4 w-4 mr-1"
+            fill="green"
+            stroke="green"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+          </svg>
+        ),
         none: "⚪",
       }[addressSource];
-      return `${sourceIndicator} ${contextAddress}`;
+      return (
+        <>
+          {sourceIndicator} {contextAddress}
+        </>
+      );
     }
     return "Set your location";
   };
@@ -103,7 +125,6 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
                   className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
                   disabled={isLoading}
                 >
-                  <MapPin className="h-4 w-4 ml-1 hide-on-small text-[#FF6600] mr-2" />
                   <span className="truncate max-w-[150px] md:max-w-[200px]">
                     {renderAddressText()}
                   </span>

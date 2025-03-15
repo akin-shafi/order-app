@@ -34,19 +34,19 @@ export default function CTASection() {
       text: '"The fastest delivery I\'ve ever experienced!"',
       name: "Sarah J.",
       rating: 5,
-      image: "/food_placeholder.jpg?height=48&width=48",
+      image: "/placeholder.svg?height=48&width=48",
     },
     {
       text: '"Amazing variety of restaurants to choose from!"',
       name: "Michael R.",
       rating: 5,
-      image: "/food_placeholder.jpg?height=48&width=48",
+      image: "/placeholder.svg?height=48&width=48",
     },
     {
       text: '"The tracking feature is so convenient!"',
       name: "Emma L.",
       rating: 5,
-      image: "/food_placeholder.jpg?height=48&width=48",
+      image: "/placeholder.svg?height=48&width=48",
     },
   ];
 
@@ -144,7 +144,7 @@ export default function CTASection() {
             >
               <div className="flex items-start gap-4 mb-4">
                 <Image
-                  src={testimonial.image || "/food_placeholder.jpg"}
+                  src={testimonial.image || "/placeholder.svg"}
                   alt={testimonial.name}
                   width={48}
                   height={48}

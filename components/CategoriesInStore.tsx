@@ -73,7 +73,7 @@ export default function CategoriesInStore() {
                         onClick={() => handleCategoryClick(category.name)}
                       >
                         <Image
-                          src={category.image || "/food_placeholder.jpg"}
+                          src={category.image || "/placeholder.svg"}
                           alt={category.name}
                           width={32}
                           height={32}
@@ -106,7 +106,7 @@ export default function CategoriesInStore() {
                         onClick={() => handleCategoryClick(category.name)}
                       >
                         <Image
-                          src={category.image || "/food_placeholder.jpg"}
+                          src={category.image || "/placeholder.svg"}
                           alt={category.name}
                           width={48}
                           height={48}
