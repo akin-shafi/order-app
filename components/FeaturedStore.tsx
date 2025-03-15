@@ -20,7 +20,7 @@ interface Business {
   productCategories: string[];
   businessType: string;
   priceRange: string | null;
-  deliveryTimeRange: string | null;
+  deliveryTime: string | null;
   rating: string;
   ratingCount: number;
   status?: string; // Added status to the interface
@@ -156,13 +156,26 @@ export default function FeaturedStore({
                       >
                         <div className="relative hover-container">
                           <Image
-                            src={business.image || "/food_placeholder.jpg"}
+                            src={business.image || "/images/store-placeholder.png"}
                             alt={business.name}
                             width={280}
                             height={160}
-                            className="w-full h-40 object-cover"
+                            className={`w-full h-40 object-cover ${
+                              !isOpen ? "opacity-50" : ""
+                            }`}
                           />
-                          <div className="absolute inset-0 bg-black opacity-0 overlay transition-opacity duration-300 ease-in-out"></div>
+                          {!isOpen && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded">
+                                Closed
+                              </span>
+                            </div>
+                          )}
+                          <div
+                            className={`absolute inset-0 bg-black  ${
+                              !isOpen ? "opacity-50" : "opacity-0"
+                            } overlay transition-opacity duration-300 ease-in-out`}
+                          ></div>
                         </div>
 
                         <div className="p-3">
@@ -172,15 +185,29 @@ export default function FeaturedStore({
                             </h3>
                             <div className="flex items-center">
                               <span className="text-xs mr-1 text-[#292d32]">
-                                {business.rating}({business.ratingCount})
+                                {business.rating}
                               </span>
                               <StarIcon className="text-yellow-400 w-4 h-4" />
                             </div>
                           </div>
 
-                          <div className="flex items-center text-gray-500 text-xs">
+                          {/* <div className="flex items-center text-gray-500 text-xs">
                             <ClockIcon className="text-[#FF6600] mr-1 w-4 h-4" />
                             {business.deliveryTimeRange || "N/A"}
+                          </div> */}
+
+                          <div className="flex items-center justify-between text-gray-500 text-xs">
+                            <div className="flex items-center">
+                              <ClockIcon className="text-[#FF6600] mr-1 w-4 h-4" />
+                              {business.deliveryTime}
+                            </div>
+                            <span
+                              className={`text-xs ${
+                                isOpen ? "text-green-600" : "text-red-600"
+                              }`}
+                            >
+                              {isOpen ? "Open" : "Closed"}
+                            </span>
                           </div>
 
                           <div className="flex flex-wrap gap-3 mt-1">

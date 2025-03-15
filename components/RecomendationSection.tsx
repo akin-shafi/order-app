@@ -102,7 +102,7 @@ export default function RecommendedForYou() {
                         >
                           <div className="relative hover-container">
                             <Image
-                              src={business.image || "/food_placeholder.jpg"}
+                              src={business.image || "/images/store-placeholder.png"}
                               alt={business.name}
                               width={280}
                               height={160}
