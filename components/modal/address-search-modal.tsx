@@ -311,7 +311,7 @@ export default function AddressSearchModal({
 
   return (
     <div className="fixed inset-0 bg-brand-opacity z-[100] flex items-start justify-center animate-in fade-in duration-300">
-      <div className="bg-white rounded-lg w-full h-full relative flex flex-col animate-in slide-in-from-bottom duration-500">
+      <div className="bg-white  w-full h-full relative flex flex-col animate-in slide-in-from-bottom duration-500">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 z-10"
@@ -366,7 +366,7 @@ export default function AddressSearchModal({
           <button
             onClick={handleUseCurrentLocation}
             disabled={isVerifying || isExplicitlyFetching}
-            className="w-full text-left hover:bg-gray-50 p-4 rounded-md cursor-pointer transition-colors"
+            className="w-full text-left bg-gray-100 hover:bg-gray-200 p-4 rounded-md cursor-pointer transition-colors"
           >
             <div className="flex items-center gap-2 text-[#f15736] mb-2">
               {isExplicitlyFetching ? (

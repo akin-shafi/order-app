@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Search, ShoppingCart, User } from "lucide-react";
+import { Search, ShoppingCart, User, ChevronDown } from "lucide-react"; // Added ChevronDown
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
@@ -92,7 +92,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
       }[addressSource];
       return (
         <>
-          {sourceIndicator} {contextAddress}
+          {sourceIndicator} {contextAddress}{" "}
         </>
       );
     }
@@ -128,6 +128,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
                   <span className="truncate max-w-[150px] md:max-w-[200px]">
                     {renderAddressText()}
                   </span>
+                  <ChevronDown className="inline-block h-4 w-4 ml-1 text-gray-600" />
                 </button>
               </span>
             </div>

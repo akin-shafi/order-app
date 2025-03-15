@@ -117,7 +117,7 @@ export default function AddressField() {
   return (
     <div className="relative space-y-4">
       {/* Address Input */}
-      <div className="flex flex-col sm:flex-row gap-2 p-1 bg-transparent sm:bg-white rounded-full max-w-md mx-auto md:mx-0 animate-fadeInUp">
+      <div className="flex flex-col sm:flex-row gap-2 p-1 bg-transparent sm:bg-white rounded-0 max-w-md mx-auto md:mx-0 animate-fadeInUp">
         <div className="flex-1 flex items-center bg-white rounded-full pl-2">
           <MapPin className="text-[#f15736] h-5 w-5 mr-2" />
           <input
