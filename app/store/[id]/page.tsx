@@ -51,7 +51,7 @@ export default function StoreDetailsPage() {
   const [categories, setCategories] = useState<string[]>([]);
   // Set first category as active by default instead of "all"
   const [activeCategory, setActiveCategory] = useState<string>("");
-  const [priceRange, setPriceRange] = useState<[number, number]>([500, 10000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([100, 10000]);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
