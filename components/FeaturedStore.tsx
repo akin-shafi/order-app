@@ -156,7 +156,9 @@ export default function FeaturedStore({
                       >
                         <div className="relative hover-container">
                           <Image
-                            src={business.image || "/images/store-placeholder.png"}
+                            src={
+                              business.image || "/images/store-placeholder.png"
+                            }
                             alt={business.name}
                             width={280}
                             height={160}
@@ -231,7 +233,7 @@ export default function FeaturedStore({
                         onClick={(e) =>
                           handleHeartClick(e, business.id.toString())
                         }
-                        className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-10"
+                        className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-5"
                         disabled={!isOpen}
                       >
                         <Heart
