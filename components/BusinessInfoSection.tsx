@@ -106,7 +106,7 @@ export default function BusinessInfoSection({
         </div>
       </div>
 
-      <div className="p-4 sm:p-6 w-full">
+      <div className="py-4 sm:p-2 w-full">
         <div className="flex flex-col md:flex-row justify-between mb-6">
           <div className="flex items-baseline">
             <h1 className="font-medium text-xl md:text-[28px] leading-[36px] tracking-tighter mr-4 text-black">
@@ -169,7 +169,7 @@ export default function BusinessInfoSection({
           <div className="text-xs sm:text-sm text-gray-600">
             Opening Hour:{" "}
             <span className="font-medium">{business.openingTime}</span> -{" "}
-            <span className="font-medium">{business.closingTime} | </span>
+            <span className="font-medium">{business.closingTime} </span>
           </div>
         </div>
       </div>

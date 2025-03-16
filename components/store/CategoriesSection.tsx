@@ -65,11 +65,11 @@ export default function CategoriesSection({
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-4 py-2 mx-1 rounded-md text-sm whitespace-nowrap transition-colors duration-200 flex items-center justify-center
+              className={`min-w-max py-[6px] px-5 mr-4 text-xs rounded-lg uppercase  text-black cursor-pointer 
                 ${
                   activeCategory === category
-                    ? "bg-[#000000] text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-[#f36405bf] text-white shadow-md font-medium"
+                    : "bg-gray-100 text-gray-900 hover:bg-gray-200 font-medium"
                 }`}
             >
               {category === "all"

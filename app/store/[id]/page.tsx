@@ -41,21 +41,18 @@ type BusinessDetails = {
   totalRatings: number;
   isActive: boolean;
   products: MenuItem[];
-  businessType: string; // Added to reflect the new string field
+  businessType: string;
 };
 
 export default function StoreDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
 
-  // Get categories from groupedProducts once available
   const [categories, setCategories] = useState<string[]>([]);
-  // Set first category as active by default instead of "all"
   const [activeCategory, setActiveCategory] = useState<string>("");
   const [priceRange, setPriceRange] = useState<[number, number]>([100, 10000]);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
-
   const [business, setBusiness] = useState<BusinessDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,11 +91,10 @@ export default function StoreDetailsPage() {
         const grouped = groupProductsByCategory(response.business.products);
         setGroupedProducts(grouped);
 
-        // Set categories and make first one active
         const categoryList = Object.keys(grouped);
         setCategories(categoryList);
         if (categoryList.length > 0) {
-          setActiveCategory(categoryList[0]); // Set first category as active
+          setActiveCategory(categoryList[0]);
         }
       } catch (err) {
         setError(
@@ -115,7 +111,6 @@ export default function StoreDetailsPage() {
     }
   }, [id]);
 
-  // Function to get category item counts
   const getCategoryCounts = () => {
     return Object.fromEntries(
       Object.entries(groupedProducts).map(([category, items]) => [
@@ -126,7 +121,85 @@ export default function StoreDetailsPage() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-white animate-pulse">
+        {/* Header Skeleton */}
+        <div className="border-b">
+          <div className="max-w-6xl mx-auto px-4 py-4">
+            <div className="h-8 w-1/3 bg-gray-200 rounded" />
+          </div>
+        </div>
+
+        {/* Main Content Skeleton */}
+        <main className="max-w-6xl mx-auto px-4 py-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            <div className="w-full lg:w-2/3">
+              {/* Business Info Skeleton */}
+              <div className="w-full mb-6">
+                <div className="inline-flex items-center mb-6">
+                  <div className="h-4 w-4 bg-gray-200 rounded mr-2" />
+                  <div className="h-4 w-24 bg-gray-200 rounded" />
+                </div>
+                <div className="w-full h-[200px] sm:h-[250px] md:h-[300px] bg-gray-200 rounded-md mb-6" />
+                <div className="p-4">
+                  <div className="flex flex-col md:flex-row justify-between mb-6">
+                    <div className="flex items-baseline">
+                      <div className="h-8 w-3/4 bg-gray-200 rounded mr-4" />
+                      <div className="flex items-center">
+                        <div className="h-4 w-8 bg-gray-200 rounded mr-2" />
+                        <div className="h-4 w-12 bg-gray-200 rounded" />
+                      </div>
+                    </div>
+                    <div className="flex w-full md:w-52 bg-gray-200 h-10 rounded-lg mt-4 md:mt-0" />
+                  </div>
+                  <div className="h-4 w-32 bg-gray-200 rounded" />
+                </div>
+              </div>
+
+              {/* Categories Skeleton */}
+              <div className="flex gap-2 mb-6">
+                {Array(4)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div key={i} className="h-8 w-20 bg-gray-200 rounded" />
+                  ))}
+              </div>
+
+              {/* Menu Items Skeleton */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Array(4)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div key={i} className="flex gap-4">
+                      <div className="h-24 w-24 bg-gray-200 rounded-md" />
+                      <div className="flex-1">
+                        <div className="h-5 w-3/4 bg-gray-200 rounded mb-2" />
+                        <div className="h-4 w-full bg-gray-200 rounded mb-1" />
+                        <div className="h-4 w-1/2 bg-gray-200 rounded" />
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Cart Skeleton */}
+            <div className="w-full lg:w-1/3">
+              <div className="border rounded-lg p-4">
+                <div className="h-6 w-1/2 bg-gray-200 rounded mb-4" />
+                <div className="h-32 w-full bg-gray-200 rounded" />
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Footer Skeleton */}
+        <div className="border-t mt-6">
+          <div className="max-w-6xl mx-auto px-4 py-4">
+            <div className="h-4 w-1/4 bg-gray-200 rounded" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error || !business) {
@@ -146,7 +219,7 @@ export default function StoreDetailsPage() {
               priceRange={priceRange}
               setPriceRange={setPriceRange}
               categories={categories}
-              categoryCounts={getCategoryCounts()} // Pass category counts
+              categoryCounts={getCategoryCounts()}
               isLoading={isLoading}
             />
             <MenuItemsSection
