@@ -32,7 +32,7 @@ export default function BusinessInfoSection({
   isLoading = false,
 }: BusinessInfoSectionProps) {
   const [activeOption, setActiveOption] = useState<string | null>(
-    business.deliveryOptions[0] || null
+    business.deliveryOptions[1] || null
   );
 
   if (isLoading) {
