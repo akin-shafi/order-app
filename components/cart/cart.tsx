@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/cart-context";
 import Image from "next/image";
 import Pack from "./Pack";
 import { formatPrice } from "@/lib/utils";
+import { useAddress } from "@/contexts/address-context";
 
 interface CartProps {
   restaurantName: string;
@@ -13,6 +14,27 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ restaurantName }) => {
   const { state, dispatch } = useCart();
+
+  const {
+    address: contextAddress,
+    isAddressValid,
+    isLoading,
+    error,
+    // addressSource,
+  } = useAddress();
+
+  const renderAddressText = () => {
+    if (isLoading) {
+      return "Getting your location...";
+    }
+    if (error) {
+      return "Set your location";
+    }
+    if (isAddressValid && contextAddress) {
+      return <>{contextAddress} </>;
+    }
+    return "Set your location";
+  };
 
   const calculateTotal = () => {
     const packsTotal = state.packs.reduce((sum, pack) => {
@@ -151,7 +173,10 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-sm text-[#292d32]">Akere Bus Stop</span>
+              <span className="text-sm text-[#292d32] truncate-text">
+                {renderAddressText()}
+                {/* Akere Bus Stop */}
+              </span>
               <button className="text-[#ff6600] text-sm">Change</button>
             </div>
 
@@ -208,7 +233,7 @@ const Cart: React.FC<CartProps> = ({ restaurantName }) => {
               <span>Total</span>
               <span>{formatPrice(calculateTotal())}</span>
             </div>
-      </div>
+          </div>
 
           {/* Action Buttons */}
           <div className="space-y-3 pt-4">

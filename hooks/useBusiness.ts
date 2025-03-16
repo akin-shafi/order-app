@@ -68,6 +68,7 @@ const fetchBusinesses = async ({ localGovernment, state, category }: Omit<UseBus
   const params = new URLSearchParams({
     city: encodeURIComponent(normalizedCity),
     state: encodeURIComponent(state),
+    businessType: "Restaurant"
   });
   
   if (category) {

@@ -71,6 +71,7 @@ const fetchRecommendations = async (city: string, state: string): Promise<Recomm
   const params = new URLSearchParams({
     page: "1",
     limit: "5",
+    businessType: "Restaurant",
     city: encodeURIComponent(normalizedCity),
     state: encodeURIComponent(state),
     minRating: "0",

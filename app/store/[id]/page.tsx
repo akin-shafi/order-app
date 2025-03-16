@@ -41,6 +41,7 @@ type BusinessDetails = {
   totalRatings: number;
   isActive: boolean;
   products: MenuItem[];
+  businessType: string; // Added to reflect the new string field
 };
 
 export default function StoreDetailsPage() {
