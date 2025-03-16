@@ -68,7 +68,7 @@ export default function CategoriesSection({
               className={`min-w-max py-[6px] px-5 mr-4 text-xs rounded-lg uppercase  text-black cursor-pointer 
                 ${
                   activeCategory === category
-                    ? "bg-[#f36405bf] text-white shadow-md font-medium"
+                    ? "bg-[#FF6600] text-white shadow-md font-medium"
                     : "bg-gray-100 text-gray-900 hover:bg-gray-200 font-medium"
                 }`}
             >

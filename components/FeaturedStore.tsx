@@ -213,7 +213,7 @@ export default function FeaturedStore({
                             </span>
                           </div>
 
-                          <div className="flex flex-wrap gap-3 mt-1">
+                          <div className="flex flex-wrap gap-3 mt-4">
                             <span className="text-black text-xs px-1 py-0.5 rounded bg-gray-100">
                               {business.businessType}
                             </span>

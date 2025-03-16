@@ -15,7 +15,7 @@ export default function ClosedBusinessModal({
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-md relative">
+      <div className="bg-white rounded-xl w-full max-w-md relative md:max-w-md mobile-modal">
         <button
           type="button"
           onClick={onClose}

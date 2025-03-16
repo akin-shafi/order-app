@@ -71,7 +71,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-brand-opacity flex items-center justify-center p-4 md:items-center md:justify-center">
-      <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
+      <div className="bg-white rounded-xl w-full max-w-md relative md:max-w-md mobile-modal">
         <button
           type="button"
           onClick={onClose}
