@@ -233,7 +233,8 @@ export default function FeaturedStore({
                         onClick={(e) =>
                           handleHeartClick(e, business.id.toString())
                         }
-                        className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-5"
+                        // className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-5 bg-[#f46d33]"
+                        className="flex items-center justify-center rounded-full cursor-pointer absolute right-[21px] top-[12px] bg-brand-white w-[40px] h-[40px] active:opacity-70"
                         disabled={!isOpen}
                       >
                         <Heart

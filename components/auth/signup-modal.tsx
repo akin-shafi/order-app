@@ -89,7 +89,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-md border text-gray-400 hover:text-gray-600 p-2 bg-white"
+          className="absolute right-4 top-4 rounded-md cursor-pointer border text-gray-400 hover:text-gray-600 p-2 bg-white"
         >
           <X size={20} />
         </button>
