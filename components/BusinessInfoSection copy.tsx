@@ -72,11 +72,14 @@ export default function BusinessInfoSection({
       <div
         className="w-full flex items-end h-[200px] sm:h-[250px] md:h-[300px] bg-cover bg-center rounded-md"
         style={{
-          backgroundImage: `url(${business.image || "images/food.png"})`,
+          backgroundImage: `url(${
+            business.image ||
+            "https://files.chowdeck.com/fit-in/2160x1215/images/fbabwus3be0mewtsglrw/1666340743.jpg"
+          })`,
         }}
       >
-        <div className="p-4 flex items-center">
-          <p className="flex items-center justify-center border border-brandmain rounded-md bg-white px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm text-brandmain mr-2">
+        <div className="p-4 sm:p-6 w-full">
+          <p className="flex items-center justify-center border border-black rounded-md bg-white px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm text-black">
             <svg
               width="14"
               height="14"
@@ -87,20 +90,20 @@ export default function BusinessInfoSection({
             >
               <path
                 d="M7 12.25C9.8995 12.25 12.25 9.8995 12.25 7C12.25 4.10051 9.8995 1.75 7 1.75C4.10051 1.75 1.75 4.10051 1.75 7C1.75 9.8995 4.10051 12.25 7 12.25Z"
-                stroke="#0c513f"
-                stroke-width="1.16667"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></path>
+                stroke="black"
+                strokeWidth="1.16667"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
               <path
                 d="M7 4.08398V7.00065H9.91667"
-                stroke="#0c513f"
-                stroke-width="1.16667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></path>
-            </svg>{" "}
+                stroke="black"
+                strokeWidth="1.16667"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
             {business.deliveryTimeRange || "49 - 59 mins"}
           </p>
         </div>

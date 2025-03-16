@@ -146,7 +146,8 @@ export default function FeaturedStore({
                   return (
                     <div
                       key={business.id}
-                      className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative"
+                      // className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative"
+                      className="block p-2 rounded-xl bg-white cursor-pointer relative overflow-hidden transition-all hover:shadow-md"
                       // onClick={(e) => handleBusinessClick(e, isOpen)}
                     >
                       <Link
@@ -154,7 +155,7 @@ export default function FeaturedStore({
                         className="block"
                         onClick={(e) => handleBusinessClick(e, isOpen)}
                       >
-                        <div className="relative hover-container">
+                        <div className=" hover-container w-full h-[160px] relative bg-no-repeat bg-1/2 bg-cover rounded-xl overflow-hidden shadow-sm animate__animated animate__fadeIn">
                           <Image
                             src={
                               business.image || "/images/store-placeholder.png"

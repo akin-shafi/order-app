@@ -92,7 +92,7 @@ const fetchRecommendations = async (city: string, state: string): Promise<Recomm
     name: business.name,
     image: business.image,
     rating: business.rating,
-    deliveryTime: business.deliveryTimeRange || "Not specified",
+    deliveryTime: business.deliveryTimeRange || "15 - 20 mins",
     tags: [],
     status: isBusinessOpen(business.openingTime, business.closingTime) ? "open" : "closed",
     preOrder: false,
