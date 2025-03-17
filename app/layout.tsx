@@ -4,7 +4,7 @@ import { DM_Sans as DMSans } from "next/font/google";
 import GoogleMapsScript from "@/components/google-maps-script";
 import Providers from "./providers";
 import ModalContainer from "@/components/auth/modal-container";
-import InstallAppPrompt from "@/components/InstallAppPrompt"; // Import the component
+import InstallAppPrompt from "@/components/InstallAppPrompt"; // Ensure correct path
 import "./globals.css";
 
 const dmSans = DMSans({
@@ -28,7 +28,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Existing Meta Tags */}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -39,7 +38,6 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        {/* PWA Meta Tags */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -49,7 +47,6 @@ export default function RootLayout({
           name="description"
           content="Enjoy real Naija flavors delivered fast! Order from local chefs & restaurants."
         />
-        {/* Favicon and Icon Links */}
         <link rel="icon" type="image/svg+xml" href="/icons/betaday-icon.svg" />
         <link
           rel="icon"
@@ -68,7 +65,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <ModalContainer />
-          <InstallAppPrompt /> {/* Add the InstallAppPrompt here */}
+          <InstallAppPrompt />
         </Providers>
       </body>
     </html>
