@@ -117,7 +117,7 @@ export default function AddressField() {
   return (
     <div className="relative space-y-4">
       {/* Address Input */}
-      <div className="flex flex-col sm:flex-row gap-2 p-1 bg-transparent sm:bg-white rounded-0 max-w-md mx-auto md:mx-0 animate-fadeInUp">
+      <div className="flex flex-col sm:flex-row gap-2 p-1 rounded-full sm:bg-white  max-w-md mx-auto md:mx-0 animate-fadeInUp">
         <div className="flex-1 flex items-center bg-white rounded-full pl-2">
           <MapPin className="text-[#f15736] h-5 w-5 mr-2" />
           <input
@@ -169,7 +169,7 @@ export default function AddressField() {
           <button
             onClick={handlePlaceOrder}
             disabled={isButtonDisabled}
-            className="w-full mt-8 bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-base hover:bg-[#d8432c] transition-colors disabled:opacity-70"
+            className="w-full mt-2 bg-[#f15736] text-white cursor-pointer rounded-full px-4 py-2 flex items-center justify-center text-base hover:bg-[#d8432c] transition-colors disabled:opacity-70"
           >
             {isSending ? (
               <>

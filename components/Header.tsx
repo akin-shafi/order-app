@@ -74,7 +74,7 @@ export default function Header() {
       </div>
 
       {/* Navigation menu with white background */}
-      <nav className="hidden md:flex bg-[#F5F5F5] rounded-full px-4 py-4 shadow-sm flex items-center gap-6">
+      <nav className="hidden md:flex bg-[#FFFFFF] rounded-full px-6 py-4 shadow-sm flex items-center gap-6">
         {/* Products Dropdown */}
         <div className="relative group">
           <button className="text-[#000000] hover:text-[#f15736]  text-sm font-medium transition-colors flex items-center gap-1">
@@ -127,10 +127,10 @@ export default function Header() {
         ))}
       </nav>
 
-      <div className="hidden md:flex items-center gap-4">
+      <div className="hidden md:flex items-center gap-4 ">
         {/* Partners Dropdown */}
         <div className="relative group">
-          <button className="bg-[#F5F5F5] text-[#000000] hover:text-[#f15736] px-4 py-4 text-sm font-medium rounded-full flex items-center gap-1 transition-colors">
+          <button className="bg-[#FFFFFF] shadow-sm text-[#000000] hover:text-[#f15736] px-4 py-4 text-sm font-medium rounded-full flex items-center gap-1 transition-colors">
             Partners
             <svg
               className="w-4 h-4 transition-transform group-hover:rotate-180"
@@ -148,7 +148,7 @@ export default function Header() {
           </button>
 
           {/* Dropdown Menu */}
-          <div className="absolute top-full right-0 mt-2 w-40 bg-[#F5F5F5] shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100">
+          <div className="absolute top-full right-0 mt-2 w-40 bg-[#FFFFFF] shadow-lg rounded-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all delay-100">
             <Link
               href="/become-a-vendor"
               className="block px-4 py-2 text-sm text-[#000000] hover:bg-[#fff2f1] hover:text-[#f15736]"
@@ -167,7 +167,7 @@ export default function Header() {
         {/* Cart Icon */}
         <Link
           href="/store"
-          className="bg-[#F5F5F5] p-3 rounded-full text-[#000000] hover:text-[#f15736]"
+          className="bg-[#FFFFFF] shadow-sm p-3 rounded-full text-[#000000] hover:text-[#f15736]"
         >
           <CartIcon className="h-5 w-5" />
         </Link>
