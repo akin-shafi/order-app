@@ -95,11 +95,11 @@ export default function JoinWaitlistModal({
 
   return (
     <div className="fixed inset-0 bg-brand-opacity z-50 flex items-center justify-center p-4 md:items-center md:justify-center">
-      <div className="bg-white rounded-lg w-full max-w-md relative md:max-w-md mobile-modal">
+      <div className="block p-2 rounded-xl bg-white cursor-pointer relative overflow-hidden transition-all hover:shadow-md flex-shrink-0 w-[280px] relative mobile-modal">
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-md border text-gray-400 hover:text-gray-600 p-2 bg-white"
+          className="absolute right-4 top-4  cursor-pointer   text-gray-400 hover:text-gray-600 p-2 bg-white rounded-full z-60"
         >
           <X size={20} />
         </button>

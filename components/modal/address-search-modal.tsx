@@ -314,7 +314,7 @@ export default function AddressSearchModal({
       <div className="bg-white  w-full h-full relative flex flex-col animate-in slide-in-from-bottom duration-500">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 z-10"
+          className="absolute right-4 top-4  cursor-pointer   text-gray-400 hover:text-gray-600 p-2 bg-white rounded-full z-60"
         >
           <X size={24} />
         </button>
