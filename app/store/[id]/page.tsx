@@ -122,9 +122,9 @@ export default function StoreDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white animate-pulse">
+      <div className="min-h-screen bg-white">
         {/* Header Skeleton */}
-        <div className="border-b">
+        <div className="border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <div className="h-8 w-1/3 bg-gray-200 rounded" />
           </div>
@@ -184,7 +184,7 @@ export default function StoreDetailsPage() {
 
             {/* Cart Skeleton */}
             <div className="w-full lg:w-1/3">
-              <div className="border rounded-lg p-4">
+              <div className="border border-gray-200  rounded-lg p-4">
                 <div className="h-6 w-1/2 bg-gray-200 rounded mb-4" />
                 <div className="h-32 w-full bg-gray-200 rounded" />
               </div>
@@ -193,7 +193,7 @@ export default function StoreDetailsPage() {
         </main>
 
         {/* Footer Skeleton */}
-        <div className="border-t mt-6">
+        <div className="border-t border-gray-200 mt-6">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <div className="h-4 w-1/4 bg-gray-200 rounded" />
           </div>

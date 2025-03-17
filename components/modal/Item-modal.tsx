@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChevronDown, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
