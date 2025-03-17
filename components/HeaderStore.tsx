@@ -104,12 +104,12 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="">
+            <Link href="/" className=" rounded-lg ">
               <Image
-                src="/betaday-logo-white.png"
+                src="/icons/betaday-icon.svg"
                 alt="betaday logo"
-                width={40}
-                height={40}
+                width={30}
+                height={30}
                 className="w-[40px] h-[40px] md:w-[45px] md:h-[45px] transition-all duration-300 object-contain"
                 quality={55}
                 priority

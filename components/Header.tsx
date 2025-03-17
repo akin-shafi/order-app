@@ -60,7 +60,7 @@ export default function Header() {
       <div className="bg-[#000000] hover:bg-[#000000] cursor-pointer p-3 rounded-full">
         <Link href="/" className="flex items-center">
           <Image
-            src="/betaday-white.png"
+            src="/icons/betaday-white.svg"
             alt="BetaDay Logo"
             width={100}
             height={100}
@@ -68,7 +68,7 @@ export default function Header() {
             quality={100}
             priority
             placeholder="blur"
-            blurDataURL="/betaday-placeholder.png" // Low-resolution image path
+            blurDataURL="/icons/betaday-white.svg" // Low-resolution image path
           />
         </Link>
       </div>

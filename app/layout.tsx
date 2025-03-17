@@ -4,6 +4,7 @@ import { DM_Sans as DMSans } from "next/font/google";
 import GoogleMapsScript from "@/components/google-maps-script";
 import Providers from "./providers";
 import ModalContainer from "@/components/auth/modal-container";
+import InstallAppPrompt from "@/components/InstallAppPrompt"; // Import the component
 import "./globals.css";
 
 const dmSans = DMSans({
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Existing Meta Tags */}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -37,14 +39,26 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        {/* Favicon Links */}
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        {/* PWA Meta Tags */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="BetaDay" />
+        <meta
+          name="description"
+          content="Enjoy real Naija flavors delivered fast! Order from local chefs & restaurants."
+        />
+        {/* Favicon and Icon Links */}
+        <link rel="icon" type="image/svg+xml" href="/icons/betaday-icon.svg" />
         <link
           rel="icon"
-          type="image/png"
+          type="image/svg+xml"
           sizes="16x16"
-          href="/favicon-16x16.png"
+          href="/icons/betaday-icon.svg"
         />
+        <link rel="apple-touch-icon" sizes="192x192" href="/192x192.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/512x512.png" />
       </head>
       <body
         className={`${dmSans.variable} antialiased bg-white`}
@@ -54,6 +68,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <ModalContainer />
+          <InstallAppPrompt /> {/* Add the InstallAppPrompt here */}
         </Providers>
       </body>
     </html>

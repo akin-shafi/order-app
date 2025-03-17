@@ -1,18 +1,20 @@
+/* eslint-disable import/no-anonymous-default-export */
+// next.config.ts
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*.com", // Allows any .com domain (e.g., goldencrustbakery.com)
-        port: "", // Optional, leave empty unless specific port needed
-        pathname: "/**", // Allows any path
+        hostname: "*.com",
+        port: "",
+        pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "*.org", // Add other TLDs if needed
+        hostname: "*.org",
         port: "",
         pathname: "/**",
       },
@@ -20,6 +22,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-
-export default nextConfig;
-
+export default async (phase: string): Promise<NextConfig> => {
+  if (phase !== PHASE_DEVELOPMENT_SERVER) {
+    const withPWA = (await import("@ducanh2912/next-pwa")).default({
+      dest: "public",
+      register: true,
+    });
+    return withPWA(nextConfig);
+  }
+  return nextConfig;
+};
