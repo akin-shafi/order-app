@@ -4,23 +4,24 @@ import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import CategoriesInStore from "@/components/CategoriesInStore";
 import FeaturedStore from "@/components/FeaturedStore";
-import { useSearchParams } from "next/navigation";
 import RecomendationSection from "@/components/RecomendationSection";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Suspense } from "react";
 // import AdvertBanners from "@/components/AdvertBanners";
 // import Carousel from "@/components/Carousel";
 
-function StoreContentInner() {
-  const searchParams = useSearchParams();
-  const category = searchParams?.get("category") ?? null;
+function StoreContentInner({
+  selectedCategory = null,
+}: {
+  selectedCategory?: string | null;
+}) {
   return (
     <div className="min-h-screen relative">
       {/* Background with brand color gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-[#fff5f2] to-white"></div>
       <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(241,87,54,0.03)_0%,rgba(255,255,255,0)_100%)]"></div>
 
-      {/* Subtle pattern overlay */}
+      {/* Subtle pattern overlay (commented out as in original) */}
       {/* <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(circle_at_center,#000_1px,transparent_1px)] bg-[length:24px_24px]"></div> */}
 
       {/* Content */}
@@ -31,6 +32,7 @@ function StoreContentInner() {
             <CategoriesInStore />
           </Suspense>
 
+          {/* Commented out Carousel */}
           {/* <Suspense
             fallback={
               <div className="h-[200px] animate-pulse bg-gray-200 rounded-xl"></div>
@@ -39,9 +41,7 @@ function StoreContentInner() {
             <Carousel />
           </Suspense> */}
 
-
-
-          {/* Animated Advert Banners */}
+          {/* Commented out Advert Banners */}
           {/* <Suspense
             fallback={
               <div className="h-[200px] animate-pulse bg-gray-200 rounded-xl"></div>
@@ -54,8 +54,8 @@ function StoreContentInner() {
             <RecomendationSection />
           </Suspense>
 
-          <Suspense fallback={<div>Loading featured items...</div>}>
-            <FeaturedStore selectedCategory={category} />
+          <Suspense fallback={<>Loading featured items...</>}>
+            <FeaturedStore selectedCategory={selectedCategory} />
           </Suspense>
         </main>
         <FooterStore />
@@ -64,10 +64,14 @@ function StoreContentInner() {
   );
 }
 
-export default function StoreContent() {
+export default function StoreContent({
+  selectedCategory,
+}: {
+  selectedCategory?: string | null;
+}) {
   return (
     <ErrorBoundary>
-      <StoreContentInner />
+      <StoreContentInner selectedCategory={selectedCategory} />
     </ErrorBoundary>
   );
 }
