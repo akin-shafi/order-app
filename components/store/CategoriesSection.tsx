@@ -1,6 +1,6 @@
 // components/store/CategoriesSection.tsx
 import { Slider } from "antd";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 
 interface CategoriesSectionProps {
   activeCategory: string;
@@ -24,13 +24,13 @@ export default function CategoriesSection({
   const minPrice = 0;
   const maxPrice = 15000;
 
-  const getProgressBarPosition = () => {
-    // Adjust for "all" category if you want to include it in the progress bar
-    const allCategories = ["all", ...categories];
-    const index = allCategories.findIndex((cat) => cat === activeCategory);
-    if (index === -1) return "0%";
-    return `${(index / (allCategories.length - 1)) * 100}%`;
-  };
+  // const getProgressBarPosition = () => {
+  //   // Adjust for "all" category if you want to include it in the progress bar
+  //   const allCategories = ["all", ...categories];
+  //   const index = allCategories.findIndex((cat) => cat === activeCategory);
+  //   if (index === -1) return "0%";
+  //   return `${(index / (allCategories.length - 1)) * 100}%`;
+  // };
 
   if (isLoading) {
     return (
@@ -99,14 +99,14 @@ export default function CategoriesSection({
           </div>
         </div>
       </div>
-      <div className="mt-4 h-1 bg-gray-200 rounded-full relative max-w-screen-md mx-auto">
+      {/* <div className="mt-4 h-1 bg-gray-200 rounded-full relative max-w-screen-md mx-auto">
         <motion.div
           className="absolute h-full bg-[#000000] rounded-full"
           initial={false}
           animate={{ width: "20%", left: getProgressBarPosition() }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
