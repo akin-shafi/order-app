@@ -28,27 +28,18 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
     { name: "Agege Bread", price: 200 },
   ];
 
-  const handleAddToCart = async () => {
-    // First, ensure we have a pack
-    if (!state.activePackId || state.packs.length === 0) {
+  const handleAddToCart = () => {
+    let currentPackId = state.activePackId;
+
+    // If no pack exists, create one synchronously
+    if (!currentPackId || state.packs.length === 0) {
+      currentPackId = `Pack: ${state.packs.length + 1}`;
       dispatch({ type: "ADD_PACK" });
-      // Wait for state to update
-      await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
     const priceAsNumber = parseFloat(
       item.price.replace("₦", "").replace(",", "")
     );
-
-    // Get the current pack ID, either from activePackId or the last pack
-    const currentPackId =
-      state.activePackId ||
-      (state.packs.length > 0 ? state.packs[state.packs.length - 1].id : null);
-
-    if (!currentPackId) {
-      console.error("No pack available to add item to");
-      return;
-    }
 
     dispatch({
       type: "ADD_ITEM_TO_PACK",
@@ -78,12 +69,12 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-    <div className="bg-white rounded-xl w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto relative p-4 transition-all">
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 p-2 bg-white rounded-full shadow-sm z-10"
-      >
+      <div className="bg-white rounded-xl w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto relative p-4 transition-all">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 p-2 bg-white rounded-full shadow-sm z-10"
+        >
           <svg
             className="h-5 w-5"
             fill="none"
