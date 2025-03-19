@@ -3,9 +3,10 @@
 import { useModal } from "@/contexts/modal-context";
 import LoginModal from "./login-modal";
 import SignupModal from "./signup-modal";
+import OTPModal from "./otp-modal"; // Import the new OTPModal
 
 export default function ModalContainer() {
-  const { modalType, closeModal } = useModal();
+  const { modalType, modalProps, closeModal } = useModal();
 
   if (!modalType) return null;
 
@@ -16,6 +17,13 @@ export default function ModalContainer() {
       )}
       {modalType === "signup" && (
         <SignupModal isOpen={true} onClose={closeModal} />
+      )}
+      {modalType === "otp" && (
+        <OTPModal
+          isOpen={true}
+          onClose={closeModal}
+          phoneNumber={modalProps.phoneNumber} // Pass phoneNumber from modalProps
+        />
       )}
     </>
   );

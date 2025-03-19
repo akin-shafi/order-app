@@ -6,7 +6,7 @@ import { X, Mail } from "lucide-react";
 import PhoneNumberInput from "../PhoneNumberInput";
 import { useAuth } from "@/contexts/auth-context";
 import { useModal } from "@/contexts/modal-context";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useState } from "react";
 
 interface SignupModalProps {
@@ -21,6 +21,7 @@ interface SignupFormValues {
   phoneNumber: string;
   referralCode?: string;
   otp: string;
+  role: string;
 }
 
 export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
@@ -41,6 +42,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       phoneNumber: "",
       referralCode: "",
       otp: "",
+      role: "customer",
     },
   });
 
@@ -58,6 +60,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           email: data.email,
           phoneNumber: data.phoneNumber,
           referralCode: data.referralCode,
+          role: "customer",
         });
         setShowOTP(true);
         toast.success("OTP sent successfully!");

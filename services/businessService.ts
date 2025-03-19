@@ -15,7 +15,10 @@ export const saveToFavorite = async (businessId: string): Promise<void> => {
     body: JSON.stringify({ businessId }),
   });
 
+  
+
   if (!response.ok) {
     throw new Error('Failed to save to favorites');
   }
 }; 
+

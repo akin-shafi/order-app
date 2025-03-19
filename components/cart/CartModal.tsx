@@ -89,7 +89,7 @@ const CartModal: React.FC<CartModalProps> = ({
                   </span>
                 </button>
                 <button
-                  className="group relative w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+                  className="group relative cursor-pointer w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
                   onClick={() => {
                     setCartOpen(false);
                     onClose();

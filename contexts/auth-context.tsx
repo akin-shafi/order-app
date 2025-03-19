@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -12,8 +13,8 @@ import { getAuthToken, setAuthToken, removeAuthToken } from "@/utils/auth";
 
 interface User {
   id: string;
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   phoneNumber: string;
 }
 
@@ -23,6 +24,7 @@ interface SignupData {
   email: string;
   phoneNumber: string;
   referralCode?: string;
+  role?: string;
 }
 
 interface AuthContextType {
@@ -40,6 +42,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
   useEffect(() => {
     const token = getAuthToken();
@@ -50,12 +53,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // src/contexts/auth-context.tsx
   const validateToken = async (token: string) => {
     try {
-      setIsLoading(false);
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+      const response = await fetch(`${baseUrl}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Invalid token");
+      const userData: User = await response.json();
+      setUser(userData);
     } catch (error) {
+      console.error("Token validation error:", error);
       removeAuthToken();
       setUser(null);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -63,10 +76,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signup = async (data: SignupData) => {
     try {
       const { firstName, lastName, email, phoneNumber, referralCode } = data;
-      // Combine firstName and lastName into a single name field if needed
       const name = `${firstName} ${lastName}`;
-      // TODO: Implement signup API call with the data
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch(`${baseUrl}/users/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phoneNumber, referralCode }),
+      });
+      if (!response.ok) throw new Error("Signup failed");
+      // Handle signup success (e.g., auto-login or redirect)
     } catch (error) {
       throw new Error("Failed to create account");
     }
@@ -74,26 +91,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (phoneNumber: string) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch(`${baseUrl}/users/login/phone`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to send OTP");
+      }
     } catch (error) {
-      throw new Error("Failed to send OTP");
+      throw error; // Propagates to LoginModal for toast display
     }
   };
 
   const verifyOTP = async (phoneNumber: string, otp: string) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const mockUser: User = {
-        id: "1",
-        name: "Test User",
-        email: "test@example.com",
-        phoneNumber: phoneNumber,
-      };
-      const mockToken = "mock-auth-token";
-      setAuthToken(mockToken);
-      setUser(mockUser);
+      const response = await fetch(`${baseUrl}/users/login/phone`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber, otp }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Invalid OTP");
+      }
+      const data = await response.json();
+      setAuthToken(data.token); // Store the JWT
+      setUser({
+        id: data.user.id,
+        phoneNumber: data.user.phoneNumber,
+        name: data.user.name, // Optional, if returned by backend
+        email: data.user.email, // Optional
+      });
     } catch (error) {
-      throw new Error("Invalid OTP");
+      throw error; // Propagates to OTPModal for toast display
     }
   };
 

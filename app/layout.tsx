@@ -1,4 +1,6 @@
 import type React from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import type { Metadata } from "next";
 import { DM_Sans as DMSans } from "next/font/google";
 import GoogleMapsScript from "@/components/google-maps-script";
@@ -66,6 +68,7 @@ export default function RootLayout({
           {children}
           <ModalContainer />
           <InstallAppPrompt />
+          <ToastContainer position="top-right" autoClose={3000} />
         </Providers>
       </body>
     </html>

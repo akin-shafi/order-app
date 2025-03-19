@@ -34,7 +34,7 @@ const FloatingCheckoutButton = ({
   return (
     <button
       onClick={onCheckout}
-      className="fixed bottom-4 left-4 right-4 bg-[#292d32] text-white py-3 px-4 rounded-lg shadow-lg md:hidden flex items-center justify-between"
+      className="fixed bottom-12 left-4 right-4 bg-[#292d32] text-white py-3 px-4 rounded-lg shadow-lg md:hidden flex items-center justify-between"
     >
       <span className="text-sm font-medium">
         Proceed to order {totalItems} {totalItems === 1 ? "item" : "items"}
