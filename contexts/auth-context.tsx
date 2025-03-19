@@ -19,8 +19,7 @@ interface User {
 }
 
 interface SignupData {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   phoneNumber: string;
   referralCode?: string;
@@ -75,8 +74,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signup = async (data: SignupData) => {
     try {
-      const { firstName, lastName, email, phoneNumber, referralCode } = data;
-      const name = `${firstName} ${lastName}`;
+      const { fullName, email, phoneNumber, referralCode } = data;
+      const name = `${fullName}`;
       const response = await fetch(`${baseUrl}/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

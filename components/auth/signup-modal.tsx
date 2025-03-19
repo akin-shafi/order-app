@@ -54,13 +54,15 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       }
 
       try {
+        // Merge firstName and lastName into fullName
+        const fullName = `${data.firstName} ${data.lastName}`.trim();
+
         await signup({
-          firstName: data.firstName,
-          lastName: data.lastName,
+          fullName, // Send as fullName
           email: data.email,
           phoneNumber: data.phoneNumber,
           referralCode: data.referralCode,
-          role: "customer",
+          role: data.role || "customer", // Default to "customer"
         });
         setShowOTP(true);
         toast.success("OTP sent successfully!");
@@ -103,7 +105,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           </h2>
           <p className="text-gray-500 text-center mb-6">
             {showOTP
-              ? "Enter the OTP sent to your phone"
+              ? "Enter the OTP sent to your email"
               : "Sign Up to continue."}
           </p>
 
@@ -213,8 +215,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                       required: "Phone number is required",
                       pattern: {
                         value: /^\d{10}$/,
-                        message:
-                          "Please enter a valid 10-digit phone number (e.g., 8098290445)",
+                        message: "Please enter a valid 10-digit phone number",
                       },
                     }}
                     render={({ field: { onChange, value } }) => (
@@ -286,7 +287,6 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
                             const newOtp = currentValue.split("");
                             newOtp[index] = newValue;
 
-                            // Move to next input if value is entered
                             if (newValue && index < 3) {
                               const nextInput = document.querySelector(
                                 `input[name="otp-${index + 1}"]`
