@@ -495,6 +495,20 @@ img.filter {
 }
 
 
+/* globals.css */
+@keyframes flash {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-flash {
+  animation: flash 1s infinite;
+}
+
 
 /* General Container Styles */
 .cart-container {

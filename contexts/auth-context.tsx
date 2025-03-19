@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signup = async (data: SignupData) => {
     try {
       const { fullName, email, phoneNumber, referralCode, role } = data;
-      const response = await fetch(`${baseUrl}/auth/register`, {
+      const response = await fetch(`${baseUrl}/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

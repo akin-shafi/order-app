@@ -30,9 +30,14 @@ module.exports = {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        flash: {
+          "0%, 50%, 100%": { opacity: 1 },
+          "25%, 75%": { opacity: 0 },
+        },
       },
       animation: {
         "slide-in": "slide-in 0.3s ease-out",
+        flash: "flash 1s infinite",
       },
     },
   },
