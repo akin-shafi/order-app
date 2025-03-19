@@ -10,14 +10,13 @@ import {
   ReactNode,
 } from "react";
 import { getAuthToken, setAuthToken, removeAuthToken } from "@/utils/auth";
-import { jwtDecode } from "jwt-decode"; // Add this dependency for decoding JWT
 
 interface User {
   id: string;
   name?: string;
   email?: string;
   phoneNumber: string;
-  role?: string; // Added role for potential use
+  role?: string;
 }
 
 interface SignupData {
@@ -43,40 +42,23 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      const token = getAuthToken();
-      if (token) {
-        try {
-          // Decode token to check expiration
-          const decoded: { exp: number; id: string; role: string } =
-            jwtDecode(token);
-          const currentTime = Date.now() / 1000; // Convert to seconds
-          if (decoded.exp < currentTime) {
-            // Token expired
-            removeAuthToken();
-            setUser(null);
-          } else {
-            // Token valid, fetch user data
-            await validateToken(token);
-          }
-        } catch (error) {
-          console.error("Token decode/validation error:", error);
-          removeAuthToken();
-          setUser(null);
-        }
-      }
+    const token = getAuthToken();
+    if (token) {
+      validateToken(token);
+    } else {
       setIsLoading(false);
-    };
-
-    initializeAuth();
+    }
   }, []);
 
+  // src/contexts/auth-context.tsx
   const validateToken = async (token: string) => {
     try {
-      const response = await fetch(`${baseUrl}/auth/users/me`, {
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+      const response = await fetch(`${baseUrl}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error("Invalid token");
@@ -86,29 +68,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Token validation error:", error);
       removeAuthToken();
       setUser(null);
-      throw error; // Re-throw for handling in verifyOTP or other callers
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const signup = async (data: SignupData) => {
     try {
-      const { fullName, email, phoneNumber, referralCode, role } = data;
-      const response = await fetch(`${baseUrl}/auth/register`, {
+      const { fullName, email, phoneNumber, referralCode } = data;
+      const name = `${fullName}`;
+      const response = await fetch(`${baseUrl}/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName,
-          email,
-          phoneNumber,
-          referralCode,
-          role,
-        }),
+        body: JSON.stringify({ name, email, phoneNumber, referralCode }),
       });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Signup failed");
-      }
-      // No token returned here; user must verify OTP
+      if (!response.ok) throw new Error("Signup failed");
+      // Handle signup success (e.g., auto-login or redirect)
     } catch (error) {
       throw new Error("Failed to create account");
     }
@@ -126,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(errorData.message || "Failed to send OTP");
       }
     } catch (error) {
-      throw error;
+      throw error; // Propagates to LoginModal for toast display
     }
   };
 
@@ -142,13 +117,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(errorData.message || "Invalid OTP");
       }
       const data = await response.json();
-      const token = data.token;
-
-      // Store token and validate it
-      setAuthToken(token);
-      await validateToken(token); // Fetch user data and set user state
+      setAuthToken(data.token); // Store the JWT
+      setUser({
+        id: data.user.id,
+        phoneNumber: data.user.phoneNumber,
+        name: data.user.name, // Optional, if returned by backend
+        email: data.user.email, // Optional
+      });
     } catch (error) {
-      throw error;
+      throw error; // Propagates to OTPModal for toast display
     }
   };
 

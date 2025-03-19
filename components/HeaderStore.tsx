@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { Search, ShoppingCart, User, ChevronDown } from "lucide-react"; // Added ChevronDown
+import { Search, ShoppingCart, User, ChevronDown } from "lucide-react";
 import SignupModal from "./auth/signup-modal";
 import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
@@ -13,6 +13,7 @@ import JoinWaitlistModal from "./modal/join-waitlist-modal";
 import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
+import { useAuth } from "@/contexts/auth-context";
 
 interface HeaderStoreProps {
   restaurantName?: string;
@@ -25,8 +26,8 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [undeliverableAddress, setUndeliverableAddress] = useState("");
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); // Added for dropdown
 
-  // Get all necessary data from the address context
   const {
     address: contextAddress,
     isAddressValid,
@@ -34,44 +35,47 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
     error,
     addressSource,
   } = useAddress();
+  const { isAuthenticated, logout } = useAuth(); // Added logout
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
     setIsSignupModalOpen(true);
+    setIsProfileDropdownOpen(false);
   };
 
   const openLoginModal = () => {
     setIsSignupModalOpen(false);
     setIsLoginModalOpen(true);
+    setIsProfileDropdownOpen(false);
   };
 
-  const handleAuthSuccess = () => {
-    console.log("Authentication successful!");
+  const handleProfileClick = () => {
+    if (isAuthenticated) {
+      setIsProfileDropdownOpen(!isProfileDropdownOpen); // Toggle dropdown if logged in
+    } else {
+      openLoginModal(); // Open login modal if not logged in
+    }
   };
 
-  const handleAddressClick = () => {
-    setIsAddressModalOpen(true);
+  const handleLogout = () => {
+    logout();
+    setIsProfileDropdownOpen(false);
   };
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
 
-  // Function to render the address text
   const renderAddressText = () => {
-    if (isLoading) {
-      return "Getting your location...";
-    }
-    if (error) {
-      return "Set your location";
-    }
+    if (isLoading) return "Getting your location...";
+    if (error) return "Set your location";
     if (isAddressValid && contextAddress) {
       const sourceIndicator = {
         localStorage: (
           <svg
             className="inline-block h-4 w-4 mr-1"
-            fill="blue"
-            stroke="blue"
+            fill="gray"
+            stroke="gray"
             viewBox="0 0 24 24"
           >
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -81,8 +85,8 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
         manual: (
           <svg
             className="inline-block h-4 w-4 mr-1"
-            fill="green"
-            stroke="green"
+            fill="black"
+            stroke="black"
             viewBox="0 0 24 24"
           >
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -104,7 +108,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className=" rounded-lg ">
+            <Link href="/" className="rounded-lg">
               <Image
                 src="/icons/betaday-icon.svg"
                 alt="betaday logo"
@@ -118,10 +122,10 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
             </Link>
 
             <div className="flex items-center text-gray-600">
-              <span className="flex items-center ml-2 md:ml-5 mr-6">
+              <span className="flex items-center ml-1 md:ml-0 mr-1">
                 <button
                   type="button"
-                  onClick={handleAddressClick}
+                  onClick={() => setIsAddressModalOpen(true)}
                   className="flex font-medium text-sm md:text-sm w-fit items-center leading-none"
                   disabled={isLoading}
                 >
@@ -154,7 +158,6 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
                 <ShoppingCart size={20} />
                 <CartBadge />
               </button>
-
               {isCartOpen && (
                 <CartModal
                   isOpen={isCartOpen}
@@ -164,13 +167,31 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
               )}
             </div>
 
-            <button
-              type="button"
-              className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
-              onClick={openLoginModal}
-            >
-              <User className="h-5 w-5" />
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                className="relative bg-[#FF6600] hover:bg-gray-400 cursor-pointer flex items-center text-white justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+                onClick={handleProfileClick}
+              >
+                <User className="h-5 w-5" />
+                {isAuthenticated && (
+                  <span className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                )}
+              </button>
+
+              {/* Dropdown for logged-in users */}
+              {isAuthenticated && isProfileDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                  <button
+                    type="button"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
