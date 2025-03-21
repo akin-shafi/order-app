@@ -15,18 +15,24 @@ import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
 import { useAuth } from "@/contexts/auth-context";
 
-interface HeaderStoreProps {
-  restaurantName?: string;
+interface BusinessInfo {
+  name: string;
+  id: string;
 }
 
-const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
+interface HeaderStoreProps {
+  businessInfo: BusinessInfo;
+}
+
+const HeaderStore: React.FC<HeaderStoreProps> = ({ businessInfo }) => {
+  const { name } = businessInfo; // Destructure name for use in the component
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [undeliverableAddress, setUndeliverableAddress] = useState("");
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); // Added for dropdown
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const {
     address: contextAddress,
@@ -35,7 +41,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
     error,
     addressSource,
   } = useAddress();
-  const { isAuthenticated, logout } = useAuth(); // Added logout
+  const { isAuthenticated, logout } = useAuth();
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
@@ -51,9 +57,9 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
 
   const handleProfileClick = () => {
     if (isAuthenticated) {
-      setIsProfileDropdownOpen(!isProfileDropdownOpen); // Toggle dropdown if logged in
+      setIsProfileDropdownOpen(!isProfileDropdownOpen);
     } else {
-      openLoginModal(); // Open login modal if not logged in
+      openLoginModal();
     }
   };
 
@@ -162,7 +168,7 @@ const HeaderStore: React.FC<HeaderStoreProps> = ({ restaurantName = "" }) => {
                 <CartModal
                   isOpen={isCartOpen}
                   onClose={() => setIsCartOpen(false)}
-                  restaurantName={restaurantName}
+                  businessInfo={businessInfo}
                 />
               )}
             </div>

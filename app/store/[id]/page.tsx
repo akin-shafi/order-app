@@ -87,6 +87,7 @@ export default function StoreDetailsPage() {
 
         const response = await fetchBusinessById(id, "products");
         setBusiness(response.business);
+        console.log("response", response);
 
         const grouped = groupProductsByCategory(response.business.products);
         setGroupedProducts(grouped);
@@ -184,7 +185,7 @@ export default function StoreDetailsPage() {
 
             {/* Cart Skeleton */}
             <div className="w-full lg:w-1/3">
-              <div className="border border-gray-200  rounded-lg p-4">
+              <div className="border border-gray-200 rounded-lg p-4">
                 <div className="h-6 w-1/2 bg-gray-200 rounded mb-4" />
                 <div className="h-32 w-full bg-gray-200 rounded" />
               </div>
@@ -206,9 +207,11 @@ export default function StoreDetailsPage() {
     return <div>{error || "Business not found"}</div>;
   }
 
+  const businessInfo = { name: business.name, id: business.id };
+
   return (
     <div className="min-h-screen bg-white">
-      <HeaderStore restaurantName={business.name} />
+      <HeaderStore businessInfo={businessInfo} />
       <main className="max-w-6xl mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-2/3">
@@ -229,7 +232,7 @@ export default function StoreDetailsPage() {
               isLoading={isLoading}
             />
           </div>
-          <CartSection restaurantName={business.name} />
+          <CartSection businessInfo={businessInfo} />
         </div>
       </main>
       <FooterStore />
@@ -248,7 +251,7 @@ export default function StoreDetailsPage() {
       <CartModal
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
-        restaurantName={business.name}
+        businessInfo={businessInfo}
       />
 
       <FloatingCheckoutButton onCheckout={handleCheckout} />

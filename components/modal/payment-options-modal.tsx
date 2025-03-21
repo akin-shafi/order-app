@@ -100,7 +100,7 @@ const PaymentOptionsModal: React.FC<PaymentOptionsModalProps> = ({
               className="h-5 w-5 text-teal-500"
             />
           </label>
-          <label className="flex items-center justify-between p-3 border rounded-md cursor-pointer">
+          {/* <label className="flex items-center justify-between p-3 border rounded-md cursor-pointer">
             <div className="flex items-center gap-2">
               <svg
                 className="h-5 w-5"
@@ -125,7 +125,7 @@ const PaymentOptionsModal: React.FC<PaymentOptionsModalProps> = ({
               onChange={() => onSelectMethod("Cash on Delivery")}
               className="h-5 w-5 text-teal-500"
             />
-          </label>
+          </label> */}
         </div>
         <button
           onClick={onChooseMethod}

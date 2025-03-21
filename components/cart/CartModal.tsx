@@ -8,16 +8,21 @@ import Cart from "./cart";
 import SavedCartsModal from "./SavedCartsModal";
 import { useShoppingList } from "@/contexts/shopping-list-context";
 
+interface BusinessInfo {
+  name: string;
+  id: string;
+}
+
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  restaurantName: string;
+  businessInfo: BusinessInfo;
 }
 
 const CartModal: React.FC<CartModalProps> = ({
   isOpen,
   onClose,
-  restaurantName,
+  businessInfo,
 }) => {
   const { isCartOpen, isShoppingListOpen, setCartOpen, toggleShoppingList } =
     useHeaderStore();
@@ -106,7 +111,7 @@ const CartModal: React.FC<CartModalProps> = ({
             </div>
 
             {/* Cart Content */}
-            <Cart restaurantName={restaurantName} />
+            <Cart businessInfo={businessInfo} />
             {/* Shopping List Modal */}
             {isShoppingListOpen && (
               <SavedCartsModal onClose={toggleShoppingList} />

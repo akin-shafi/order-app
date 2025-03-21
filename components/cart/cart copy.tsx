@@ -17,21 +17,13 @@ import OnlinePaymentOptionsModal from "@/components/modal/online-payment-options
 import PromoCodeModal from "@/components/modal/PromoCodeModal";
 import RateOrderModal from "@/components/modal/RateOrderModal";
 import { toast } from "react-toastify";
-import { getAuthToken } from "@/utils/auth";
-
-interface BusinessInfo {
-  name: string;
-  id: string;
-}
 
 interface CartProps {
-  businessInfo: BusinessInfo;
+  restaurantName: string;
+  restaurantId: number;
 }
 
-const Cart: React.FC<CartProps> = ({ businessInfo }) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const token = getAuthToken();
-  const { name, id } = businessInfo;
+const Cart: React.FC<CartProps> = ({ restaurantName, restaurantId }) => {
   const { state, dispatch } = useCart();
   const {
     address: contextAddress,
@@ -286,6 +278,8 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
     toast.info("Promo code removed.");
   };
 
+  // console.log("user", user);
+
   const handlePlaceOrder = async () => {
     setCartError(null);
     setAddressError(null);
@@ -333,8 +327,8 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
     setIsSubmitting(true);
 
     const payload = {
-      userId: user?.id,
-      businessId: id,
+      userId: user?.id, // Assuming userId is stored in localStorage after login
+      businessId: restaurantId,
       items: getOrderItems(),
       totalAmount: calculateTotal(),
       deliveryAddress: contextAddress,
@@ -348,11 +342,11 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
     };
 
     try {
-      const response = await fetch(`${baseUrl}/api/orders`, {
+      const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(payload),
       });
@@ -365,7 +359,7 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
       const data = await response.json();
       console.log("Order placed successfully:", data);
 
-      setOrderId(data.order.id);
+      setOrderId(data.order.id); // Extract orderId from the response
       setIsRateOrderModalOpen(true);
 
       dispatch({ type: "CLEAR_CART" });
@@ -398,46 +392,37 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
 
     setIsSavingForLater(true);
 
-    const orderItems = getOrderItems();
-    if (orderItems.length === 0) {
-      console.error("No valid order items found despite packs existing");
-      toast.error("No valid items to save. Please check your cart.");
-      setIsSavingForLater(false);
-      return;
-    }
-
     const payload = {
       source: "web",
-      vendor_id: id,
-      order_items: orderItems,
+      vendor_id: restaurantId,
+      order_items: getOrderItems(),
       bag_quantity: state.brownBagQuantity,
     };
-    console.log("Save for later payload:", payload);
+    console.log("payload", payload)
 
-    try {
-      const response = await fetch(`${baseUrl}/api/save-for-later`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+    // try {
+    //   const response = await fetch("/api/save-for-later", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     },
+    //     body: JSON.stringify(payload),
+    //   });
 
-      if (!response.ok) {
-        throw new Error("Failed to save for later");
-      }
+    //   if (!response.ok) {
+    //     throw new Error("Failed to save for later");
+    //   }
 
-      const data = await response.json();
-      console.log("Cart saved for later:", data);
-      toast.success("Cart saved for later successfully!");
-      dispatch({ type: "CLEAR_CART" });
-    } catch (error: any) {
-      console.error("Error saving for later:", error);
-      toast.error("Failed to save for later. Please try again.");
-    } finally {
-      setIsSavingForLater(false);
-    }
+    //   const data = await response.json();
+    //   console.log("Cart saved for later:", data);
+    //   toast.success("Cart saved for later successfully!");
+    // } catch (error: any) {
+    //   console.error("Error saving for later:", error);
+    //   toast.error("Failed to save for later. Please try again.");
+    // } finally {
+    //   setIsSavingForLater(false);
+    // }
   };
 
   const handleRateOrderClose = () => {
@@ -480,7 +465,9 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
         <div className="sticky top-0 bg-white z-10">
           <div className="p-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-medium text-[#292d32]">{name}</h3>
+              <h3 className="text-sm font-medium text-[#292d32]">
+                {restaurantName}
+              </h3>
               <button
                 onClick={() => dispatch({ type: "ADD_PACK" })}
                 className="text-[#ff6600] cursor-pointer border border-gray-200 text-xxs py-1 px-2 rounded-full flex items-center transition duration-300 hover:border-[#ff6600] hover:text-[#ff6600]"
