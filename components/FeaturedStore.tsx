@@ -68,12 +68,11 @@ export default function FeaturedStore({
   });
 
   const filteredBusinesses = businesses;
-
   const handleBusinessClick = (e: React.MouseEvent, isOpen: boolean) => {
-    if (!isOpen) {
-      e.preventDefault();
-      setIsModalOpen(true);
-    }
+    // if (!isOpen) {
+    //   e.preventDefault();
+    //   setIsModalOpen(true);
+    // }
   };
 
   return (
@@ -169,8 +168,8 @@ export default function FeaturedStore({
                           />
                           {!isOpen && (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <span className="text-white text-md font-semibold px-3 py-1 ">
-                                OPENS TODAY AT {business.openingTime}
+                              <span className="bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded">
+                                Closed
                               </span>
                             </div>
                           )}

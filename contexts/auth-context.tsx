@@ -10,14 +10,14 @@ import {
   ReactNode,
 } from "react";
 import { getAuthToken, setAuthToken, removeAuthToken } from "@/utils/auth";
-import { jwtDecode } from "jwt-decode"; // Add this dependency for decoding JWT
+import { jwtDecode } from "jwt-decode";
 
 interface User {
   id: string;
-  name?: string;
-  email?: string;
-  phoneNumber: string;
-  role?: string; // Added role for potential use
+  fullName?: string; // Optional full name
+  email?: string; // Optional email
+  phoneNumber: string; // Required phone number
+  role?: string; // Optional role
 }
 
 interface SignupData {
@@ -50,16 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = getAuthToken();
       if (token) {
         try {
-          // Decode token to check expiration
           const decoded: { exp: number; id: string; role: string } =
             jwtDecode(token);
-          const currentTime = Date.now() / 1000; // Convert to seconds
+          const currentTime = Date.now() / 1000;
           if (decoded.exp < currentTime) {
-            // Token expired
             removeAuthToken();
             setUser(null);
           } else {
-            // Token valid, fetch user data
             await validateToken(token);
           }
         } catch (error) {
@@ -81,12 +78,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!response.ok) throw new Error("Invalid token");
       const userData: User = await response.json();
+      // Ensure all fields are set (adjust based on your API response)
       setUser(userData);
     } catch (error) {
       console.error("Token validation error:", error);
       removeAuthToken();
       setUser(null);
-      throw error; // Re-throw for handling in verifyOTP or other callers
+      throw error;
     }
   };
 
@@ -108,7 +106,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Signup failed");
       }
-      // No token returned here; user must verify OTP
     } catch (error) {
       throw new Error("Failed to create account");
     }
@@ -144,9 +141,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
       const token = data.token;
 
-      // Store token and validate it
       setAuthToken(token);
-      await validateToken(token); // Fetch user data and set user state
+      await validateToken(token); // Fetch and set user data
     } catch (error) {
       throw error;
     }

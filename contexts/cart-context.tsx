@@ -17,7 +17,7 @@ interface Pack {
 export interface CartState {
   packs: Pack[];
   activePackId: string | null;
-  includeBrownBag: boolean;
+  brownBagQuantity: number; // Changed from includeBrownBag to brownBagQuantity
 }
 
 type CartAction =
@@ -30,7 +30,7 @@ type CartAction =
       payload: { packId: string; itemId: string; quantity: number };
     }
   | { type: "SET_ACTIVE_PACK"; payload: string }
-  | { type: "TOGGLE_BROWN_BAG" }
+  | { type: "SET_BROWN_BAG_QUANTITY"; payload: number } // New action to set quantity
   | { type: "CLEAR_CART" }
   | { type: "RESTORE_CART"; payload: CartState };
 
@@ -72,8 +72,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         items: [...packToDuplicate.items],
       };
 
-        return {
-          ...state,
+      return {
+        ...state,
         packs: [...state.packs, newPack],
         activePackId: newPack.id,
       };
@@ -142,17 +142,17 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         activePackId: action.payload,
       };
 
-    case "TOGGLE_BROWN_BAG":
-        return {
-          ...state,
-        includeBrownBag: !state.includeBrownBag,
+    case "SET_BROWN_BAG_QUANTITY":
+      return {
+        ...state,
+        brownBagQuantity: action.payload,
       };
 
     case "CLEAR_CART":
       return {
         packs: [],
         activePackId: null,
-        includeBrownBag: false,
+        brownBagQuantity: 0, // Reset to 0
       };
 
     case "RESTORE_CART":
@@ -172,7 +172,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const [state, dispatch] = useReducer(cartReducer, {
     packs: [],
     activePackId: null,
-    includeBrownBag: false,
+    brownBagQuantity: 0, // Initialize to 0
   });
 
   // Load cart from localStorage on mount
@@ -194,9 +194,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
             });
           });
         });
-        // Restore other state
-        if (parsedCart.includeBrownBag) {
-          dispatch({ type: "TOGGLE_BROWN_BAG" });
+        // Restore brown bag quantity
+        if (parsedCart.brownBagQuantity) {
+          dispatch({
+            type: "SET_BROWN_BAG_QUANTITY",
+            payload: parsedCart.brownBagQuantity,
+          });
         }
         if (parsedCart.activePackId) {
           dispatch({

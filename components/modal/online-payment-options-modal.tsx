@@ -32,7 +32,7 @@ const OnlinePaymentOptionsModal: React.FC<OnlinePaymentOptionsModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md relative mobile-modal">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"

@@ -89,16 +89,16 @@ export default function BusinessInfoSection({
                 d="M7 12.25C9.8995 12.25 12.25 9.8995 12.25 7C12.25 4.10051 9.8995 1.75 7 1.75C4.10051 1.75 1.75 4.10051 1.75 7C1.75 9.8995 4.10051 12.25 7 12.25Z"
                 stroke="#0c513f"
                 strokeWidth="1.16667"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               ></path>
               <path
                 d="M7 4.08398V7.00065H9.91667"
                 stroke="#0c513f"
                 strokeWidth="1.16667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               ></path>
             </svg>{" "}
             {business.deliveryTimeRange || "49 - 59 mins"}

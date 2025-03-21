@@ -69,7 +69,7 @@ const ItemModal: React.FC<ItemModalProps> = ({ item, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto relative p-4 transition-all">
+      <div className="bg-white rounded-xl w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto relative p-4 transition-all mobile-modal">
         {/* Close Button */}
         <button
           onClick={onClose}

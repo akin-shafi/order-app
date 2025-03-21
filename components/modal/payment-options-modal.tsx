@@ -1,4 +1,3 @@
-// src/components/modal/payment-options-modal.tsx
 import React from "react";
 
 interface PaymentOptionsModalProps {
@@ -101,11 +100,37 @@ const PaymentOptionsModal: React.FC<PaymentOptionsModalProps> = ({
               className="h-5 w-5 text-teal-500"
             />
           </label>
+          <label className="flex items-center justify-between p-3 border rounded-md cursor-pointer">
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              <span>Cash on Delivery</span>
+            </div>
+            <input
+              type="radio"
+              name="paymentMethod"
+              value="Cash on Delivery"
+              checked={selectedMethod === "Cash on Delivery"}
+              onChange={() => onSelectMethod("Cash on Delivery")}
+              className="h-5 w-5 text-teal-500"
+            />
+          </label>
         </div>
         <button
           onClick={onChooseMethod}
           disabled={!selectedMethod}
-          className="w-full mt-6 bg-[#FF6600]  cursor-pointer text-white py-3 rounded-md font-medium transition-colors duration-200 hover:bg-[#000000] disabled:opacity-50"
+          className="w-full mt-6 bg-[#FF6600] cursor-pointer text-white py-3 rounded-md font-medium transition-colors duration-200 hover:bg-[#000000] disabled:opacity-50"
         >
           Choose method
         </button>

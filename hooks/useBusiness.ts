@@ -89,6 +89,7 @@ const fetchBusinesses = async ({ localGovernment, state, category }: Omit<UseBus
     name: business.name,
     image: business.image,
     rating: business.rating,
+    openingTime: business.openingTime, 
     deliveryTime: business.deliveryTime || "15 - 20 mins",
     tags: [],
     status: isBusinessOpen(business.openingTime, business.closingTime) ? "open" : "closed",
