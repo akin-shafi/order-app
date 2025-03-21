@@ -152,7 +152,9 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
       quantity: number;
       type: string;
       pack_id: string;
+      name: string; // Added name property
     }[] = [];
+
     state.packs.forEach((pack) => {
       pack.items.forEach((item) => {
         const itemId = parseInt(item.id, 10);
@@ -165,9 +167,11 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
           quantity: item.quantity,
           type: "menu",
           pack_id: pack.id,
+          name: item.name, // Include the item name from CartItem
         });
       });
     });
+
     return orderItems;
   };
 
@@ -398,19 +402,10 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
 
     setIsSavingForLater(true);
 
-    const orderItems = getOrderItems();
-    if (orderItems.length === 0) {
-      console.error("No valid order items found despite packs existing");
-      toast.error("No valid items to save. Please check your cart.");
-      setIsSavingForLater(false);
-      return;
-    }
-
     const payload = {
       source: "web",
       vendor_id: id,
-      order_items: orderItems,
-      bag_quantity: state.brownBagQuantity,
+      cart: state, // This matches the expected structure
     };
     console.log("Save for later payload:", payload);
 
@@ -425,16 +420,20 @@ const Cart: React.FC<CartProps> = ({ businessInfo }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save for later");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to save for later");
       }
 
       const data = await response.json();
       console.log("Cart saved for later:", data);
       toast.success("Cart saved for later successfully!");
+      // Clear the cart after successful save
       dispatch({ type: "CLEAR_CART" });
     } catch (error: any) {
       console.error("Error saving for later:", error);
-      toast.error("Failed to save for later. Please try again.");
+      toast.error(
+        error.message || "Failed to save for later. Please try again."
+      );
     } finally {
       setIsSavingForLater(false);
     }

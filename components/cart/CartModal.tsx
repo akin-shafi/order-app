@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useHeaderStore } from "@/stores/header-store";
 import Cart from "./cart";
-import SavedCartsModal from "./SavedCartsModal";
+import SavedCartModal from "./SavedCartModal";
 import { useShoppingList } from "@/contexts/shopping-list-context";
+import { useAuth } from "@/contexts/auth-context";
+import LoginModal from "@/components/auth/login-modal"; // Import only once
 
 interface BusinessInfo {
   name: string;
@@ -24,6 +26,9 @@ const CartModal: React.FC<CartModalProps> = ({
   onClose,
   businessInfo,
 }) => {
+  const { isAuthenticated } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // State for LoginModal
+
   const { isCartOpen, isShoppingListOpen, setCartOpen, toggleShoppingList } =
     useHeaderStore();
   const { state: shoppingListState } = useShoppingList();
@@ -39,6 +44,14 @@ const CartModal: React.FC<CartModalProps> = ({
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
+    }
+  };
+
+  const handleToggleShoppingList = () => {
+    if (isAuthenticated) {
+      toggleShoppingList(); // Show SavedCartModal if authenticated
+    } else {
+      setIsLoginModalOpen(true); // Show LoginModal if not authenticated
     }
   };
 
@@ -85,8 +98,8 @@ const CartModal: React.FC<CartModalProps> = ({
               <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={toggleShoppingList}
-                  className="flex items-center gap-1 text-[#ff6600]"
+                  onClick={handleToggleShoppingList} // Use custom handler
+                  className="flex items-center cursor-pointer gap-1 text-[#ff6600]"
                 >
                   Saved Items:{" "}
                   <span className="bg-[#ff6600] text-white rounded-full px-2 py-0.5 text-xs">
@@ -112,9 +125,18 @@ const CartModal: React.FC<CartModalProps> = ({
 
             {/* Cart Content */}
             <Cart businessInfo={businessInfo} />
+
             {/* Shopping List Modal */}
-            {isShoppingListOpen && (
-              <SavedCartsModal onClose={toggleShoppingList} />
+            {isShoppingListOpen && isAuthenticated && (
+              <SavedCartModal onClose={toggleShoppingList} />
+            )}
+
+            {/* Login Modal */}
+            {isLoginModalOpen && (
+              <LoginModal
+                isOpen={isLoginModalOpen}
+                onClose={() => setIsLoginModalOpen(false)}
+              />
             )}
           </motion.div>
         </div>

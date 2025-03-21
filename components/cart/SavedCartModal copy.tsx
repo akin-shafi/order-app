@@ -10,18 +10,15 @@ interface SavedCart {
   userId: string;
   vendorId: string;
   cart: {
-    packs: {
-      id: string;
-      items: {
-        id: string;
-        name: string;
-        price: number;
-        quantity: number;
-        image?: string;
-      }[];
+    source: string;
+    vendor_id: string;
+    order_items: {
+      item_id: string;
+      quantity: number;
+      type: string;
+      pack_id: string;
     }[];
-    activePackId: string | null;
-    brownBagQuantity: number;
+    bag_quantity: number;
   };
   createdAt: string;
   updatedAt: string;
@@ -65,15 +62,59 @@ const SavedCartModal: React.FC<SavedCartModalProps> = ({ onClose }) => {
     };
 
     fetchSavedCarts();
-  }, [token, baseUrl]);
+  }, [token]);
 
   const handleRestoreCart = (
     savedCart: SavedCart,
     clearAfterRestore: boolean = false
   ) => {
     try {
-      // Restore the entire cart state using RESTORE_CART
-      dispatch({ type: "RESTORE_CART", payload: savedCart.cart });
+      const { order_items, bag_quantity } = savedCart.cart;
+
+      // Map order_items to the cart context's pack structure
+      const packs = order_items.reduce((acc: any[], item) => {
+        const existingPack = acc.find((p) => p.id === item.pack_id);
+        if (existingPack) {
+          existingPack.items.push({
+            id: item.item_id,
+            name: `Item ${item.item_id}`, // Placeholder, fetch actual name if needed
+            price: 0, // Placeholder, fetch actual price if needed
+            quantity: item.quantity,
+          });
+        } else {
+          acc.push({
+            id: item.pack_id,
+            items: [
+              {
+                id: item.item_id,
+                name: `Item ${item.item_id}`, // Placeholder
+                price: 0, // Placeholder
+                quantity: item.quantity,
+              },
+            ],
+          });
+        }
+        return acc;
+      }, []);
+
+      // Clear current cart and restore new one
+      dispatch({ type: "CLEAR_CART" });
+
+      packs.forEach((pack: any) => {
+        // Add pack (without payload since ADD_PACK doesn't accept one)
+        dispatch({ type: "ADD_PACK" });
+        const newPackId = `Pack: ${packs.indexOf(pack) + 1}`; // Match the reducer's generated ID
+
+        // Add items to the newly created pack
+        pack.items.forEach((item: any) => {
+          dispatch({
+            type: "ADD_ITEM_TO_PACK",
+            payload: { packId: newPackId, item },
+          });
+        });
+      });
+
+      dispatch({ type: "SET_BROWN_BAG_QUANTITY", payload: bag_quantity });
 
       toast.success("Cart restored successfully!");
 
@@ -110,22 +151,9 @@ const SavedCartModal: React.FC<SavedCartModalProps> = ({ onClose }) => {
     }
   };
 
-  // Function to calculate the total price of a pack
-  const calculatePackTotal = (pack: SavedCart["cart"]["packs"][0]) => {
-    return pack.items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-  };
-
-  // Function to format price (similar to formatPrice in cart.tsx)
-  const formatPrice = (price: number) => {
-    return `₦${price.toLocaleString("en-NG")}`;
-  };
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="w-full md:w-[480px] bg-white h-full">
+      <div className="bg-white rounded-lg w-full max-w-md mx-4">
         <div className="p-4 border-b flex justify-between items-center">
           <h2 className="text-lg font-semibold text-[#292d32]">Saved Carts</h2>
           <button
@@ -136,7 +164,7 @@ const SavedCartModal: React.FC<SavedCartModalProps> = ({ onClose }) => {
           </button>
         </div>
 
-        <div className=" p-4">
+        <div className="max-h-[70vh] overflow-y-auto p-4">
           {loading ? (
             <p className="text-center text-gray-500 py-8">Loading...</p>
           ) : savedCarts.length === 0 ? (
@@ -167,50 +195,20 @@ const SavedCartModal: React.FC<SavedCartModalProps> = ({ onClose }) => {
                     </button>
                   </div>
 
-                  {/* Render packs and items similar to cart.tsx */}
-                  <div className="space-y-4">
-                    {savedCart.cart.packs.map((pack, index) => (
-                      <div key={pack.id} className="border-b pb-2">
-                        <div className="flex justify-between items-center">
-                          <h4 className="font-semibold text-[#292d32]">
-                            Pack: {index + 1}{" "}
-                            {formatPrice(calculatePackTotal(pack))}
-                          </h4>
-                        </div>
-                        {pack.items.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex justify-between items-center mt-2"
-                          >
-                            <div>
-                              <p className="text-sm text-[#292d32]">
-                                {item.name}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {formatPrice(item.price)}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm text-[#292d32]">
-                                {item.quantity}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
+                  <div className="text-sm text-gray-600">
+                    {savedCart.cart.order_items.length} item(s)
                   </div>
 
                   <div className="flex justify-between items-center pt-2">
                     <button
                       onClick={() => handleRestoreCart(savedCart, false)}
-                      className="text-[#ff6600] text-sm font-medium cursor-pointer"
+                      className="text-[#ff6600] text-sm font-medium"
                     >
                       Restore
                     </button>
                     <button
                       onClick={() => handleRestoreCart(savedCart, true)}
-                      className="text-[#ff6600] text-sm font-medium cursor-pointer"
+                      className="text-[#ff6600] text-sm font-medium"
                     >
                       Restore & Clear
                     </button>
