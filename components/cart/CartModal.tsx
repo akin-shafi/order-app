@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useEffect, useState } from "react";
@@ -6,9 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useHeaderStore } from "@/stores/header-store";
 import Cart from "./cart";
 import SavedCartModal from "./SavedCartModal";
-import { useShoppingList } from "@/contexts/shopping-list-context";
 import { useAuth } from "@/contexts/auth-context";
-import LoginModal from "@/components/auth/login-modal"; // Import only once
+import LoginModal from "@/components/auth/login-modal";
+import { getAuthToken } from "@/utils/auth";
 
 interface BusinessInfo {
   name: string;
@@ -27,11 +28,45 @@ const CartModal: React.FC<CartModalProps> = ({
   businessInfo,
 }) => {
   const { isAuthenticated } = useAuth();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // State for LoginModal
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [savedCartsCount, setSavedCartsCount] = useState<number>(0); // State for saved carts count
 
   const { isCartOpen, isShoppingListOpen, setCartOpen, toggleShoppingList } =
     useHeaderStore();
-  const { state: shoppingListState } = useShoppingList();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const token = getAuthToken();
+
+  // Fetch the count of saved carts
+  useEffect(() => {
+    const fetchSavedCartsCount = async () => {
+      if (!isAuthenticated || !token) {
+        setSavedCartsCount(0); // Reset count if not authenticated
+        return;
+      }
+
+      try {
+        const response = await fetch(`${baseUrl}/api/save-for-later/count`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch saved carts count");
+        }
+
+        const data = await response.json();
+        setSavedCartsCount(data.count || 0);
+      } catch (error: any) {
+        console.error("Error fetching saved carts count:", error);
+        setSavedCartsCount(0); // Fallback to 0 on error
+      }
+    };
+
+    fetchSavedCartsCount();
+  }, [isAuthenticated, token, baseUrl]);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -98,12 +133,12 @@ const CartModal: React.FC<CartModalProps> = ({
               <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={handleToggleShoppingList} // Use custom handler
+                  onClick={handleToggleShoppingList}
                   className="flex items-center cursor-pointer gap-1 text-[#ff6600]"
                 >
                   Saved Items:{" "}
                   <span className="bg-[#ff6600] text-white rounded-full px-2 py-0.5 text-xs">
-                    {shoppingListState.savedCarts.length}
+                    {savedCartsCount}
                   </span>
                 </button>
                 <button
