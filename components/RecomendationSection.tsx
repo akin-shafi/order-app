@@ -69,8 +69,8 @@ export default function RecommendedForYou() {
         <div className="container mx-auto px-2">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-xl md:text-2xl font-medium text-[#292d32] mb-3 md:mb-6">
-              Recommended for You
-            </h2>
+            Recommended for You
+          </h2>
 
             {isLoading ? (
               <div className="flex gap-6 overflow-x-auto pb-4">
@@ -102,7 +102,7 @@ export default function RecommendedForYou() {
                           onClick={(e) => handleBusinessClick(e, isOpen)}
                         >
                           <div className=" hover-container w-full h-[160px] relative bg-no-repeat bg-1/2 bg-cover rounded-xl overflow-hidden shadow-sm animate__animated animate__fadeIn">
-                            <Image
+                        <Image
                               src={
                                 business.image ||
                                 "/images/store-placeholder.png"
@@ -119,7 +119,7 @@ export default function RecommendedForYou() {
                                 <span className="bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded">
                                   Closed
                                 </span>
-                              </div>
+                        </div>
                             )}
                             <div
                               className={`absolute inset-0 bg-black  ${
@@ -193,9 +193,9 @@ export default function RecommendedForYou() {
                 </div>
               </div>
             )}
-          </div>
         </div>
-      </section>
+      </div>
+    </section>
       <ClosedBusinessModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -18,12 +18,20 @@ import PromoCodeModal from "@/components/modal/PromoCodeModal";
 import RateOrderModal from "@/components/modal/RateOrderModal";
 import { toast } from "react-toastify";
 import { getAuthToken } from "@/utils/auth";
-import { useBusinessStore } from "@/stores/business-store"; // Import the store
 
-const Cart: React.FC = () => {
+interface BusinessInfo {
+  name: string;
+  id: string;
+}
+
+interface CartProps {
+  businessInfo: BusinessInfo;
+}
+
+const Cart: React.FC<CartProps> = ({ businessInfo }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const token = getAuthToken();
-  const { businessInfo } = useBusinessStore(); // Access businessInfo from the store
+  const { name, id } = businessInfo;
   const { state, dispatch } = useCart();
   const {
     address: contextAddress,
@@ -144,7 +152,7 @@ const Cart: React.FC = () => {
       quantity: number;
       type: string;
       pack_id: string;
-      name: string;
+      name: string; // Added name property
     }[] = [];
 
     state.packs.forEach((pack) => {
@@ -159,7 +167,7 @@ const Cart: React.FC = () => {
           quantity: item.quantity,
           type: "menu",
           pack_id: pack.id,
-          name: item.name,
+          name: item.name, // Include the item name from CartItem
         });
       });
     });
@@ -330,7 +338,7 @@ const Cart: React.FC = () => {
 
     const payload = {
       userId: user?.id,
-      businessId: businessInfo?.id, // Use id from the store
+      businessId: id,
       items: getOrderItems(),
       totalAmount: calculateTotal(),
       deliveryAddress: contextAddress,
@@ -396,8 +404,8 @@ const Cart: React.FC = () => {
 
     const payload = {
       source: "web",
-      vendor_id: businessInfo?.id, // Use id from the store
-      cart: state,
+      vendor_id: id,
+      cart: state, // This matches the expected structure
     };
     console.log("Save for later payload:", payload);
 
@@ -419,6 +427,7 @@ const Cart: React.FC = () => {
       const data = await response.json();
       console.log("Cart saved for later:", data);
       toast.success("Cart saved for later successfully!");
+      // Clear the cart after successful save
       dispatch({ type: "CLEAR_CART" });
     } catch (error: any) {
       console.error("Error saving for later:", error);
@@ -436,10 +445,6 @@ const Cart: React.FC = () => {
     setPromoCodes([]);
     setDiscount(0);
   };
-
-  if (!businessInfo) {
-    return null; // Or a loading state
-  }
 
   if (state.packs.length === 0) {
     return (
@@ -474,7 +479,7 @@ const Cart: React.FC = () => {
         <div className="sticky top-0 bg-white z-10">
           <div className="p-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-medium text-[#292d32]">{businessInfo.name}</h3>
+              <h3 className="text-sm font-medium text-[#292d32]">{name}</h3>
               <button
                 onClick={() => dispatch({ type: "ADD_PACK" })}
                 className="text-[#ff6600] cursor-pointer border border-gray-200 text-xxs py-1 px-2 rounded-full flex items-center transition duration-300 hover:border-[#ff6600] hover:text-[#ff6600]"
@@ -482,7 +487,7 @@ const Cart: React.FC = () => {
                 + Add another pack
               </button>
             </div>
-          </div>
+      </div>
         </div>
 
         <div className="flex-1 overflow-y-auto">
@@ -818,9 +823,9 @@ const Cart: React.FC = () => {
                   ♡
                 </span>
                 {isSavingForLater ? "Saving..." : "Save for Later"}
-              </button>
-            </div>
-          </div>
+        </button>
+      </div>
+    </div>
         </div>
       </div>
 

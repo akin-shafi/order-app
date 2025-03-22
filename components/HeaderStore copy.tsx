@@ -15,7 +15,17 @@ import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
 import { useAuth } from "@/contexts/auth-context";
 
-const HeaderStore: React.FC = () => {
+interface BusinessInfo {
+  name: string;
+  id: string;
+}
+
+interface HeaderStoreProps {
+  businessInfo: BusinessInfo;
+}
+
+const HeaderStore: React.FC<HeaderStoreProps> = ({ businessInfo }) => {
+  const { name } = businessInfo; // Destructure name for use in the component
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -158,6 +168,7 @@ const HeaderStore: React.FC = () => {
                 <CartModal
                   isOpen={isCartOpen}
                   onClose={() => setIsCartOpen(false)}
+                  businessInfo={businessInfo}
                 />
               )}
             </div>

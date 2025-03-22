@@ -10,37 +10,30 @@ import SavedCartModal from "./SavedCartModal";
 import { useAuth } from "@/contexts/auth-context";
 import LoginModal from "@/components/auth/login-modal";
 import { getAuthToken } from "@/utils/auth";
-
-interface BusinessInfo {
-  name: string;
-  id: string;
-}
+import { useBusinessStore } from "@/stores/business-store"; // Import the store
 
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  businessInfo: BusinessInfo;
 }
 
-const CartModal: React.FC<CartModalProps> = ({
-  isOpen,
-  onClose,
-  businessInfo,
-}) => {
+const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const { isAuthenticated } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [savedCartsCount, setSavedCartsCount] = useState<number>(0); // State for saved carts count
+  const [savedCartsCount, setSavedCartsCount] = useState<number>(0);
 
   const { isCartOpen, isShoppingListOpen, setCartOpen, toggleShoppingList } =
     useHeaderStore();
+  const { businessInfo } = useBusinessStore(); // Access businessInfo from the store
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const token = getAuthToken();
 
+  console.log("businessInfo", businessInfo)
   // Fetch the count of saved carts
   useEffect(() => {
     const fetchSavedCartsCount = async () => {
       if (!isAuthenticated || !token) {
-        setSavedCartsCount(0); // Reset count if not authenticated
+        setSavedCartsCount(0);
         return;
       }
 
@@ -61,7 +54,7 @@ const CartModal: React.FC<CartModalProps> = ({
         setSavedCartsCount(data.count || 0);
       } catch (error: any) {
         console.error("Error fetching saved carts count:", error);
-        setSavedCartsCount(0); // Fallback to 0 on error
+        setSavedCartsCount(0);
       }
     };
 
@@ -84,9 +77,9 @@ const CartModal: React.FC<CartModalProps> = ({
 
   const handleToggleShoppingList = () => {
     if (isAuthenticated) {
-      toggleShoppingList(); // Show SavedCartModal if authenticated
+      toggleShoppingList();
     } else {
-      setIsLoginModalOpen(true); // Show LoginModal if not authenticated
+      setIsLoginModalOpen(true);
     }
   };
 
@@ -112,6 +105,11 @@ const CartModal: React.FC<CartModalProps> = ({
       },
     },
   };
+
+  // If businessInfo is not available, show a fallback (optional)
+  if (!businessInfo) {
+    return null; // Or a loading state
+  }
 
   return (
     <AnimatePresence>
@@ -159,7 +157,7 @@ const CartModal: React.FC<CartModalProps> = ({
             </div>
 
             {/* Cart Content */}
-            <Cart businessInfo={businessInfo} />
+            <Cart />
 
             {/* Shopping List Modal */}
             {isShoppingListOpen && isAuthenticated && (

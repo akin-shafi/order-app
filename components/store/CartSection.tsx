@@ -1,20 +1,11 @@
 // CartSection component
 import Cart from "@/components/cart/cart";
 
-interface BusinessInfo {
-  name: string;
-  id: string;
-}
-
 interface CartSectionProps {
-  businessInfo: BusinessInfo;
   isLoading?: boolean;
 }
 
-export default function CartSection({
-  businessInfo,
-  isLoading = false,
-}: CartSectionProps) {
+export default function CartSection({ isLoading = false }: CartSectionProps) {
   if (isLoading) {
     return (
       <div className="w-full md:w-1/3 mt-8 md:mt-0 hidden md:block">
@@ -42,7 +33,7 @@ export default function CartSection({
   return (
     <div className="w-full md:w-1/3 mt-8 md:mt-0 hidden md:block">
       <div className="sticky top-24">
-        <Cart businessInfo={businessInfo} />
+        <Cart />
       </div>
     </div>
   );

@@ -10,17 +10,15 @@ import { Suspense } from "react";
 // import AdvertBanners from "@/components/AdvertBanners";
 // import Carousel from "@/components/Carousel";
 
-interface BusinessInfo {
-  name: string;
-  id: string;
-}
+// interface BusinessInfo {
+//   name: string;
+//   id: string;
+// }
 
 function StoreContentInner({
   selectedCategory = null,
-  businessInfo,
 }: {
   selectedCategory?: string | null;
-  businessInfo: BusinessInfo; // Add businessInfo prop
 }) {
   return (
     <div className="min-h-screen relative">
@@ -33,7 +31,7 @@ function StoreContentInner({
 
       {/* Content */}
       <div className="relative">
-        <HeaderStore businessInfo={businessInfo} />
+        <HeaderStore  />
         <main className="max-w-6xl mx-auto px-4 pt-1 pb-8">
           <Suspense fallback={<div>Loading categories...</div>}>
             <CategoriesInStore />
@@ -73,19 +71,19 @@ function StoreContentInner({
 
 export default function StoreContent({
   selectedCategory,
-  businessInfo = {
-    name: "Food Delight",
-    id: "9d2d808d-73b1-4ede-8ead-91ace66ac59d",
-  }, // Default value for testing
+  // businessInfo = {
+  //   name: "Food Delight",
+  //   id: "9d2d808d-73b1-4ede-8ead-91ace66ac59d",
+  // }, // Default value for testing
 }: {
   selectedCategory?: string | null;
-  businessInfo?: BusinessInfo; // Add businessInfo prop to the outer component
+  // businessInfo?: BusinessInfo; // Add businessInfo prop to the outer component
 }) {
   return (
     <ErrorBoundary>
       <StoreContentInner
         selectedCategory={selectedCategory}
-        businessInfo={businessInfo}
+        // businessInfo={businessInfo}
       />
     </ErrorBoundary>
   );

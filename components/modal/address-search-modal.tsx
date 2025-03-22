@@ -118,9 +118,9 @@ export default function AddressSearchModal({
         address: formattedAddress,
         coordinates: { latitude: lat, longitude: lng },
         locationDetails: {
-          state: locationDetails.administrative_area,
-          localGovernment: locationDetails.localGovernment,
-          locality: locationDetails.locality,
+        state: locationDetails.administrative_area,
+        localGovernment: locationDetails.localGovernment,
+        locality: locationDetails.locality,
         },
       };
 
