@@ -6,13 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { ClockIcon, StarIcon } from "@/components/icons";
 import { Heart } from "lucide-react";
-import { useRecommendations } from "@/hooks/useRecommendations";
+import { useAddress } from "@/contexts/address-context";
+import { useBusiness } from "@/hooks/useBusiness";
 import ClosedBusinessModal from "@/components/modal/closed-business-modal";
 import { useFavorites } from "@/hooks/useFavorites";
 import { saveToFavorite } from "@/services/businessService";
 
 interface RecomendationSectionProps {
-  activeBusinessType: string;
+  activeBusinessType: string; // Renamed from activeCategory
   selectedSubCategory: string | null;
 }
 
@@ -40,16 +41,24 @@ const SkeletonCard = () => (
 
 export default function RecomendationSection({ activeBusinessType, selectedSubCategory }: RecomendationSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: recommendations, isLoading, error } = useRecommendations(activeBusinessType);
+  const { address, locationDetails } = useAddress();
+  const { businesses, loading, error } = useBusiness({
+    address,
+    localGovernment: locationDetails?.localGovernment,
+    state: locationDetails?.state,
+    businessType: activeBusinessType, // Changed from category
+    subcategory: selectedSubCategory
+  });
+  
   const { favorites, handleHeartClick } = useFavorites({
     onSaveToFavorite: saveToFavorite,
   });
 
-  const filteredRecommendations = selectedSubCategory
-    ? recommendations?.filter(business => 
+  const filteredBusinesses = selectedSubCategory
+    ? businesses.filter(business => 
         business.productCategories.includes(selectedSubCategory)
-      ) || []
-    : recommendations || [];
+      )
+    : businesses;
 
   const getBusinessKey = (business: { name: string; businessType: string }) =>
     `${business.name.toLowerCase().replace(/\s+/g, "-")}-${business.businessType.toLowerCase()}`;
@@ -64,7 +73,7 @@ export default function RecomendationSection({ activeBusinessType, selectedSubCa
   if (error) {
     return (
       <div className="text-red-500 text-center py-4">
-        {error.message === "Location not set"
+        {error === "Waiting for location data..."
           ? "Please set your location to see recommendations"
           : "Error loading recommendations. Please try again later."}
       </div>
@@ -80,7 +89,7 @@ export default function RecomendationSection({ activeBusinessType, selectedSubCa
               Recommended for You
             </h2>
 
-            {isLoading ? (
+            {loading ? (
               <div className="flex gap-6 overflow-x-auto pb-4">
                 {Array(3)
                   .fill(0)
@@ -88,14 +97,14 @@ export default function RecomendationSection({ activeBusinessType, selectedSubCa
                     <SkeletonCard key={index} />
                   ))}
               </div>
-            ) : filteredRecommendations.length === 0 ? (
+            ) : filteredBusinesses.length === 0 ? (
               <div className="text-center py-4 text-gray-500">
                 No recommendations available at the moment
               </div>
             ) : (
               <div className="relative">
                 <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-                  {filteredRecommendations.slice(0, 3).map((business) => {
+                  {filteredBusinesses.slice(0, 3).map((business) => {
                     const businessKey = getBusinessKey(business);
                     const isOpen = business.status === "open";
                     return (

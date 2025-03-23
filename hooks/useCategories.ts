@@ -1,21 +1,64 @@
+// hooks/useCategories.ts
 import { useQuery } from '@tanstack/react-query';
-import { categories } from '@/data/content';
 
-export interface Category {
+export interface SubCategory {
   name: string;
   image: string;
 }
 
+export interface MainCategory {
+  name: string;
+  image: string;
+  subcategories: SubCategory[];
+}
+
+export const categories: MainCategory[] = [
+  {
+    name: "Restaurants",
+    image: "/images/restaurant.png",
+    subcategories: [
+      { name: "Beans Combo", image: "/images/beans.png" },
+      { name: "Rice Dishes", image: "/images/rice.png" },
+      { name: "Swallows", image: "/images/swallow.png" },
+      { name: "Small Chops", image: "/images/small_chops.png" },
+      { name: "Fast Meals", image: "/images/fast_meal.png" },
+      { name: "Desserts", image: "/images/delicacy.png" },
+      { name: "Drinks", image: "/images/drink.png" },
+      { name: "Soups", image: "/images/swallow.png" },
+    ],
+  },
+  {
+    name: "Pharmacies",
+    image: "/images/pharmacy.png",
+    subcategories: [
+      { name: "Pain Relief", image: "/images/pain_relief.png" },
+      { name: "Vitamins", image: "/images/vitamins.png" },
+      { name: "First Aid", image: "/images/first_aid.png" },
+      { name: "Personal Care", image: "/images/personal_care.png" },
+      { name: "Prescriptions", image: "/images/prescriptions.png" },
+    ],
+  },
+  {
+    name: "Supermarkets",
+    image: "/images/supermarket.png",
+    subcategories: [
+      { name: "Groceries", image: "/images/groceries.png" },
+      { name: "Beverages", image: "/images/beverages.png" },
+      { name: "Snacks", image: "/images/snacks.png" },
+      { name: "Household", image: "/images/household.png" },
+      { name: "Fresh Produce", image: "/images/produce.png" },
+    ],
+  },
+];
+
 export const useCategories = () => {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: async (): Promise<Category[]> => {
-      // In a real app, this would be an API call
-      // For now, we'll simulate an API call with the static data
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+    queryFn: async (): Promise<MainCategory[]> => {
+      await new Promise(resolve => setTimeout(resolve, 500));
       return categories;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
-}; 
+};

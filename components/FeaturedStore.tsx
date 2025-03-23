@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+// components/FeaturedStore.tsx
 "use client";
 import { useState } from "react";
 import Image from "next/image";
@@ -12,18 +13,9 @@ import ClosedBusinessModal from "./modal/closed-business-modal";
 import { useFavorites } from "@/hooks/useFavorites";
 import { saveToFavorite } from "@/services/businessService";
 
-interface Business {
-  id: string;
-  name: string;
-  image: string | null;
-  city: string;
-  productCategories: string[];
-  businessType: string;
-  priceRange: string | null;
-  deliveryTime: string | null;
-  rating: string;
-  ratingCount: number;
-  status?: string; // Added status to the interface
+interface FeaturedStoreProps {
+  activeBusinessType: string; // Renamed from activeCategory
+  selectedSubCategory: string | null;
 }
 
 const SkeletonCard = () => (
@@ -49,10 +41,9 @@ const SkeletonCard = () => (
 );
 
 export default function FeaturedStore({
-  selectedCategory,
-}: {
-  selectedCategory: string | null;
-}) {
+  activeBusinessType,
+  selectedSubCategory,
+}: FeaturedStoreProps) {
   const { address, locationDetails } = useAddress();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
@@ -60,21 +51,28 @@ export default function FeaturedStore({
     address,
     localGovernment: locationDetails?.localGovernment,
     state: locationDetails?.state,
-    category: selectedCategory || undefined,
+    businessType: activeBusinessType, // Changed from category
+    subcategory: selectedSubCategory,
   });
 
   const { favorites, handleHeartClick } = useFavorites({
     onSaveToFavorite: saveToFavorite,
   });
 
-  const filteredBusinesses = businesses;
+  const filteredBusinesses = selectedSubCategory
+    ? businesses.filter((business) =>
+        business.productCategories.includes(selectedSubCategory)
+      )
+    : businesses;
+
   const handleBusinessClick = (e: React.MouseEvent, isOpen: boolean) => {
-    // if (!isOpen) {
-    //   e.preventDefault();
-    //   setIsModalOpen(true);
-    // }
+    if (!isOpen) {
+      e.preventDefault();
+      setIsModalOpen(true);
+    }
   };
 
+  // Rest of the component remains the same...
   return (
     <>
       <section className="py-4 md:py-8">
@@ -145,16 +143,14 @@ export default function FeaturedStore({
                   return (
                     <div
                       key={business.id}
-                      // className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-shadow relative"
                       className="block p-2 rounded-xl bg-white cursor-pointer relative overflow-hidden transition-all hover:shadow-md"
-                      // onClick={(e) => handleBusinessClick(e, isOpen)}
                     >
                       <Link
                         href={`/store/${business.id}`}
                         className="block"
                         onClick={(e) => handleBusinessClick(e, isOpen)}
                       >
-                        <div className=" hover-container w-full h-[160px] relative bg-no-repeat bg-1/2 bg-cover rounded-xl overflow-hidden shadow-sm animate__animated animate__fadeIn">
+                        <div className="hover-container w-full h-[160px] relative bg-no-repeat bg-1/2 bg-cover rounded-xl overflow-hidden shadow-sm animate__animated animate__fadeIn">
                           <Image
                             src={
                               business.image || "/images/store-placeholder.png"
@@ -174,7 +170,7 @@ export default function FeaturedStore({
                             </div>
                           )}
                           <div
-                            className={`absolute inset-0 bg-black  ${
+                            className={`absolute inset-0 bg-black ${
                               !isOpen ? "opacity-50" : "opacity-0"
                             } overlay transition-opacity duration-300 ease-in-out`}
                           ></div>
@@ -192,11 +188,6 @@ export default function FeaturedStore({
                               <StarIcon className="text-yellow-400 w-4 h-4" />
                             </div>
                           </div>
-
-                          {/* <div className="flex items-center text-gray-500 text-xs">
-                            <ClockIcon className="text-[#FF6600] mr-1 w-4 h-4" />
-                            {business.deliveryTimeRange || "N/A"}
-                          </div> */}
 
                           <div className="flex items-center justify-between text-gray-500 text-xs">
                             <div className="flex items-center">
@@ -233,7 +224,6 @@ export default function FeaturedStore({
                         onClick={(e) =>
                           handleHeartClick(e, business.id.toString())
                         }
-                        // className="absolute top-2 right-2 bg-white hover:bg-gray-200 cursor-pointer p-1 rounded-full z-5 bg-[#f46d33]"
                         className="flex items-center justify-center rounded-full cursor-pointer absolute right-[21px] top-[12px] bg-brand-white w-[40px] h-[40px] active:opacity-70"
                         disabled={!isOpen}
                       >
