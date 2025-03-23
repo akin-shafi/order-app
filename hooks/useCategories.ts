@@ -27,28 +27,28 @@ export const categories: MainCategory[] = [
       { name: "Soups", image: "/images/swallow.png" },
     ],
   },
-  {
-    name: "Pharmacies",
-    image: "/images/pharmacy.png",
-    subcategories: [
-      { name: "Pain Relief", image: "/images/pain_relief.png" },
-      { name: "Vitamins", image: "/images/vitamins.png" },
-      { name: "First Aid", image: "/images/first_aid.png" },
-      { name: "Personal Care", image: "/images/personal_care.png" },
-      { name: "Prescriptions", image: "/images/prescriptions.png" },
-    ],
-  },
-  {
-    name: "Supermarkets",
-    image: "/images/supermarket.png",
-    subcategories: [
-      { name: "Groceries", image: "/images/groceries.png" },
-      { name: "Beverages", image: "/images/beverages.png" },
-      { name: "Snacks", image: "/images/snacks.png" },
-      { name: "Household", image: "/images/household.png" },
-      { name: "Fresh Produce", image: "/images/produce.png" },
-    ],
-  },
+  // {
+  //   name: "Pharmacies",
+  //   image: "/images/pharmacy.png",
+  //   subcategories: [
+  //     { name: "Pain Relief", image: "/images/pain_relief.png" },
+  //     { name: "Vitamins", image: "/images/vitamins.png" },
+  //     { name: "First Aid", image: "/images/first_aid.png" },
+  //     { name: "Personal Care", image: "/images/personal_care.png" },
+  //     { name: "Prescriptions", image: "/images/prescriptions.png" },
+  //   ],
+  // },
+  // {
+  //   name: "Supermarkets",
+  //   image: "/images/supermarket.png",
+  //   subcategories: [
+  //     { name: "Groceries", image: "/images/groceries.png" },
+  //     { name: "Beverages", image: "/images/beverages.png" },
+  //     { name: "Snacks", image: "/images/snacks.png" },
+  //     { name: "Household", image: "/images/household.png" },
+  //     { name: "Fresh Produce", image: "/images/produce.png" },
+  //   ],
+  // },
 ];
 
 export const useCategories = () => {
