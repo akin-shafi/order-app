@@ -6,7 +6,7 @@ import { X, Mail } from "lucide-react";
 import PhoneNumberInput from "../PhoneNumberInput";
 import { useAuth } from "@/contexts/auth-context";
 import { useModal } from "@/contexts/modal-context";
-import { toast } from "react-toastify";
+import { message } from "antd";
 import { useState } from "react";
 
 interface SignupModalProps {
@@ -49,7 +49,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
   const onSubmit = async (data: SignupFormValues) => {
     if (!showOTP) {
       if (!/^\d{10}$/.test(data.phoneNumber)) {
-        toast.error("Please enter a valid 10-digit phone number");
+        message.error("Please enter a valid 10-digit phone number");
         return;
       }
 
@@ -65,24 +65,24 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           role: data.role || "user", // Default to "user"
         });
         setShowOTP(true);
-        toast.success("OTP sent successfully!");
+        message.success("OTP sent successfully!");
       } catch (error) {
-        toast.error("Failed to send OTP. Please try again.");
+        message.error("Failed to send OTP. Please try again.");
       }
     } else {
       try {
         await verifyOTP(data.phoneNumber, data.otp);
-        toast.success("Account created successfully!");
+        message.success("Account created successfully!");
         onClose();
       } catch (error) {
-        toast.error("Invalid OTP. Please try again.");
+        message.error("Invalid OTP. Please try again.");
       }
     }
   };
 
   const handlePhoneBlur = (value: string) => {
     if (value && !/^\d{10}$/.test(value)) {
-      toast.error("Please enter a valid 10-digit phone number");
+      message.error("Please enter a valid 10-digit phone number");
     }
   };
 
