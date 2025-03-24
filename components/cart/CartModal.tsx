@@ -28,7 +28,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const token = getAuthToken();
 
-  console.log("businessInfo", businessInfo)
+  // console.log("businessInfo", businessInfo)
   // Fetch the count of saved carts
   useEffect(() => {
     const fetchSavedCartsCount = async () => {

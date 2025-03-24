@@ -42,7 +42,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
       phoneNumber: "",
       referralCode: "",
       otp: "",
-      role: "customer",
+      role: "user",
     },
   });
 
@@ -62,7 +62,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           email: data.email,
           phoneNumber: data.phoneNumber,
           referralCode: data.referralCode,
-          role: data.role || "customer", // Default to "customer"
+          role: data.role || "user", // Default to "user"
         });
         setShowOTP(true);
         toast.success("OTP sent successfully!");

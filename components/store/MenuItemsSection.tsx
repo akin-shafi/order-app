@@ -24,7 +24,6 @@ export default function MenuItemsSection({
   setSelectedItem,
   isLoading = false,
 }: MenuItemsSectionProps) {
-  
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -67,12 +66,14 @@ export default function MenuItemsSection({
             <div className="flex items-start gap-4 p-4">
               <div className="relative flex-shrink-0 w-[120px] h-[120px]">
                 <Image
-                  src={item.image || "/images/food.png"} // item.image can be null, handled by fallback
+                  src={item.image || "/images/food.png"}
                   alt={item.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   style={{ objectFit: "cover" }}
                   className="rounded-md transform group-hover:scale-105 transition-transform duration-300"
                 />
+
                 {item.popular && (
                   <span className="absolute top-2 left-2 bg-[#ff6600] text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                     Popular

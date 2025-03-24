@@ -35,6 +35,8 @@ export default function BusinessInfoSection({
     business.deliveryOptions[1] || null
   );
 
+  const foodImage = "/images/food.png";
+
   if (isLoading) {
     return (
       <div className="w-full">
@@ -72,7 +74,7 @@ export default function BusinessInfoSection({
       <div
         className="w-full flex items-end h-[200px] sm:h-[250px] md:h-[300px] bg-cover bg-center rounded-md"
         style={{
-          backgroundImage: `url(${business.image || "images/food.png"})`,
+          backgroundImage: `url(${business.image || foodImage})`,
         }}
       >
         <div className="p-4 flex items-center">
