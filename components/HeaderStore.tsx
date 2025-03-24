@@ -52,7 +52,7 @@ const HeaderStore: React.FC = () => {
       openLoginModal();
     }
   };
-
+ 
   const handleLogout = () => {
     logout();
     setIsProfileDropdownOpen(false);

@@ -14,10 +14,10 @@ import { jwtDecode } from "jwt-decode";
 
 interface User {
   id: string;
-  fullName?: string; // Optional full name
-  email?: string; // Optional email
-  phoneNumber: string; // Required phone number
-  role?: string; // Optional role
+  fullName?: string;
+  email?: string;
+  phoneNumber: string;
+  role?: string;
 }
 
 interface SignupData {
@@ -34,7 +34,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
   signup: (data: SignupData) => Promise<void>;
   login: (phoneNumber: string) => Promise<void>;
-  verifyOTP: (phoneNumber: string, otp: string) => Promise<void>;
+  verifyOTP: (
+    phoneNumber: string,
+    otp: string,
+    source: "login" | "signup"
+  ) => Promise<void>;
+  resendOTP: (phoneNumber: string, source: "login" | "signup") => Promise<void>;
   logout: () => void;
 }
 
@@ -43,7 +48,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8500";
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -78,7 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!response.ok) throw new Error("Invalid token");
       const userData: User = await response.json();
-      // Ensure all fields are set (adjust based on your API response)
       setUser(userData);
     } catch (error) {
       console.error("Token validation error:", error);
@@ -127,9 +131,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const verifyOTP = async (phoneNumber: string, otp: string) => {
+  const verifyOTP = async (
+    phoneNumber: string,
+    otp: string,
+    source: "login" | "signup"
+  ) => {
     try {
-      const response = await fetch(`${baseUrl}/users/login/phone`, {
+      const endpoint =
+        source === "login"
+          ? `${baseUrl}/users/login/phone`
+          : `${baseUrl}/users/verify-otp`;
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phoneNumber, otp }),
@@ -142,7 +154,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = data.token;
 
       setAuthToken(token);
-      await validateToken(token); // Fetch and set user data
+      await validateToken(token);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const resendOTP = async (phoneNumber: string, source: "login" | "signup") => {
+    try {
+      if (source === "login") {
+        // For login, reuse the login endpoint without OTP to resend
+        const response = await fetch(`${baseUrl}/users/login/phone`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phoneNumber }),
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to resend OTP");
+        }
+      } else if (source === "signup") {
+        // For signup, call a new endpoint to resend OTP
+        const response = await fetch(`${baseUrl}/users/resend-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phoneNumber }),
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to resend OTP");
+        }
+      }
     } catch (error) {
       throw error;
     }
@@ -160,6 +202,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signup,
     login,
     verifyOTP,
+    resendOTP,
     logout,
   };
 

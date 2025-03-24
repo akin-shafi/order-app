@@ -38,10 +38,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     }
     const number = "234" + data.phoneNumber;
     try {
-      await login(number); // Calls the backend to send OTP
+      await login(number);
       toast.success("OTP sent successfully!");
       onClose();
-      openModal("otp", { phoneNumber: number }); // Pass phoneNumber to OTPModal
+      openModal("otp", { phoneNumber: number, source: "login" }); // Add source
     } catch (error) {
       toast.error("Failed to send OTP. Please try again.");
     }

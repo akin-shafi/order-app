@@ -6,11 +6,11 @@ import { X } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { toast } from "react-toastify";
 
-
 interface OTPModalProps {
   isOpen: boolean;
   onClose: () => void;
-  phoneNumber: string; // Passed from LoginModal
+  phoneNumber: string;
+  source: "login" | "signup";
 }
 
 interface OTPFormValues {
@@ -21,9 +21,10 @@ export default function OTPModal({
   isOpen,
   onClose,
   phoneNumber,
+  source,
 }: OTPModalProps) {
-  const { verifyOTP } = useAuth();
-  
+  const { verifyOTP, resendOTP } = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -36,11 +37,20 @@ export default function OTPModal({
 
   const onSubmit = async (data: OTPFormValues) => {
     try {
-      await verifyOTP(phoneNumber, data.otp);
-      toast.success("Logged in successfully!");
+      await verifyOTP(phoneNumber, data.otp, source);
+      toast.success(`${source === "login" ? "Logged in" : "Signed up"} successfully!`);
       onClose();
     } catch (error) {
       toast.error("Invalid OTP. Please try again.");
+    }
+  };
+
+  const handleResendOTP = async () => {
+    try {
+      await resendOTP(phoneNumber, source);
+      toast.success("OTP resent successfully!");
+    } catch (error) {
+      toast.error("Failed to resend OTP. Please try again.");
     }
   };
 
@@ -67,12 +77,6 @@ export default function OTPModal({
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              {/* <label
-                htmlFor="otp"
-                className="block text-sm font-medium mb-1 text-black"
-              >
-                Enter OTP
-              </label> */}
               <Controller
                 name="otp"
                 control={control}
@@ -142,6 +146,20 @@ export default function OTPModal({
               {isSubmitting ? "Verifying..." : "Verify OTP"}
             </button>
           </form>
+
+          <div className="mt-4 text-center">
+            <p className="text-gray-500">
+              Didn&rsquo;t receive an OTP?{" "}
+              <button
+                type="button"
+                onClick={handleResendOTP}
+                className="text-[#FF6600] font-medium hover:underline"
+                disabled={isSubmitting}
+              >
+                Resend OTP
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

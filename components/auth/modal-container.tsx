@@ -3,7 +3,7 @@
 import { useModal } from "@/contexts/modal-context";
 import LoginModal from "./login-modal";
 import SignupModal from "./signup-modal";
-import OTPModal from "./otp-modal"; // Import the new OTPModal
+import OTPModal from "./otp-modal";
 
 export default function ModalContainer() {
   const { modalType, modalProps, closeModal } = useModal();
@@ -22,7 +22,8 @@ export default function ModalContainer() {
         <OTPModal
           isOpen={true}
           onClose={closeModal}
-          phoneNumber={modalProps.phoneNumber} // Pass phoneNumber from modalProps
+          phoneNumber={modalProps.phoneNumber}
+          source={modalProps.source} // Pass source
         />
       )}
     </>
