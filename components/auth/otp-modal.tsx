@@ -4,7 +4,8 @@
 import { useForm, Controller } from "react-hook-form";
 import { X } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
-import { message } from "antd";
+import { toast } from "react-toastify";
+
 
 interface OTPModalProps {
   isOpen: boolean;
@@ -36,10 +37,10 @@ export default function OTPModal({
   const onSubmit = async (data: OTPFormValues) => {
     try {
       await verifyOTP(phoneNumber, data.otp);
-      message.success("Logged in successfully!");
+      toast.success("Logged in successfully!");
       onClose();
     } catch (error) {
-      message.error("Invalid OTP. Please try again.");
+      toast.error("Invalid OTP. Please try again.");
     }
   };
 

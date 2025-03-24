@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 import PhoneNumberInput from "../PhoneNumberInput";
 import { useAuth } from "@/contexts/auth-context";
 import { useModal } from "@/contexts/modal-context";
-import { message } from "antd";
+import { toast } from "react-toastify";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -33,23 +33,23 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   const onSubmit = async (data: LoginFormValues) => {
     if (!/^\d{10}$/.test(data.phoneNumber)) {
-      message.error("Please enter a valid 10-digit phone number");
+      toast.error("Please enter a valid 10-digit phone number");
       return;
     }
     const number = "234" + data.phoneNumber;
     try {
       await login(number); // Calls the backend to send OTP
-      message.success("OTP sent successfully!");
+      toast.success("OTP sent successfully!");
       onClose();
       openModal("otp", { phoneNumber: number }); // Pass phoneNumber to OTPModal
     } catch (error) {
-      message.error("Failed to send OTP. Please try again.");
+      toast.error("Failed to send OTP. Please try again.");
     }
   };
 
   const handlePhoneBlur = (value: string) => {
     if (value && !/^\d{10}$/.test(value)) {
-      message.error("Please enter a valid 10-digit phone number");
+      toast.error("Please enter a valid 10-digit phone number");
     }
   };
 

@@ -16,7 +16,7 @@ import PaymentOptionsModal from "@/components/modal/payment-options-modal";
 import OnlinePaymentOptionsModal from "@/components/modal/online-payment-options-modal";
 import PromoCodeModal from "@/components/modal/PromoCodeModal";
 import RateOrderModal from "@/components/modal/RateOrderModal";
-import { message } from "antd";
+import { toast } from "react-toastify";
 import { getAuthToken } from "@/utils/auth";
 import { useBusinessStore } from "@/stores/business-store"; // Import the store
 
@@ -273,13 +273,13 @@ const Cart: React.FC = () => {
   const handleApplyPromo = (promoCode: string, discount: number) => {
     setPromoCodes([promoCode]);
     setDiscount(discount);
-    message.success(`Promo code ${promoCode} applied! (${discount}% off)`);
+    toast.success(`Promo code ${promoCode} applied! (${discount}% off)`);
   };
 
   const handleRemovePromo = () => {
     setPromoCodes([]);
     setDiscount(0);
-    message.info("Promo code removed.");
+    toast.info("Promo code removed.");
   };
 
   const handlePlaceOrder = async () => {
@@ -289,7 +289,7 @@ const Cart: React.FC = () => {
 
     if (state.packs.length === 0) {
       setCartError("Cart cannot be empty. Please add items to your cart.");
-      message.error("Cart cannot be empty. Please add items to your cart.");
+      toast.error("Cart cannot be empty. Please add items to your cart.");
       if (cartRef.current) {
         cartRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       }
@@ -298,13 +298,13 @@ const Cart: React.FC = () => {
 
     if (!isAuthenticated) {
       setIsLoginModalOpen(true);
-      message.error("Please log in to place an order.");
+      toast.error("Please log in to place an order.");
       return;
     }
 
     if (!contextAddress || !isAddressValid) {
       setAddressError("Please set a valid delivery address.");
-      message.error("Please set a valid delivery address.");
+      toast.error("Please set a valid delivery address.");
       if (addressRef.current) {
         addressRef.current.scrollIntoView({
           behavior: "smooth",
@@ -316,7 +316,7 @@ const Cart: React.FC = () => {
 
     if (!displayedPaymentMethod || displayedPaymentMethod === "Choose") {
       setPaymentMethodError("Please select a payment method.");
-      message.error("Please select a payment method.");
+      toast.error("Please select a payment method.");
       if (paymentMethodRef.current) {
         paymentMethodRef.current.scrollIntoView({
           behavior: "smooth",
@@ -365,10 +365,10 @@ const Cart: React.FC = () => {
       setIsRateOrderModalOpen(true);
 
       dispatch({ type: "CLEAR_CART" });
-      message.success("Order placed successfully!");
+      toast.success("Order placed successfully!");
     } catch (error: any) {
       console.error("Error placing order:", error);
-      message.error(error.message || "Failed to place order. Please try again.");
+      toast.error(error.message || "Failed to place order. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -379,7 +379,7 @@ const Cart: React.FC = () => {
 
     if (state.packs.length === 0) {
       setCartError("Cart cannot be empty. Please add items to your cart.");
-      message.error("Cart cannot be empty. Please add items to your cart.");
+      toast.error("Cart cannot be empty. Please add items to your cart.");
       if (cartRef.current) {
         cartRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       }
@@ -388,7 +388,7 @@ const Cart: React.FC = () => {
 
     if (!isAuthenticated) {
       setIsLoginModalOpen(true);
-      message.error("Please log in to save your cart.");
+      toast.error("Please log in to save your cart.");
       return;
     }
 
@@ -418,11 +418,11 @@ const Cart: React.FC = () => {
 
       const data = await response.json();
       console.log("Cart saved for later:", data);
-      message.success("Cart saved for later successfully!");
+      toast.success("Cart saved for later successfully!");
       dispatch({ type: "CLEAR_CART" });
     } catch (error: any) {
       console.error("Error saving for later:", error);
-      message.error(
+      toast.error(
         error.message || "Failed to save for later. Please try again."
       );
     } finally {
