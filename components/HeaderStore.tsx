@@ -154,12 +154,10 @@ const HeaderStore: React.FC = () => {
                 <ShoppingCart size={20} />
                 <CartBadge />
               </button>
-              {isCartOpen && (
-                <CartModal
-                  isOpen={isCartOpen}
-                  onClose={() => setIsCartOpen(false)}
-                />
-              )}
+              <CartModal
+                isOpen={isCartOpen}
+                onClose={() => setIsCartOpen(false)}
+              />
             </div>
 
             <div className="relative">

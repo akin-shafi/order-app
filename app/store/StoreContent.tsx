@@ -1,4 +1,4 @@
-// StoreContent.tsx
+// app/store/StoreContent.tsx
 "use client";
 
 import HeaderStore from "@/components/HeaderStore";

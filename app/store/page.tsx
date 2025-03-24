@@ -1,3 +1,4 @@
+// app/store/page.tsx
 import StoreContent from "./StoreContent";
 import QueryProvider from "@/components/providers/QueryProvider";
 

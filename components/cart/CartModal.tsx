@@ -22,14 +22,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [savedCartsCount, setSavedCartsCount] = useState<number>(0);
 
-  const { isCartOpen, isShoppingListOpen, setCartOpen, toggleShoppingList } =
-    useHeaderStore();
-  const { businessInfo } = useBusinessStore(); // Access businessInfo from the store
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const token = getAuthToken();
 
-  // console.log("businessInfo", businessInfo)
-  // Fetch the count of saved carts
   useEffect(() => {
     const fetchSavedCartsCount = async () => {
       if (!isAuthenticated || !token) {
@@ -75,41 +70,11 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleToggleShoppingList = () => {
-    if (isAuthenticated) {
-      toggleShoppingList();
-    } else {
-      setIsLoginModalOpen(true);
-    }
-  };
-
   const modalVariants = {
-    hidden: {
-      x: "100%",
-      opacity: 0,
-    },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      },
-    },
-    exit: {
-      x: "100%",
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-      },
-    },
+    hidden: { x: "100%", opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 30 } },
+    exit: { x: "100%", opacity: 0, transition: { duration: 0.2 } },
   };
-
-  // If businessInfo is not available, show a fallback (optional)
-  if (!businessInfo) {
-    return null; // Or a loading state
-  }
 
   return (
     <AnimatePresence>
@@ -123,54 +88,21 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="w-full md:w-[480px] bg-white h-full"
+            className="w-full max-w-[480px] bg-white h-full fixed top-0 right-0 md:w-[480px]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Cart Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={handleToggleShoppingList}
-                  className="flex items-center cursor-pointer gap-1 text-[#ff6600]"
-                >
-                  Saved Items:{" "}
-                  <span className="bg-[#ff6600] text-white rounded-full px-2 py-0.5 text-xs">
-                    {savedCartsCount}
-                  </span>
-                </button>
-                <button
-                  className="group relative cursor-pointer w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
-                  onClick={() => {
-                    setCartOpen(false);
-                    onClose();
-                  }}
-                  aria-label="Close modal"
-                >
-                  <X
-                    size={24}
-                    className="transition-transform group-hover:scale-110"
-                  />
-                  <span className="absolute inset-0 rounded-full bg-gray-200 opacity-0 group-hover:opacity-20 transition-opacity"></span>
-                </button>
-              </div>
+              <button
+                className="group relative cursor-pointer w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+                onClick={onClose}
+                aria-label="Close modal"
+              >
+                <X size={24} className="transition-transform group-hover:scale-110" />
+                <span className="absolute inset-0 rounded-full bg-gray-200 opacity-0 group-hover:opacity-20 transition-opacity"></span>
+              </button>
             </div>
-
-            {/* Cart Content */}
             <Cart />
-
-            {/* Shopping List Modal */}
-            {isShoppingListOpen && isAuthenticated && (
-              <SavedCartModal onClose={toggleShoppingList} />
-            )}
-
-            {/* Login Modal */}
-            {isLoginModalOpen && (
-              <LoginModal
-                isOpen={isLoginModalOpen}
-                onClose={() => setIsLoginModalOpen(false)}
-              />
-            )}
           </motion.div>
         </div>
       )}
