@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import CartModal from "./cart/CartModal";
 import { useAuth } from "@/contexts/auth-context";
+import { toast } from "react-toastify";
 
 const HeaderStore: React.FC = () => {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
@@ -52,10 +53,11 @@ const HeaderStore: React.FC = () => {
       openLoginModal();
     }
   };
- 
+
   const handleLogout = () => {
     logout();
     setIsProfileDropdownOpen(false);
+    toast.success("Logout successful");
   };
 
   const toggleCart = () => {
