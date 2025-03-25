@@ -24,12 +24,10 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
 
   const { isCartOpen, isShoppingListOpen, setCartOpen, toggleShoppingList } =
     useHeaderStore();
-  const { businessInfo } = useBusinessStore(); // Access businessInfo from the store
+
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const token = getAuthToken();
 
-  // console.log("businessInfo", businessInfo)
-  // Fetch the count of saved carts
   useEffect(() => {
     const fetchSavedCartsCount = async () => {
       if (!isAuthenticated || !token) {
@@ -84,32 +82,14 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   };
 
   const modalVariants = {
-    hidden: {
-      x: "100%",
-      opacity: 0,
-    },
+    hidden: { x: "100%", opacity: 0 },
     visible: {
       x: 0,
       opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      },
+      transition: { type: "spring", stiffness: 300, damping: 30 },
     },
-    exit: {
-      x: "100%",
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-      },
-    },
+    exit: { x: "100%", opacity: 0, transition: { duration: 0.2 } },
   };
-
-  // If businessInfo is not available, show a fallback (optional)
-  if (!businessInfo) {
-    return null; // Or a loading state
-  }
 
   return (
     <AnimatePresence>
@@ -123,10 +103,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="w-full md:w-[480px] bg-white h-full"
+            className="w-full max-w-[480px] bg-white h-full fixed top-0 right-0 md:w-[480px]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Cart Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-[#292d32]">Checkout</h2>
               <div className="flex items-center gap-4">
@@ -155,8 +134,6 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                 </button>
               </div>
             </div>
-
-            {/* Cart Content */}
             <Cart />
 
             {/* Shopping List Modal */}
