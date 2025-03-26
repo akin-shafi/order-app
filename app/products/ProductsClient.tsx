@@ -9,6 +9,7 @@ import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 
 const { Search } = Input;
 
@@ -120,10 +121,12 @@ export default function ProductsClient() {
                 ) : products.length === 0 ? (
                   <p>No products found.</p>
                 ) : (
-                  <ProductGrid
-                    products={products}
-                    onAddToCart={handleAddToCart}
-                  />
+                  <AnimatePresence>
+                    <ProductGrid
+                      products={products}
+                      onAddToCart={handleAddToCart}
+                    />
+                  </AnimatePresence>
                 )}
               </div>
             </div>
