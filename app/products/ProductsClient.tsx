@@ -1,74 +1,74 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Input } from "antd";
+import { Input, Pagination } from "antd";
 import { useProducts } from "@/hooks/useProducts";
 import { CategoryFilter } from "@/components/product/CategoryFilter";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { SkeletonProductGrid } from "@/components/product/SkeletonProductGrid"; // Import Skeleton Loader
+import { SkeletonProductGrid } from "@/components/product/SkeletonProductGrid";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import { ArrowLeft } from "lucide-react";
+import { useAddress } from "@/contexts/address-context";
 
 const { Search } = Input;
 
 export default function ProductsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { locationDetails } = useAddress(); // Fetch state and city from context
   const fixedSectionRef = useRef<HTMLDivElement>(null);
   const [fixedSectionHeight, setFixedSectionHeight] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const initialCategory = isMounted
-    ? searchParams?.get("category") || undefined
-    : undefined;
-
+  // Pagination and filter states
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10); // Fixed limit, can be made dynamic if needed
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
-    initialCategory
+    undefined
   );
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { products, loading, error } = useProducts({
+  useEffect(() => {
+    setIsMounted(true);
+    const categoryFromQuery = searchParams?.get("category") || undefined;
+    setSelectedCategory(categoryFromQuery);
+    const pageFromQuery = Number(searchParams?.get("page")) || 1;
+    setPage(pageFromQuery);
+  }, [searchParams]);
+
+  // Fetch products with pagination, category, search, and address filters
+  const { products, total, loading, error } = useProducts({
+    page,
+    limit,
+    state: locationDetails?.state,
+    city: locationDetails?.localGovernment,
     category: selectedCategory,
     searchTerm,
   });
 
+  // Update URL when filters change
   useEffect(() => {
     if (!isMounted) return;
 
-    const categoryFromQuery = searchParams?.get("category") || undefined;
-    setSelectedCategory(categoryFromQuery);
-  }, [searchParams, isMounted]);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const params = new URLSearchParams(searchParams?.toString() || "");
-    if (selectedCategory) {
-      params.set("category", selectedCategory);
-    } else {
-      params.delete("category");
-    }
+    const params = new URLSearchParams();
+    if (selectedCategory) params.set("category", selectedCategory);
+    if (page > 1) params.set("page", page.toString());
     router.push(`/products?${params.toString()}`, { scroll: false });
-  }, [selectedCategory, router, searchParams, isMounted]);
+  }, [selectedCategory, page, router, isMounted]);
 
+  // Handle fixed section height for spacing
   useEffect(() => {
     const updateHeight = () => {
       if (fixedSectionRef.current) {
-        const height = fixedSectionRef.current.getBoundingClientRect().height;
-        setFixedSectionHeight(height);
+        setFixedSectionHeight(
+          fixedSectionRef.current.getBoundingClientRect().height
+        );
       }
     };
-
     updateHeight();
     window.addEventListener("resize", updateHeight);
-
     return () => window.removeEventListener("resize", updateHeight);
   }, []);
 
@@ -86,16 +86,13 @@ export default function ProductsClient() {
           <HeaderStore />
           <main className="max-w-6xl mx-auto px-4 pt-1 pb-8">
             <div className="container">
-              {/* Fixed Search and Category Filter */}
               <div
                 ref={fixedSectionRef}
-                className="fixed top-16 left-0 right-0 z-10 bg-white  p-4 max-w-6xl mx-auto"
+                className="fixed top-16 left-0 right-0 z-10 bg-white p-4 max-w-6xl mx-auto"
               >
                 <h1 className="text-2xl font-bold text-[#000000] mb-4">
                   Explore Our Menu
                 </h1>
-
-                {/* Search Bar */}
                 <div className="flex items-center gap-2 mb-4">
                   <button
                     onClick={() => router.push("/store")}
@@ -113,17 +110,16 @@ export default function ProductsClient() {
                     style={{ height: "40px" }}
                   />
                 </div>
-
-                {/* Category Filter */}
                 <CategoryFilter
                   selectedCategory={selectedCategory}
-                  onCategoryChange={setSelectedCategory}
+                  onCategoryChange={(cat) => {
+                    setSelectedCategory(cat);
+                    setPage(1); // Reset to page 1 when category changes
+                  }}
                 />
               </div>
 
-              {/* Spacer to prevent content from being hidden under fixed elements */}
-              <div style={{ paddingTop: `${fixedSectionHeight + 16}px` }}>
-                {/* Product Grid with Skeleton Loader */}
+              <div style={{ paddingTop: `${fixedSectionHeight + 26}px` }}>
                 {loading ? (
                   <SkeletonProductGrid />
                 ) : error ? (
@@ -131,10 +127,21 @@ export default function ProductsClient() {
                 ) : products.length === 0 ? (
                   <p>No products found.</p>
                 ) : (
-                  <ProductGrid
-                    products={products}
-                    onAddToCart={handleAddToCart}
-                  />
+                  <>
+                    <ProductGrid
+                      products={products}
+                      onAddToCart={handleAddToCart}
+                    />
+                    <div className="mt-6 flex justify-center">
+                      <Pagination
+                        current={page}
+                        pageSize={limit}
+                        total={total}
+                        onChange={(newPage) => setPage(newPage)}
+                        showSizeChanger={false}
+                      />
+                    </div>
+                  </>
                 )}
               </div>
             </div>

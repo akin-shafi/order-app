@@ -1,4 +1,3 @@
-// components/ProductGrid.tsx
 import React from "react";
 import { ProductCard } from "./ProductCard";
 

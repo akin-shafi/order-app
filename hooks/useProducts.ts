@@ -1,4 +1,3 @@
-// hooks/useProducts.ts
 import { useQuery } from "@tanstack/react-query";
 import { getAuthToken } from "@/utils/auth";
 
@@ -17,65 +16,96 @@ interface Product {
 }
 
 interface UseProductsProps {
+  page: number;
+  limit: number;
+  state?: string;
+  city?: string;
   category?: string;
   searchTerm?: string;
 }
 
-const fetchProducts = async (): Promise<Product[]> => {
+const fetchProducts = async ({
+  page,
+  limit,
+  state,
+  city,
+  category,
+  searchTerm,
+}: UseProductsProps): Promise<{ products: Product[]; total: number }> => {
   const token = getAuthToken();
-  const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/products`;
+  const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/products/filtered-products`;
 
-  const response = await fetch(baseUrl, {
+  const normalizedCity = city
+    ?.replace(/\s+/g, "-")
+    .replace(/\//g, "-");
+
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+  if (state) params.append("state", state);
+  if (normalizedCity) params.append("city", normalizedCity);
+  if (category) params.append("categories", category);
+  if (searchTerm) params.append("search", searchTerm);
+
+  const response = await fetch(`${baseUrl}?${params.toString()}`, {
     method: "GET",
     headers: {
-      "accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch products");
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to fetch products");
   }
 
   const data = await response.json();
-  return data.products;
+  return { products: data.products, total: data.total };
 };
 
-export const useProducts = ({ category, searchTerm }: UseProductsProps) => {
+export const useProducts = ({
+  page,
+  limit,
+  state,
+  city,
+  category,
+  searchTerm,
+}: UseProductsProps) => {
   const query = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    queryKey: ["products", page, limit, state, city, category, searchTerm],
+    queryFn: () => fetchProducts({ page, limit, state, city, category, searchTerm }),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    enabled: !!state && !!city,
   });
 
-  const filterProducts = (products: Product[]) => {
-    let filtered = products;
-
-    if (category) {
-      filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(category.toLowerCase())
-      );
-    }
-
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(
-        (product) =>
-          product.name.toLowerCase().includes(term) ||
-          product.price.includes(term) ||
-          product.business.name.toLowerCase().includes(term) ||
-          product.business.city.toLowerCase().includes(term) ||
-          product.business.state.toLowerCase().includes(term)
-      );
-    }
-
-    return filtered;
-  };
-
   return {
-    products: query.data ? filterProducts(query.data) : [],
+    products: query.data?.products || [],
+    total: query.data?.total || 0,
     loading: query.isLoading,
     error: query.error instanceof Error ? query.error.message : null,
   };
+};
+
+// src/hooks/useProducts.ts
+export const fetchProductCategories = async () => {
+  try {
+    const token = getAuthToken();
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/product-categories`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch product categories.");
+    }
+
+    const data = await response.json();
+    return Array.isArray(data.categories) ? data.categories : [];
+  } catch (error) {
+    const err = error as Error;
+    throw new Error(err.message || "Error fetching product categories.");
+  }
 };
