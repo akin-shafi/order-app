@@ -628,6 +628,18 @@ img.filter {
   /* border-bottom: 1px solid #e5e7eb; */
 }
 
+/* styles/globals.css */
+.custom-search .ant-input-search-button {
+  background-color: #000000 !important; /* Black background */
+  border-color: #000000 !important;
+  color: #ffffff !important; /* White text for contrast */
+}
+
+.custom-search .ant-input-search-button:hover {
+  background-color: #333333 !important; /* Slightly lighter black on hover */
+  border-color: #333333 !important;
+}
+
 .item-header {
   display: flex;
   justify-content: space-between;

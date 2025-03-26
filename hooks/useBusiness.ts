@@ -1,30 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // hooks/useBusiness.ts
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query"; 
 
+// Define the Business interface with proper typing
 interface Business {
-  status: string;
-  businessType: string;
-  productCategories: string[];
   id: string;
   name: string;
-  image: string;
+  image: string | null; // Adjusted to match backend response
   city: string;
   priceRange: string | null;
   deliveryTime: string | null;
-  rating: string;
+  rating: number; // Changed to number to match backend (decimal)
   ratingCount: number;
   openingTime: string;
   closingTime: string;
+  status: "open" | "closed"; // Explicit union type
+  businessType: string;
+  productCategories: string[];
 }
 
+// Define props interface with productType instead of subcategory
 interface UseBusinessProps {
   address: string | null;
   localGovernment: string | undefined;
   state: string | undefined;
-  businessType?: string; // Renamed from category
-  subcategory?: string | null;
+  businessType?: string;
+  productType?: string | null; // Renamed from subcategory
 }
 
+// Utility function to determine if a business is open
 const isBusinessOpen = (openingTime: string, closingTime: string): boolean => {
   const now = new Date();
   const [openHour, openMinute] = openingTime.split(":").map(Number);
@@ -49,7 +53,18 @@ const isBusinessOpen = (openingTime: string, closingTime: string): boolean => {
   );
 };
 
-const fetchBusinesses = async ({ localGovernment, state, businessType, subcategory }: Omit<UseBusinessProps, 'address'>): Promise<Business[]> => {
+// Fetch businesses function with consistent parameter names
+const fetchBusinesses = async ({
+  localGovernment,
+  state,
+  businessType,
+  productType,
+}: {
+  localGovernment: string;
+  state: string;
+  businessType?: string;
+  productType?: string;
+}): Promise<Business[]> => {
   if (!localGovernment || !state) {
     throw new Error("Waiting for location data...");
   }
@@ -62,13 +77,13 @@ const fetchBusinesses = async ({ localGovernment, state, businessType, subcatego
   const params = new URLSearchParams({
     city: encodeURIComponent(normalizedCity),
     state: encodeURIComponent(state),
-    businessType: businessType || "Restaurants" // Default to Restaurants
+    businessType: businessType || "Restaurants", // Default to Restaurants
   });
-  
-  if (subcategory) {
-    params.set("subcategory", subcategory);
+
+  if (productType) {
+    params.set("productType", productType); // Consistent with backend
   }
-  
+
   const url = `${baseUrl}?${params.toString()}`;
 
   const response = await fetch(url);
@@ -78,27 +93,51 @@ const fetchBusinesses = async ({ localGovernment, state, businessType, subcatego
 
   const data = await response.json();
 
-  return data.businesses.map((business: Business) => ({
+  return data.businesses.map((business: any) => ({
     id: business.id,
     name: business.name,
-    image: business.image,
-    rating: business.rating,
+    image: business.image || null, // Handle null from backend
+    city: business.city,
+    priceRange: business.priceRange || null,
+    deliveryTime: business.deliveryTimeRange || "15 - 20 mins", // Adjusted to match backend field
+    rating: Number(business.rating), // Ensure number type
+    ratingCount: business.ratingCount || business.totalRatings || 0, // Fallback for consistency
     openingTime: business.openingTime,
     closingTime: business.closingTime,
-    deliveryTime: business.deliveryTime || "15 - 20 mins",
-    status: isBusinessOpen(business.openingTime, business.closingTime) ? "open" : "closed",
+    status: isBusinessOpen(business.openingTime, business.closingTime)
+      ? "open"
+      : "closed",
     businessType: business.businessType,
-    productCategories: business.productCategories,
+    productCategories: business.productCategories || [],
   }));
 };
 
-export const useBusiness = ({ address, localGovernment, state, businessType, subcategory }: UseBusinessProps) => {
+// Updated useBusiness hook
+export const useBusiness = ({
+  address,
+  localGovernment,
+  state,
+  businessType,
+  productType, // Renamed from subcategory
+}: UseBusinessProps) => {
   const query = useQuery({
-    queryKey: ['businesses', localGovernment, state, businessType, subcategory],
-    queryFn: () => fetchBusinesses({ localGovernment, state, businessType, subcategory }),
-    enabled: !!address && !!localGovernment && !!state,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    queryKey: [
+      "businesses",
+      localGovernment,
+      state,
+      businessType,
+      productType, // Updated to use productType
+    ],
+    queryFn: () =>
+      fetchBusinesses({
+        localGovernment: localGovernment!,
+        state: state!,
+        businessType,
+        productType: productType || undefined, // Handle null case
+      }),
+    enabled: !!address && !!localGovernment && !!state, // Only run when all required fields are present
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 
   return {

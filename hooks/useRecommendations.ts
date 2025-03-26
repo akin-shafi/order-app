@@ -57,7 +57,8 @@ const isBusinessOpen = (openingTime: string, closingTime: string): boolean => {
 const fetchRecommendations = async (
   city: string,
   state: string,
-  businessType: string
+  businessType: string,
+  productType?: string // Added optional productType
 ): Promise<RecommendedBusiness[]> => {
   const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/businesses/top-rated`;
 
@@ -67,11 +68,15 @@ const fetchRecommendations = async (
   const params = new URLSearchParams({
     page: "1",
     limit: "5",
-    businessType: businessType || "Restaurants", // Default to Restaurants if not provided
+    businessType: businessType || "Restaurants",
     city: encodeURIComponent(normalizedCity),
     state: encodeURIComponent(state),
     minRating: "0",
   });
+
+  if (productType) {
+    params.set("productType", productType);
+  }
 
   const url = `${baseUrl}?${params.toString()}`;
 
