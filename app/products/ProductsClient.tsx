@@ -88,7 +88,7 @@ export default function ProductsClient() {
               {/* Fixed Search and Category Filter */}
               <div
                 ref={fixedSectionRef}
-                className="fixed top-16 left-0 right-0 z-10 bg-white shadow-md p-4 max-w-6xl mx-auto"
+                className="fixed top-16 left-0 right-0 z-10 bg-white  p-4 max-w-6xl mx-auto"
               >
                 <h1 className="text-2xl font-bold text-[#000000] mb-4">
                   Explore Our Menu
