@@ -14,9 +14,13 @@ interface StoreContentProps {
   initialBusinessType?: string | null; // Renamed from selectedCategory
 }
 
-export default function StoreContent({ initialBusinessType }: StoreContentProps) {
-  const [activeBusinessType, setActiveBusinessType] = useState<string>(initialBusinessType || "Restaurants");
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
+export default function StoreContent({
+  initialBusinessType,
+}: StoreContentProps) {
+  const [activeBusinessType] = useState<string>(
+    initialBusinessType || "Restaurants"
+  );
+  const [selectedSubCategory] = useState<string | null>(null);
 
   return (
     <ErrorBoundary>
@@ -28,21 +32,18 @@ export default function StoreContent({ initialBusinessType }: StoreContentProps)
           <HeaderStore />
           <main className="max-w-6xl mx-auto px-4 pt-1 pb-8">
             <Suspense fallback={<div>Loading categories...</div>}>
-              <CategoriesInStore 
-                onBusinessTypeChange={setActiveBusinessType} // Renamed from onCategoryChange
-                onSubCategoryChange={setSelectedSubCategory}
-              />
+              <CategoriesInStore />
             </Suspense>
 
             <Suspense fallback={<div>Loading recommendations...</div>}>
-              <RecomendationSection 
+              <RecomendationSection
                 activeBusinessType={activeBusinessType} // Renamed from activeCategory
                 selectedSubCategory={selectedSubCategory}
               />
             </Suspense>
 
             <Suspense fallback={<>Loading featured items...</>}>
-              <FeaturedStore 
+              <FeaturedStore
                 activeBusinessType={activeBusinessType} // Renamed from activeCategory
                 selectedSubCategory={selectedSubCategory}
               />
