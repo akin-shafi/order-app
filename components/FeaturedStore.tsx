@@ -52,7 +52,7 @@ export default function FeaturedStore({
     localGovernment: locationDetails?.localGovernment,
     state: locationDetails?.state,
     businessType: activeBusinessType, // Changed from category
-    subcategory: selectedSubCategory,
+    // subcategory: selectedSubCategory,
   });
 
   const { favorites, handleHeartClick } = useFavorites({

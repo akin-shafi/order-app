@@ -1,4 +1,4 @@
-// pages/products.tsx
+// app/products/page.tsx
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "antd";
@@ -8,7 +8,7 @@ import { ProductGrid } from "@/components/product/ProductGrid";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const { Search } = Input;
 
@@ -17,10 +17,18 @@ export default function ProductsPage() {
   const searchParams = useSearchParams();
   const fixedSectionRef = useRef<HTMLDivElement>(null);
   const [fixedSectionHeight, setFixedSectionHeight] = useState<number>(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Ensure the component is mounted before accessing searchParams
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Safely get the category from the URL query parameter
-  const initialCategory = searchParams
-    ? searchParams.get("category") || undefined
+  const initialCategory = isMounted
+    ? searchParams
+      ? searchParams.get("category") || undefined
+      : undefined
     : undefined;
 
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
@@ -33,18 +41,28 @@ export default function ProductsPage() {
     searchTerm,
   });
 
+  // Update the selectedCategory when the URL query changes
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const categoryFromQuery = searchParams
+      ? searchParams.get("category") || undefined
+      : undefined;
+    setSelectedCategory(categoryFromQuery);
+  }, [searchParams, isMounted]);
+
   // Update the URL when the selected category changes
   useEffect(() => {
-    if (!searchParams) return;
+    if (!isMounted) return;
 
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || "");
     if (selectedCategory) {
       params.set("category", selectedCategory);
     } else {
       params.delete("category");
     }
     router.push(`/products?${params.toString()}`, { scroll: false });
-  }, [selectedCategory, router, searchParams]);
+  }, [selectedCategory, router, searchParams, isMounted]);
 
   // Calculate the height of the fixed section dynamically
   useEffect(() => {
@@ -80,7 +98,6 @@ export default function ProductsPage() {
               <div
                 ref={fixedSectionRef}
                 className="fixed top-16 left-0 right-0 z-10 bg-white shadow-md p-4 max-w-6xl mx-auto"
-                // className="relative top-16 left-0 right-0  bg-white shadow-md p-4 max-w-6xl mx-auto"
               >
                 <h1 className="text-2xl font-bold text-[#000000] mb-4">
                   Explore Our Menu
