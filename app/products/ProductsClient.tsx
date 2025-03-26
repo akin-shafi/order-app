@@ -10,6 +10,7 @@ import FooterStore from "@/components/FooterStore";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 
 const { Search } = Input;
 
@@ -95,14 +96,23 @@ export default function ProductsClient() {
                 </h1>
 
                 {/* Search Bar */}
-                <Search
-                  placeholder="Search by name, price, restaurant, or location"
-                  onSearch={(value) => setSearchTerm(value)}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ marginBottom: 16 }}
-                  enterButton
-                  className="custom-search"
-                />
+                <div className="flex items-center gap-2 mb-4">
+                  <button
+                    onClick={() => router.push("/store")}
+                    className="flex items-center justify-center bg-[#FF6600] cursor-pointer text-white px-3 py-2 rounded-md shadow-md hover:bg-[#d9472a] transition opacity-80 hover:opacity-100"
+                    style={{ height: "30px", width: "40px" }}
+                  >
+                    <ArrowLeft size={20} className="text-white" />
+                  </button>
+                  <Search
+                    placeholder="Search by name, price, restaurant, or location"
+                    onSearch={(value) => setSearchTerm(value)}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    enterButton
+                    className="custom-search flex-1 mt-2"
+                    style={{ height: "40px" }}
+                  />
+                </div>
 
                 {/* Category Filter */}
                 <CategoryFilter
