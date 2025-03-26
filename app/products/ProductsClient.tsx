@@ -1,10 +1,10 @@
-// app/products/ProductsClient.tsx
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "antd";
 import { useProducts } from "@/hooks/useProducts";
 import { CategoryFilter } from "@/components/product/CategoryFilter";
 import { ProductGrid } from "@/components/product/ProductGrid";
+import { SkeletonProductGrid } from "@/components/product/SkeletonProductGrid"; // Import Skeleton Loader
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -19,16 +19,12 @@ export default function ProductsClient() {
   const [fixedSectionHeight, setFixedSectionHeight] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Ensure the component is mounted before accessing searchParams
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Safely get the category from the URL query parameter
   const initialCategory = isMounted
-    ? searchParams
-      ? searchParams.get("category") || undefined
-      : undefined
+    ? searchParams?.get("category") || undefined
     : undefined;
 
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
@@ -41,17 +37,13 @@ export default function ProductsClient() {
     searchTerm,
   });
 
-  // Update the selectedCategory when the URL query changes
   useEffect(() => {
     if (!isMounted) return;
 
-    const categoryFromQuery = searchParams
-      ? searchParams.get("category") || undefined
-      : undefined;
+    const categoryFromQuery = searchParams?.get("category") || undefined;
     setSelectedCategory(categoryFromQuery);
   }, [searchParams, isMounted]);
 
-  // Update the URL when the selected category changes
   useEffect(() => {
     if (!isMounted) return;
 
@@ -64,7 +56,6 @@ export default function ProductsClient() {
     router.push(`/products?${params.toString()}`, { scroll: false });
   }, [selectedCategory, router, searchParams, isMounted]);
 
-  // Calculate the height of the fixed section dynamically
   useEffect(() => {
     const updateHeight = () => {
       if (fixedSectionRef.current) {
@@ -73,15 +64,14 @@ export default function ProductsClient() {
       }
     };
 
-    updateHeight(); // Initial calculation
-    window.addEventListener("resize", updateHeight); // Update on resize
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
 
-    return () => window.removeEventListener("resize", updateHeight); // Cleanup
+    return () => window.removeEventListener("resize", updateHeight);
   }, []);
 
   const handleAddToCart = (productId: string) => {
     console.log(`Added product ${productId} to cart`);
-    // Implement cart logic here
   };
 
   return (
@@ -121,10 +111,10 @@ export default function ProductsClient() {
               </div>
 
               {/* Spacer to prevent content from being hidden under fixed elements */}
-              <div style={{ paddingTop: `${fixedSectionHeight + 64}px` }}>
-                {/* Product Grid */}
+              <div style={{ paddingTop: `${fixedSectionHeight + 16}px` }}>
+                {/* Product Grid with Skeleton Loader */}
                 {loading ? (
-                  <p>Loading...</p>
+                  <SkeletonProductGrid />
                 ) : error ? (
                   <p className="text-red-500">{error}</p>
                 ) : products.length === 0 ? (
