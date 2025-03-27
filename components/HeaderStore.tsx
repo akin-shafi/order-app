@@ -137,7 +137,7 @@ const HeaderStore: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="relative hidden md:block">
+            {/* <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type="search"
@@ -145,7 +145,7 @@ const HeaderStore: React.FC = () => {
                 placeholder="What can we get you?"
                 className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
               />
-            </div>
+            </div> */}
 
             <div className="relative">
               <button

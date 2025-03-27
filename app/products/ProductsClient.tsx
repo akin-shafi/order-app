@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Input, Pagination } from "antd";
+import { Pagination } from "antd";
 import { useProducts } from "@/hooks/useProducts";
 import { CategoryFilter } from "@/components/product/CategoryFilter";
 import { ProductGrid } from "@/components/product/ProductGrid";
@@ -9,10 +9,10 @@ import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 import { useAddress } from "@/contexts/address-context";
 
-const { Search } = Input;
+// const { Search } = Input;
 
 export default function ProductsClient() {
   const router = useRouter();
@@ -93,18 +93,29 @@ export default function ProductsClient() {
                   <button
                     onClick={() => router.push("/store")}
                     className="flex items-center justify-center bg-[#FF6600] cursor-pointer text-white px-3 py-2 rounded-md shadow-md hover:bg-[#d9472a] transition opacity-80 hover:opacity-100"
-                    style={{ height: "30px", width: "40px" }}
+                    style={{ height: "38px", width: "40px" }}
                   >
                     <ArrowLeft size={20} className="text-white" />
                   </button>
-                  <Search
+                  {/* <input
                     placeholder="Search by name, price, restaurant, or location"
-                    onSearch={(value) => setSearchTerm(value)}
+                    // onSearch={(value) => setSearchTerm(value)}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    enterButton
-                    className="custom-search flex-1 mt-2"
+                    // enterButton
+                    className="custom-search flex-1 bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
                     style={{ height: "40px" }}
-                  />
+                  /> */}
+
+                  <div className="relative block  w-full">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <input
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      type="search"
+                      inputMode="search"
+                      placeholder="Search by name, price, restaurant, or location"
+                      className="bg-[#f2f2f2] w-full rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
+                    />
+                  </div>
                 </div>
                 <CategoryFilter
                   selectedCategory={selectedCategory}
