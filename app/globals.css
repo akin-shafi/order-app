@@ -640,6 +640,40 @@ img.filter {
   border-color: #333333 !important;
 }
 
+
+.custom-tabs :global(.ant-tabs-nav) {
+  margin-bottom: 0;
+}
+.custom-tabs :global(.ant-tabs-nav-wrap) {
+  overflow-x: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.custom-tabs :global(.ant-tabs-nav-wrap::-webkit-scrollbar) {
+  display: none; /* Chrome, Safari, and Opera */
+}
+.custom-tabs :global(.ant-tabs-tab) {
+  padding: 8px 16px;
+  margin-right: 8px;
+  color: #666666; /* Gray for inactive tabs */
+  font-size: 14px;
+  transition: color 0.3s;
+}
+.custom-tabs :global(.ant-tabs-tab:hover) {
+  color: #666666; /* Keep gray on hover to avoid confusion */
+}
+.custom-tabs :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
+  color: #000000; /* Black for active tab */
+  font-weight: 500;
+}
+.custom-tabs :global(.ant-tabs-ink-bar) {
+  background: #ff6600; /* Brand color for underline */
+  height: 2px;
+}
+
+
+
+
 .item-header {
   display: flex;
   justify-content: space-between;

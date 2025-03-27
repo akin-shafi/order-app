@@ -90,11 +90,21 @@ export const useProducts = ({
 };
 
 // src/hooks/useProducts.ts
-export const fetchProductCategories = async () => {
+export const fetchProductCategories = async (isPredefined?: boolean) => {
   try {
     const token = getAuthToken();
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/product-categories`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const url = new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/product-categories/all`);
+    
+    // Add isPredefined query parameter if provided
+    if (isPredefined !== undefined) {
+      url.searchParams.append("isPredefined", isPredefined.toString());
+    }
+
+    const response = await fetch(url, {
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json", // Optional, for clarity
+      },
     });
 
     if (!response.ok) {
@@ -109,3 +119,5 @@ export const fetchProductCategories = async () => {
     throw new Error(err.message || "Error fetching product categories.");
   }
 };
+
+

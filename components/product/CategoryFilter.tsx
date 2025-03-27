@@ -1,59 +1,7 @@
-// "use client";
-// import React from "react";
-
-// const categories = [
-//   { name: "All" },
-//   { name: "Beans Combo" },
-//   { name: "Rice Dishes" }, // Update these to match your backend categories
-//   { name: "Swallows" },
-//   { name: "Small Chops" },
-//   { name: "Fast Meals" },
-//   { name: "Desserts" },
-//   { name: "Drinks" },
-//   { name: "Soups" },
-// ];
-
-// interface CategoryFilterProps {
-//   selectedCategory: string | undefined;
-//   onCategoryChange: (category: string | undefined) => void;
-// }
-
-// export const CategoryFilter: React.FC<CategoryFilterProps> = ({
-//   selectedCategory,
-//   onCategoryChange,
-// }) => {
-//   return (
-//     <div className="flex flex-wrap gap-2 mb-4">
-//       {categories.map((category) => (
-//         <button
-//           key={category.name}
-//           onClick={() =>
-//             onCategoryChange(
-//               selectedCategory === category.name
-//                 ? undefined
-//                 : category.name === "All"
-//                 ? undefined
-//                 : category.name
-//             )
-//           }
-//           className={`px-4 py-2 rounded-full text-sm font-medium cursor-pointer ${
-//             selectedCategory === category.name ||
-//             (category.name === "All" && !selectedCategory)
-//               ? "bg-[#FF6600] text-white"
-//               : "bg-gray-200 text-[#000000] hover:bg-[#FF6600] hover:text-white"
-//           }`}
-//         >
-//           {category.name}
-//         </button>
-//       ))}
-//     </div>
-//   );
-// };
-
-
 "use client";
 import React, { useState, useEffect } from "react";
-import { fetchProductCategories } from "@/hooks/useProducts"; // Adjust path to your fetch function
+import { Tabs } from "antd";
+import { fetchProductCategories } from "@/hooks/useProducts";
 
 interface CategoryFilterProps {
   selectedCategory: string | undefined;
@@ -74,7 +22,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
     const loadCategories = async () => {
       setLoading(true);
       try {
-        const fetchedCategories = await fetchProductCategories(); // No token needed here
+        const fetchedCategories = await fetchProductCategories(true); // Set isPredefined to true
         const formattedCategories = [
           { name: "All" },
           ...fetchedCategories.map((cat: { name: string }) => ({
@@ -83,19 +31,15 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
         ];
         setCategories(formattedCategories);
       } catch (err) {
-        // Check if err is an Error instance
-        if (err instanceof Error) {
-          setError(err.message || "Failed to load categories");
-        } else {
-          setError("Failed to load categories");
-        }
+        const error = err as Error;
+        setError(error.message || "Failed to load categories");
       } finally {
         setLoading(false);
       }
     };
 
     loadCategories();
-  }, []); // Empty dependency array since token is handled by the hook
+  }, []);
 
   if (loading) {
     return <div>Loading categories...</div>;
@@ -106,29 +50,23 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   }
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
-      {categories.map((category) => (
-        <button
-          key={category.name}
-          onClick={() =>
-            onCategoryChange(
-              selectedCategory === category.name
-                ? undefined
-                : category.name === "All"
-                ? undefined
-                : category.name
-            )
-          }
-          className={`px-4 py-2 rounded-full text-sm font-medium cursor-pointer ${
-            selectedCategory === category.name ||
-            (category.name === "All" && !selectedCategory)
-              ? "bg-[#FF6600] text-white"
-              : "bg-gray-200 text-[#000000] hover:bg-[#FF6600] hover:text-white"
-          }`}
-        >
-          {category.name}
-        </button>
-      ))}
+    <div className="mb-0">
+      <Tabs
+        activeKey={selectedCategory || "All"}
+        onChange={(key) => onCategoryChange(key === "All" ? undefined : key)}
+        type="line" // Underline style
+        items={categories.map((category) => ({
+          key: category.name,
+          label: category.name,
+        }))}
+        tabBarStyle={{
+          overflowX: "auto",
+          whiteSpace: "nowrap",
+          display: "flex",
+          flexWrap: "nowrap",
+        }}
+        className="custom-tabs"
+      />
     </div>
   );
 };

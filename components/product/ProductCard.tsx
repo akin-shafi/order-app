@@ -1,7 +1,7 @@
-// components/ProductCard.tsx
 import React, { useState } from "react";
 import Image from "next/image";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { Plus } from "lucide-react"; // Import Plus icon from lucide-react
 import { RateProductModal } from "./RateProductModal";
 import { Rate } from "antd";
 
@@ -38,7 +38,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden">
+    <div className="bg-white rounded-xl shadow-md overflow-hidden mb-4">
       {/* Image */}
       <div className="relative w-full h-40">
         {image ? (
@@ -73,19 +73,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-sm text-gray-500">{businessName}</p>
 
         {/* Product Name */}
-        <h3 className="text-lg font-semibold text-[#000000] truncate-text">{name}</h3>
+        <h3 className="text-lg font-semibold text-[#000000] truncate-text">
+          {name}
+        </h3>
 
         {/* Description */}
         <p className="text-sm text-gray-600 truncate">{description}</p>
 
         {/* Price and Add to Cart */}
-        <div className="mt-2 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+        <div className="mt-2 flex justify-between items-center">
           <span className="text-[#FF6600] font-bold">₦{price}</span>
           <button
             onClick={onAddToCart}
-            className="bg-[#FF6600] text-white text-sm px-3 py-1 rounded-full hover:bg-[#e65c00] self-end md:self-auto w-full md:w-auto"
+            className="bg-[#FF6600] text-white p-2 rounded-full hover:bg-[#e65c00] transition-colors"
           >
-            Add to Cart
+            <Plus size={16} />
           </button>
         </div>
 

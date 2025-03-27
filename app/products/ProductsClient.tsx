@@ -17,14 +17,13 @@ const { Search } = Input;
 export default function ProductsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { locationDetails } = useAddress(); // Fetch state and city from context
+  const { locationDetails } = useAddress();
   const fixedSectionRef = useRef<HTMLDivElement>(null);
   const [fixedSectionHeight, setFixedSectionHeight] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Pagination and filter states
   const [page, setPage] = useState(1);
-  const [limit] = useState(10); // Fixed limit, can be made dynamic if needed
+  const [limit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
     undefined
   );
@@ -38,7 +37,6 @@ export default function ProductsClient() {
     setPage(pageFromQuery);
   }, [searchParams]);
 
-  // Fetch products with pagination, category, search, and address filters
   const { products, total, loading, error } = useProducts({
     page,
     limit,
@@ -48,7 +46,6 @@ export default function ProductsClient() {
     searchTerm,
   });
 
-  // Update URL when filters change
   useEffect(() => {
     if (!isMounted) return;
 
@@ -58,7 +55,6 @@ export default function ProductsClient() {
     router.push(`/products?${params.toString()}`, { scroll: false });
   }, [selectedCategory, page, router, isMounted]);
 
-  // Handle fixed section height for spacing
   useEffect(() => {
     const updateHeight = () => {
       if (fixedSectionRef.current) {
@@ -93,7 +89,7 @@ export default function ProductsClient() {
                 <h1 className="text-2xl font-bold text-[#000000] mb-4">
                   Explore Our Menu
                 </h1>
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-1">
                   <button
                     onClick={() => router.push("/store")}
                     className="flex items-center justify-center bg-[#FF6600] cursor-pointer text-white px-3 py-2 rounded-md shadow-md hover:bg-[#d9472a] transition opacity-80 hover:opacity-100"
@@ -114,7 +110,7 @@ export default function ProductsClient() {
                   selectedCategory={selectedCategory}
                   onCategoryChange={(cat) => {
                     setSelectedCategory(cat);
-                    setPage(1); // Reset to page 1 when category changes
+                    setPage(1);
                   }}
                 />
               </div>
