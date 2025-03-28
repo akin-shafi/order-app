@@ -11,14 +11,12 @@ import { useState } from "react";
 
 export default function StoreContent() {
   const [activeBusinessType] = useState<string>("Restaurants"); // Default business type
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
-    null
-  );
+  const [selectedSubCategory] = useState<string | null>(null);
 
   // Handler to update selected subcategory from CategoriesInStore
-  const handleSubCategorySelect = (subCategory: string) => {
-    setSelectedSubCategory(subCategory);
-  };
+  // const handleSubCategorySelect = (subCategory: string) => {
+  //   setSelectedSubCategory(subCategory);
+  // };
 
   return (
     <ErrorBoundary>
@@ -30,9 +28,7 @@ export default function StoreContent() {
           <HeaderStore />
           <main className="max-w-6xl mx-auto px-4 pt-1 pb-8">
             <Suspense fallback={<div>Loading categories...</div>}>
-              <CategoriesInStore
-                onSubCategorySelect={handleSubCategorySelect}
-              />
+              <CategoriesInStore />
             </Suspense>
 
             <Suspense fallback={<div>Loading recommendations...</div>}>
