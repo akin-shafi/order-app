@@ -8,10 +8,12 @@ import { Modal } from "antd";
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { useQuery } from "@tanstack/react-query";
-import { fetchProducts } from "@/hooks/useProducts"; // Import fetchProducts
+import { fetchProducts } from "@/hooks/useProducts";
 import { CategoryTabs } from "./CategoryTabs";
-import { useAddress } from "@/contexts/address-context"; // For location data
+import { useAddress } from "@/contexts/address-context";
+import { useBusiness } from "@/hooks/useBusiness"; // To map business IDs
 
+// Match the Product interface from useProducts.ts
 interface Product {
   id: string;
   name: string;
@@ -19,7 +21,6 @@ interface Product {
   image: string | null;
   isAvailable: boolean;
   business: {
-    id: string;
     name: string;
     city: string;
     state: string;
@@ -35,11 +36,20 @@ const SkeletonCategoryCard = () => (
 
 export default function CategoriesInStore() {
   const { data: categories, isLoading, error } = useCategories();
-  const {  locationDetails } = useAddress(); // Get user location
+  const { address, locationDetails } = useAddress(); // Get user location
+
   const [activeTab, setActiveTab] = useState<string>("");
   const [mounted, setMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // Fetch businesses to map business names to IDs
+  const { businesses } = useBusiness({
+    address: address || "",
+    localGovernment: locationDetails?.localGovernment,
+    state: locationDetails?.state,
+    businessType: activeTab || "Restaurants",
+  });
 
   // Set the initial active tab when categories are loaded
   useEffect(() => {
@@ -51,17 +61,22 @@ export default function CategoriesInStore() {
 
   // Fetch products for the selected category
   const { data: productsData, isLoading: productsLoading } = useQuery({
-    queryKey: ["products", selectedCategory, locationDetails?.state, locationDetails?.localGovernment],
+    queryKey: [
+      "products",
+      selectedCategory,
+      locationDetails?.state,
+      locationDetails?.localGovernment,
+    ],
     queryFn: () =>
       fetchProducts({
         page: 1,
-        limit: 10, // Adjust limit as needed
+        limit: 10,
         state: locationDetails?.state,
         city: locationDetails?.localGovernment,
         category: selectedCategory || "",
         searchTerm: "",
       }),
-    enabled: isModalOpen && !!selectedCategory, // Fetch only when modal is open and category is selected
+    enabled: isModalOpen && !!selectedCategory,
   });
 
   const products = productsData?.products || [];
@@ -77,7 +92,13 @@ export default function CategoriesInStore() {
 
   const calculateDeliveryFee = (businessCity: string) => {
     const userCity = locationDetails?.localGovernment || "";
-    return businessCity === userCity ? 600 : 1200; // Simple fee logic; adjust as needed
+    return businessCity === userCity ? 600 : 1200;
+  };
+
+  // Map business name to ID using businesses from useBusiness
+  const getBusinessId = (businessName: string) => {
+    const business = businesses.find((b) => b.name === businessName);
+    return business?.id || "";
   };
 
   if (error) {
@@ -193,8 +214,12 @@ export default function CategoriesInStore() {
               const deliveryFee = calculateDeliveryFee(product.business.city);
               const price = parseFloat(product.price);
               const totalCost = price + deliveryFee;
+              const businessId = getBusinessId(product.business.name); // Map name to ID
               return (
-                <div key={product.id} className="flex justify-between items-center p-2 border-b">
+                <div
+                  key={product.id}
+                  className="flex justify-between items-center p-2 border-b"
+                >
                   <div className="flex items-center gap-3">
                     <Image
                       src={product.image || "/placeholder.svg"}
@@ -205,15 +230,21 @@ export default function CategoriesInStore() {
                     />
                     <div>
                       <p className="font-medium">{product.name}</p>
-                      <p className="text-sm text-gray-600">{product.business.name}</p>
+                      <p className="text-sm text-gray-600">
+                        {product.business.name}
+                      </p>
                       <p className="text-sm">
                         ₦{price} + ₦{deliveryFee} Delivery = ₦{totalCost} Total
                       </p>
                     </div>
                   </div>
                   <Link
-                    href={`/store/${product.business.id || "#"}`} // Placeholder; see note below
-                    className="text-[#FF6600] hover:underline"
+                    href={businessId ? `/store/${businessId}` : "#"}
+                    className={`text-[#FF6600] ${
+                      businessId
+                        ? "hover:underline"
+                        : "cursor-not-allowed opacity-50"
+                    }`}
                   >
                     Shop in this Store
                   </Link>
