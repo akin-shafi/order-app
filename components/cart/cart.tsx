@@ -18,12 +18,12 @@ import PromoCodeModal from "@/components/modal/PromoCodeModal";
 import RateOrderModal from "@/components/modal/RateOrderModal";
 import { toast } from "react-toastify";
 import { getAuthToken } from "@/utils/auth";
-import { useBusinessStore } from "@/stores/business-store"; // Import the store
+import { useBusinessStore } from "@/stores/business-store";
 
 const Cart: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const token = getAuthToken();
-  const { businessInfo } = useBusinessStore(); // Access businessInfo from the store
+  const { businessInfo } = useBusinessStore();
   const { state, dispatch } = useCart();
   const {
     address: contextAddress,
@@ -330,7 +330,7 @@ const Cart: React.FC = () => {
 
     const payload = {
       userId: user?.id,
-      businessId: businessInfo?.id, // Use id from the store
+      businessId: businessInfo?.id || "unknown", // Fallback to "unknown"
       items: getOrderItems(),
       totalAmount: calculateTotal(),
       deliveryAddress: contextAddress,
@@ -396,7 +396,7 @@ const Cart: React.FC = () => {
 
     const payload = {
       source: "web",
-      vendor_id: businessInfo?.id, // Use id from the store
+      vendor_id: businessInfo?.id || "unknown", // Fallback to "unknown"
       cart: state,
     };
     console.log("Save for later payload:", payload);
@@ -437,10 +437,7 @@ const Cart: React.FC = () => {
     setDiscount(0);
   };
 
-  if (!businessInfo) {
-    return null; // Or a loading state
-  }
-
+  // Render even if businessInfo is null
   if (state.packs.length === 0) {
     return (
       <div
@@ -474,7 +471,9 @@ const Cart: React.FC = () => {
         <div className="sticky top-0 bg-white z-10">
           <div className="p-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-medium text-[#292d32]">{businessInfo.name}</h3>
+              <h3 className="text-sm font-medium text-[#292d32]">
+                {businessInfo?.name || "Your Cart"} {/* Fallback name */}
+              </h3>
               <button
                 onClick={() => dispatch({ type: "ADD_PACK" })}
                 className="text-[#ff6600] cursor-pointer border border-gray-200 text-xxs py-1 px-2 rounded-full flex items-center transition duration-300 hover:border-[#ff6600] hover:text-[#ff6600]"

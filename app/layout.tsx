@@ -1,12 +1,10 @@
 import type React from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import type { Metadata } from "next";
 import { DM_Sans as DMSans } from "next/font/google";
 import GoogleMapsScript from "@/components/google-maps-script";
 import Providers from "./providers";
-import ModalContainer from "@/components/auth/modal-container";
-import InstallAppPrompt from "@/components/InstallAppPrompt"; // Ensure correct path
+import ClientLayout from "./ClientLayout"; // Import the new Client Component
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 const dmSans = DMSans({
@@ -42,7 +40,6 @@ export default function RootLayout({
         />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />
-        {/* <meta name="apple-mobile-web-app-capable" content="yes" /> */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="BetaDay" />
@@ -66,10 +63,7 @@ export default function RootLayout({
       >
         <GoogleMapsScript />
         <Providers>
-          {children}
-          <ModalContainer />
-          <InstallAppPrompt />
-          <ToastContainer position="top-right" autoClose={1000} />
+          <ClientLayout>{children}</ClientLayout>
         </Providers>
       </body>
     </html>

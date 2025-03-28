@@ -12,18 +12,19 @@ import AddressSearchModal from "./modal/address-search-modal";
 import JoinWaitlistModal from "./modal/join-waitlist-modal";
 import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
-import CartModal from "./cart/CartModal";
 import { useAuth } from "@/contexts/auth-context";
 import { toast } from "react-toastify";
+import { useHeaderStore } from "@/stores/header-store"; // Import header store
 
 const HeaderStore: React.FC = () => {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [undeliverableAddress, setUndeliverableAddress] = useState("");
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+
+  const { setCartOpen } = useHeaderStore(); // Use header store
 
   const {
     address: contextAddress,
@@ -60,9 +61,7 @@ const HeaderStore: React.FC = () => {
     toast.success("Logout successful");
   };
 
-  const toggleCart = () => {
-    setIsCartOpen(!isCartOpen);
-  };
+  const toggleCart = () => setCartOpen(true); // Simplified to open only
 
   const renderAddressText = () => {
     if (isLoading) return "Getting your location...";
@@ -137,16 +136,6 @@ const HeaderStore: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="search"
-                inputMode="search"
-                placeholder="What can we get you?"
-                className="bg-[#f2f2f2] rounded py-2 pl-10 pr-4 w-64 text-sm focus:outline-none focus:ring-2 focus:ring-[#000000]"
-              />
-            </div> */}
-
             <div className="relative">
               <button
                 type="button"
@@ -156,10 +145,7 @@ const HeaderStore: React.FC = () => {
                 <ShoppingCart size={20} />
                 <CartBadge />
               </button>
-              <CartModal
-                isOpen={isCartOpen}
-                onClose={() => setIsCartOpen(false)}
-              />
+              {/* Remove CartModal from here */}
             </div>
 
             <div className="relative">
@@ -174,9 +160,8 @@ const HeaderStore: React.FC = () => {
                 )}
               </button>
 
-              {/* Dropdown for logged-in users */}
               {isAuthenticated && isProfileDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-20">
                   <button
                     type="button"
                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

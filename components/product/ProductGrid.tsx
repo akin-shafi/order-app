@@ -8,17 +8,20 @@ interface ProductGridProps {
     price: string;
     description: string;
     image: string | null;
-    business: {
-      name: string;
-    };
+    business: { name: string; id?: string }; // Add id to business
   }>;
-  onAddToCart: (productId: string) => void;
+  onSelectItem: (item: {
+    id: string;
+    name: string;
+    price: string;
+    description: string;
+    image: string | null;
+    businessId: string;
+    businessName: string;
+  }) => void;
 }
 
-export const ProductGrid: React.FC<ProductGridProps> = ({
-  products,
-  onAddToCart,
-}) => {
+export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectItem }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       {products.map((product) => (
@@ -29,7 +32,17 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
           price={product.price}
           description={product.description}
           image={product.image}
-          onAddToCart={() => onAddToCart(product.id)}
+          onSelect={() =>
+            onSelectItem({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              description: product.description,
+              image: product.image,
+              businessId: product.business.id || "unknown", // Use actual business ID if available
+              businessName: product.business.name,
+            })
+          }
         />
       ))}
     </div>

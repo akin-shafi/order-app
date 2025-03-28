@@ -24,7 +24,7 @@ interface UseProductsProps {
   searchTerm?: string;
 }
 
-const fetchProducts = async ({
+export const fetchProducts = async ({
   page,
   limit,
   state,

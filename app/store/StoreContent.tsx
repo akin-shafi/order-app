@@ -1,4 +1,3 @@
-// app/store/StoreContent.tsx
 "use client";
 
 import HeaderStore from "@/components/HeaderStore";
@@ -10,17 +9,16 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Suspense } from "react";
 import { useState } from "react";
 
-interface StoreContentProps {
-  initialBusinessType?: string | null; // Renamed from selectedCategory
-}
-
-export default function StoreContent({
-  initialBusinessType,
-}: StoreContentProps) {
-  const [activeBusinessType] = useState<string>(
-    initialBusinessType || "Restaurants"
+export default function StoreContent() {
+  const [activeBusinessType] = useState<string>("Restaurants"); // Default business type
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
+    null
   );
-  const [selectedSubCategory] = useState<string | null>(null);
+
+  // Handler to update selected subcategory from CategoriesInStore
+  const handleSubCategorySelect = (subCategory: string) => {
+    setSelectedSubCategory(subCategory);
+  };
 
   return (
     <ErrorBoundary>
@@ -32,19 +30,21 @@ export default function StoreContent({
           <HeaderStore />
           <main className="max-w-6xl mx-auto px-4 pt-1 pb-8">
             <Suspense fallback={<div>Loading categories...</div>}>
-              <CategoriesInStore />
+              <CategoriesInStore
+                onSubCategorySelect={handleSubCategorySelect}
+              />
             </Suspense>
 
             <Suspense fallback={<div>Loading recommendations...</div>}>
               <RecomendationSection
-                activeBusinessType={activeBusinessType} // Renamed from activeCategory
+                activeBusinessType={activeBusinessType}
                 selectedSubCategory={selectedSubCategory}
               />
             </Suspense>
 
-            <Suspense fallback={<>Loading featured items...</>}>
+            <Suspense fallback={<div>Loading featured stores...</div>}>
               <FeaturedStore
-                activeBusinessType={activeBusinessType} // Renamed from activeCategory
+                activeBusinessType={activeBusinessType}
                 selectedSubCategory={selectedSubCategory}
               />
             </Suspense>

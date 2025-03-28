@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Input, Pagination } from "antd";
+import { AnimatePresence } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { CategoryFilter } from "@/components/product/CategoryFilter";
 import { ProductGrid } from "@/components/product/ProductGrid";
@@ -11,22 +12,40 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useAddress } from "@/contexts/address-context";
+import { useCart, CartItem } from "@/contexts/cart-context";
+import ItemModal from "@/components/modal/ItemModal";
+import FloatingCheckoutButton from "@/components/cart/FloatingCheckoutButton";
+import { useBusinessStore } from "@/stores/business-store";
+import { useHeaderStore } from "@/stores/header-store"; // Import header store
 
 const { Search } = Input;
+
+interface MenuItem {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string | null;
+  popular?: boolean;
+  businessId: string;
+  businessName: string;
+}
 
 export default function ProductsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { locationDetails } = useAddress();
+  const { state: cartState, dispatch } = useCart();
+  const { setBusinessInfo } = useBusinessStore();
+  const { setCartOpen } = useHeaderStore(); // Use header store to control CartModal
   const fixedSectionRef = useRef<HTMLDivElement>(null);
   const [fixedSectionHeight, setFixedSectionHeight] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
-    undefined
-  );
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
@@ -48,7 +67,6 @@ export default function ProductsClient() {
 
   useEffect(() => {
     if (!isMounted) return;
-
     const params = new URLSearchParams();
     if (selectedCategory) params.set("category", selectedCategory);
     if (page > 1) params.set("page", page.toString());
@@ -58,9 +76,7 @@ export default function ProductsClient() {
   useEffect(() => {
     const updateHeight = () => {
       if (fixedSectionRef.current) {
-        setFixedSectionHeight(
-          fixedSectionRef.current.getBoundingClientRect().height
-        );
+        setFixedSectionHeight(fixedSectionRef.current.getBoundingClientRect().height);
       }
     };
     updateHeight();
@@ -68,9 +84,23 @@ export default function ProductsClient() {
     return () => window.removeEventListener("resize", updateHeight);
   }, []);
 
-  const handleAddToCart = (productId: string) => {
-    console.log(`Added product ${productId} to cart`);
+  const handleAddToCart = (item: CartItem) => {
+    const currentPackId = cartState.activePackId || `Pack: ${cartState.packs.length + 1}`;
+    if (!cartState.activePackId) {
+      dispatch({ type: "ADD_PACK" });
+    }
+    dispatch({
+      type: "ADD_ITEM_TO_PACK",
+      payload: { packId: currentPackId, item },
+    });
+    setBusinessInfo({
+      id: item.businessId || "unknown",
+      name: item.businessName || "Unknown Business",
+    });
+    setSelectedItem(null);
   };
+
+  const handleCheckout = () => setCartOpen(true); // Use setCartOpen instead of local state
 
   return (
     <ErrorBoundary>
@@ -86,10 +116,8 @@ export default function ProductsClient() {
                 ref={fixedSectionRef}
                 className="fixed top-16 left-0 right-0 z-10 bg-white p-4 max-w-6xl mx-auto"
               >
-                <h1 className="text-2xl font-bold text-[#000000] mb-4">
-                  Explore Our Menu
-                </h1>
-                <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-2xl font-bold text-[#000000] mb-4">Explore Our Menu</h1>
+                <div className="flex items-center gap-2 mb-4">
                   <button
                     onClick={() => router.push("/store")}
                     className="flex items-center justify-center bg-[#FF6600] cursor-pointer text-white px-3 py-2 rounded-md shadow-md hover:bg-[#d9472a] transition opacity-80 hover:opacity-100"
@@ -102,7 +130,7 @@ export default function ProductsClient() {
                     onSearch={(value) => setSearchTerm(value)}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     enterButton
-                    className="custom-search flex-1 mt-3"
+                    className="custom-search flex-1 mt-2"
                     style={{ height: "40px" }}
                   />
                 </div>
@@ -126,7 +154,13 @@ export default function ProductsClient() {
                   <>
                     <ProductGrid
                       products={products}
-                      onAddToCart={handleAddToCart}
+                      onSelectItem={(item) =>
+                        setSelectedItem({
+                          ...item,
+                          businessId: item.businessId || "unknown",
+                          businessName: item.businessName,
+                        })
+                      }
                     />
                     <div className="mt-6 flex justify-center">
                       <Pagination
@@ -143,6 +177,17 @@ export default function ProductsClient() {
             </div>
           </main>
           <FooterStore />
+          <AnimatePresence>
+            {selectedItem && (
+              <ItemModal
+                item={selectedItem}
+                onClose={() => setSelectedItem(null)}
+                onAddToCart={handleAddToCart}
+                key="item-modal"
+              />
+            )}
+          </AnimatePresence>
+          <FloatingCheckoutButton onCheckout={handleCheckout} />
         </div>
       </div>
     </ErrorBoundary>

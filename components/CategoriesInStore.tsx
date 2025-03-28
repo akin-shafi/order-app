@@ -1,13 +1,30 @@
-// components/CategoriesInStore.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { Modal } from "antd";
+import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProducts } from "@/hooks/useProducts"; // Import fetchProducts
 import { CategoryTabs } from "./CategoryTabs";
+import { useAddress } from "@/contexts/address-context"; // For location data
+
+interface Product {
+  id: string;
+  name: string;
+  price: string;
+  image: string | null;
+  isAvailable: boolean;
+  business: {
+    id: string;
+    name: string;
+    city: string;
+    state: string;
+  };
+}
 
 const SkeletonCategoryCard = () => (
   <div className="p-3 rounded-lg flex flex-col items-center animate-pulse bg-gray-100 w-32 h-28 flex-shrink-0">
@@ -17,27 +34,50 @@ const SkeletonCategoryCard = () => (
 );
 
 export default function CategoriesInStore() {
-  const router = useRouter();
   const { data: categories, isLoading, error } = useCategories();
+  const {  locationDetails } = useAddress(); // Get user location
   const [activeTab, setActiveTab] = useState<string>("");
   const [mounted, setMounted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Set the initial active tab when categories are loaded
   useEffect(() => {
     if (!categories || mounted) return;
-
     setMounted(true);
     const initialTab = categories[0]?.name || "Restaurants";
     setActiveTab(initialTab);
   }, [categories, mounted]);
+
+  // Fetch products for the selected category
+  const { data: productsData, isLoading: productsLoading } = useQuery({
+    queryKey: ["products", selectedCategory, locationDetails?.state, locationDetails?.localGovernment],
+    queryFn: () =>
+      fetchProducts({
+        page: 1,
+        limit: 10, // Adjust limit as needed
+        state: locationDetails?.state,
+        city: locationDetails?.localGovernment,
+        category: selectedCategory || "",
+        searchTerm: "",
+      }),
+    enabled: isModalOpen && !!selectedCategory, // Fetch only when modal is open and category is selected
+  });
+
+  const products = productsData?.products || [];
 
   const handleTabChange = (categoryName: string) => {
     setActiveTab(categoryName);
   };
 
   const handleSubCategoryClick = (subCategoryName: string) => {
-    // Redirect to /products with the subcategory as the category query parameter
-    router.push(`/products?category=${encodeURIComponent(subCategoryName)}`);
+    setSelectedCategory(subCategoryName);
+    setIsModalOpen(true);
+  };
+
+  const calculateDeliveryFee = (businessCity: string) => {
+    const userCity = locationDetails?.localGovernment || "";
+    return businessCity === userCity ? 600 : 1200; // Simple fee logic; adjust as needed
   };
 
   if (error) {
@@ -134,6 +174,55 @@ export default function CategoriesInStore() {
           </div>
         </div>
       </div>
+
+      {/* Modal for Category Products */}
+      <Modal
+        title={`Products in ${selectedCategory}`}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={null}
+        width={600}
+      >
+        {productsLoading ? (
+          <div>Loading products...</div>
+        ) : products.length === 0 ? (
+          <div>No products found for this category.</div>
+        ) : (
+          <div className="space-y-4">
+            {products.map((product: Product) => {
+              const deliveryFee = calculateDeliveryFee(product.business.city);
+              const price = parseFloat(product.price);
+              const totalCost = price + deliveryFee;
+              return (
+                <div key={product.id} className="flex justify-between items-center p-2 border-b">
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                    <div>
+                      <p className="font-medium">{product.name}</p>
+                      <p className="text-sm text-gray-600">{product.business.name}</p>
+                      <p className="text-sm">
+                        ₦{price} + ₦{deliveryFee} Delivery = ₦{totalCost} Total
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    href={`/store/${product.business.id || "#"}`} // Placeholder; see note below
+                    className="text-[#FF6600] hover:underline"
+                  >
+                    Shop in this Store
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Modal>
     </section>
   );
 }

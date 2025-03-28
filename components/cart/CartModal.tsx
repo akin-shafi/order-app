@@ -95,7 +95,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end"
+          className="fixed inset-0 bg-black bg-opacity-50 z-[1000] flex justify-end"
           onClick={handleBackdropClick}
         >
           <motion.div
