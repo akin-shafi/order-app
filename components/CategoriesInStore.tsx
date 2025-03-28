@@ -127,7 +127,7 @@ export default function CategoriesInStore() {
               onTabChange={handleTabChange}
             />
           )}
-
+          <p className="text-gray-500 pl-2 py-2 text-sm font-medium">Click a category below to compare food from different restaurant</p>
           {/* Mobile Swiper */}
           <div className="md:hidden mx-1">
             <Swiper slidesPerView={2.5} spaceBetween={12} className="px-4">
