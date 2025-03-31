@@ -107,7 +107,7 @@ const HeaderStore: React.FC = () => {
           <div className="flex items-center gap-4">
             <Link href="/" className="rounded-lg">
               <Image
-                src="/icons/betaday-icon.svg"
+                src="/betaday-logo.png"
                 alt="betaday logo"
                 width={30}
                 height={30}
