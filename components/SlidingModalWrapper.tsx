@@ -16,6 +16,7 @@ export default function SlidingModalWrapper({
   const modalRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState<number | null>(null);
   const [currentY, setCurrentY] = useState(0);
+  const [isClosing, setIsClosing] = useState(false);
 
   // Touch event handlers for sliding
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -29,7 +30,6 @@ export default function SlidingModalWrapper({
     const currentTouchY = e.touches[0].clientY;
     const diff = currentTouchY - startY;
 
-    // Only allow sliding down (positive difference)
     if (diff > 0) {
       setCurrentY(diff);
       modalRef.current.style.transform = `translateY(${diff}px)`;
@@ -39,13 +39,14 @@ export default function SlidingModalWrapper({
   const handleTouchEnd = () => {
     if (startY === null || !modalRef.current) return;
 
-    // If dragged more than 100px, close the modal
     if (currentY > 100) {
       modalRef.current.style.transition = "transform 0.3s ease-out";
       modalRef.current.style.transform = "translateY(100%)";
-      setTimeout(onClose, 300);
+      setTimeout(() => {
+        setIsClosing(true);
+        onClose();
+      }, 300);
     } else {
-      // Return to original position
       modalRef.current.style.transition = "transform 0.2s ease-out";
       modalRef.current.style.transform = "translateY(0)";
     }
@@ -54,15 +55,24 @@ export default function SlidingModalWrapper({
     setCurrentY(0);
   };
 
-  // Reset transition and position when modal opens/closes
+  // Handle closing animation when isOpen changes
   useEffect(() => {
-    if (modalRef.current) {
+    if (!isOpen && modalRef.current) {
+      setIsClosing(true);
+      modalRef.current.style.transition = "transform 0.3s ease-out";
+      modalRef.current.style.transform = "translateY(100%)";
+      const timeout = setTimeout(() => {
+        setIsClosing(false);
+      }, 300); // Match the transition duration
+      return () => clearTimeout(timeout);
+    } else if (isOpen && modalRef.current) {
       modalRef.current.style.transition = "";
       modalRef.current.style.transform = "translateY(0)";
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Return null only after the closing animation completes
+  if (!isOpen && !isClosing) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-brand-opacity flex items-center justify-center p-4 md:items-center md:justify-center">
@@ -73,7 +83,6 @@ export default function SlidingModalWrapper({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Drag handle */}
         <div className="absolute top-2 left-0 right-0 flex justify-center">
           <div className="w-8 h-1 bg-gray-400 rounded-full" />
         </div>
