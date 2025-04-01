@@ -51,7 +51,7 @@ export default function CTASection() {
   ];
 
   return (
-    <section className="bg-[#000000] py-24 px-6 md:px-12 pt-32 relative overflow-hidden">
+    <section className="bg-[#1A2E20] py-24 px-6 md:px-12 pt-32 relative overflow-hidden">
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div

@@ -130,7 +130,7 @@ const PaymentOptionsModal: React.FC<PaymentOptionsModalProps> = ({
         <button
           onClick={onChooseMethod}
           disabled={!selectedMethod}
-          className="w-full mt-6 bg-[#FF6600] cursor-pointer text-white py-3 rounded-md font-medium transition-colors duration-200 hover:bg-[#000000] disabled:opacity-50"
+          className="w-full mt-6 bg-[#FF6600] cursor-pointer text-white py-3 rounded-md font-medium transition-colors duration-200 hover:bg-[#1A2E20] disabled:opacity-50"
         >
           Choose method
         </button>

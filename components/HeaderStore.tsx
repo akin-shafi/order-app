@@ -107,7 +107,8 @@ const HeaderStore: React.FC = () => {
           <div className="flex items-center gap-4">
             <Link href="/" className="rounded-lg">
               <Image
-                src="/betaday-logo.png"
+                src="/icons/betaday-icon.svg"
+                // src="/betaday-logo.png"
                 alt="betaday logo"
                 width={30}
                 height={30}
@@ -140,7 +141,7 @@ const HeaderStore: React.FC = () => {
               <button
                 type="button"
                 onClick={toggleCart}
-                className="relative bg-[#000000] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
+                className="relative bg-[#1A2E20] hover:bg-[#1A2E20] cursor-pointer flex items-center text-[white] justify-center rounded-full w-[40px] h-[40px] md:w-[45px] md:h-[45px] shadow-indigo-500/40"
               >
                 <ShoppingCart size={20} />
                 <CartBadge />

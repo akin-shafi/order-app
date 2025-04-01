@@ -101,7 +101,7 @@ export default function CategoriesSection({
       </div>
       {/* <div className="mt-4 h-1 bg-gray-200 rounded-full relative max-w-screen-md mx-auto">
         <motion.div
-          className="absolute h-full bg-[#000000] rounded-full"
+          className="absolute h-full bg-[#1A2E20] rounded-full"
           initial={false}
           animate={{ width: "20%", left: getProgressBarPosition() }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}

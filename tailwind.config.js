@@ -19,7 +19,7 @@ module.exports = {
         background: "rgb(var(--background) / <alpha-value>)",
         foreground: "rgb(var(--foreground) / <alpha-value>)",
         brandOrange: "#FF6600",
-        brandBlack: "#000000",
+        brandBlack: "#1A2E20",
         FF6600: "#FF6600",
         FF8F00: "#FF8F00",
         FFA726: "#FFA726",

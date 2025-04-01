@@ -86,7 +86,7 @@ export default function MenuItemsSection({
                   {item.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-[#000000]">{item.price}</span>
+                  <span className="font-bold text-[#1A2E20]">{item.price}</span>
                 </div>
               </div>
             </div>

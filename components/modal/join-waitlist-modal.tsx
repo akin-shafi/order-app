@@ -148,7 +148,7 @@ export default function JoinWaitlistModal({
                     className={`w-full pl-10 p-3 border rounded-md focus:outline-none focus:ring-1 bg-white text-black placeholder-gray-500 ${
                       errors.email
                         ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 focus:ring-[#000000]"
+                        : "border-gray-300 focus:ring-[#1A2E20]"
                     }`}
                     {...register("email", { required: "Email is required" })}
                   />

@@ -14,7 +14,7 @@ export default function CategoriesSection() {
           </h2>
           <Link
             href="/store"
-            className="store-link bg-[#000000] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
+            className="store-link bg-[#1A2E20] text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm hover:bg-[#F15736] transition-colors duration-300"
           >
             View Store
           </Link>
@@ -26,7 +26,7 @@ export default function CategoriesSection() {
             <Link
               href={`/store?category=${category.name}`}
               key={index}
-              className="bg-white p-2 md:p-4 rounded-lg flex flex-col items-center hover:ring-2 ring-[#000000] hover:cursor-pointer transition-colors duration-300"
+              className="bg-white p-2 md:p-4 rounded-lg flex flex-col items-center hover:ring-2 ring-[#1A2E20] hover:cursor-pointer transition-colors duration-300"
             >
               <div className="w-12 h-12 md:w-16 md:h-16 mb-1 md:mb-2">
                 <Image
@@ -48,7 +48,7 @@ export default function CategoriesSection() {
         <div className="mt-6 block sm:hidden">
           <Link
             href="/store"
-            className="w-full block font-medium text-center bg-[#000000] text-white px-3 py-4 md:px-4 md:py-2 rounded text-md md:text-sm hover:bg-[#FF6600] transition-colors duration-300"
+            className="w-full block font-medium text-center bg-[#1A2E20] text-white px-3 py-4 md:px-4 md:py-2 rounded text-md md:text-sm hover:bg-[#FF6600] transition-colors duration-300"
           >
             View Store
           </Link>

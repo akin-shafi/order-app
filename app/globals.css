@@ -123,13 +123,12 @@ input[type="tel"]:-ms-input-placeholder {
 
 /* Mobile-specific modal styles */
 @media (max-width: 767px) {
-  
-.rounded-top {
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
+  .rounded-top {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
   .mobile-modal {
     position: fixed;
     bottom: 0;
@@ -141,31 +140,32 @@ input[type="tel"]:-ms-input-placeholder {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     animation: slideUp 0.3s ease-out forwards;
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-y: auto;
+    touch-action: none; /* Prevents default scrolling behavior */
   }
 
   /* Tiny scrollbar styling for mobile-modal */
   .mobile-modal::-webkit-scrollbar {
-    width: 1px; /* Tiny width */
+    width: 1px;
   }
 
   .mobile-modal::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Light track background */
+    background: #f1f1f1;
   }
 
   .mobile-modal::-webkit-scrollbar-thumb {
-    background: #9df0b6; /* Scrollbar color */
-    border-radius: 10px; /* Rounded edges */
+    background: #9df0b6;
+    border-radius: 10px;
   }
 
   .mobile-modal::-webkit-scrollbar-thumb:hover {
-    background: #153d28; /* Slightly lighter on hover */
+    background: #153d28;
   }
 
   /* Firefox scrollbar support */
   .mobile-modal {
-    scrollbar-width: thin; /* Tiny scrollbar */
-    scrollbar-color: #1A2E20 #f1f1f1; /* Thumb color, track color */
+    scrollbar-width: thin;
+    scrollbar-color: #1A2E20 #f1f1f1;
   }
 
   /* Adjust outer container to align at bottom on mobile */
@@ -185,6 +185,14 @@ input[type="tel"]:-ms-input-placeholder {
   }
 }
 
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
 /* Rest of your existing styles... */
 
 .PhoneInput {

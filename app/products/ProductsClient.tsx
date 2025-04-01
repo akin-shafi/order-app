@@ -45,7 +45,9 @@ export default function ProductsClient() {
 
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
+    undefined
+  );
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
@@ -76,7 +78,9 @@ export default function ProductsClient() {
   useEffect(() => {
     const updateHeight = () => {
       if (fixedSectionRef.current) {
-        setFixedSectionHeight(fixedSectionRef.current.getBoundingClientRect().height);
+        setFixedSectionHeight(
+          fixedSectionRef.current.getBoundingClientRect().height
+        );
       }
     };
     updateHeight();
@@ -85,7 +89,8 @@ export default function ProductsClient() {
   }, []);
 
   const handleAddToCart = (item: CartItem) => {
-    const currentPackId = cartState.activePackId || `Pack: ${cartState.packs.length + 1}`;
+    const currentPackId =
+      cartState.activePackId || `Pack: ${cartState.packs.length + 1}`;
     if (!cartState.activePackId) {
       dispatch({ type: "ADD_PACK" });
     }
@@ -116,7 +121,9 @@ export default function ProductsClient() {
                 ref={fixedSectionRef}
                 className="fixed top-16 left-0 right-0 z-10 bg-white p-4 max-w-6xl mx-auto"
               >
-                <h1 className="text-2xl font-bold text-[#000000] mb-4">Explore Our Menu</h1>
+                <h1 className="text-2xl font-bold text-[#1A2E20] mb-4">
+                  Explore Our Menu
+                </h1>
                 <div className="flex items-center gap-2 mb-4">
                   <button
                     onClick={() => router.push("/store")}
