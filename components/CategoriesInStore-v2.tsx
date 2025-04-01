@@ -4,16 +4,15 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { Modal } from "antd";
+import { Modal, Input } from "antd"; // Added Input for price reporting
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/hooks/useProducts";
 import { CategoryTabs } from "./CategoryTabs";
 import { useAddress } from "@/contexts/address-context";
-import { useBusiness } from "@/hooks/useBusiness"; // To map business IDs
+import { useBusiness } from "@/hooks/useBusiness";
 
-// Match the Product interface from useProducts.ts
 interface Product {
   id: string;
   name: string;
@@ -36,22 +35,22 @@ const SkeletonCategoryCard = () => (
 
 export default function CategoriesInStore() {
   const { data: categories, isLoading, error } = useCategories();
-  const { address, locationDetails } = useAddress(); // Get user location
-
+  const { locationDetails } = useAddress();
   const [activeTab, setActiveTab] = useState<string>("");
   const [mounted, setMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportedProduct, setReportedProduct] = useState<Product | null>(null);
+  const [reportedPrice, setReportedPrice] = useState<string>("");
 
-  // Fetch businesses to map business names to IDs
   const { businesses } = useBusiness({
-    address: address || "",
+    address: locationDetails?.address || "",
     localGovernment: locationDetails?.localGovernment,
     state: locationDetails?.state,
     businessType: activeTab || "Restaurants",
   });
 
-  // Set the initial active tab when categories are loaded
   useEffect(() => {
     if (!categories || mounted) return;
     setMounted(true);
@@ -59,7 +58,6 @@ export default function CategoriesInStore() {
     setActiveTab(initialTab);
   }, [categories, mounted]);
 
-  // Fetch products for the selected category
   const { data: productsData, isLoading: productsLoading } = useQuery({
     queryKey: [
       "products",
@@ -95,10 +93,44 @@ export default function CategoriesInStore() {
     return businessCity === userCity ? 600 : 1200;
   };
 
-  // Map business name to ID using businesses from useBusiness
   const getBusinessId = (businessName: string) => {
     const business = businesses.find((b) => b.name === businessName);
     return business?.id || "";
+  };
+
+  // Find the best deal (lowest total cost)
+  const getBestDeal = () => {
+    if (!products.length) return null;
+    return products.reduce((best, current) => {
+      const currentTotal =
+        parseFloat(current.price) + calculateDeliveryFee(current.business.city);
+      const bestTotal =
+        parseFloat(best.price) + calculateDeliveryFee(best.business.city);
+      return currentTotal < bestTotal ? current : best;
+    });
+  };
+
+  const bestDeal = getBestDeal();
+
+  // Handle price report submission (placeholder for backend integration)
+  const handlePriceReport = () => {
+    if (!reportedProduct || !reportedPrice) return;
+    const reportedTotal =
+      parseFloat(reportedPrice) +
+      calculateDeliveryFee(reportedProduct.business.city);
+    const currentTotal =
+      parseFloat(reportedProduct.price) +
+      calculateDeliveryFee(reportedProduct.business.city);
+    if (reportedTotal < currentTotal) {
+      // Simulate applying the lower price (update this with actual backend call)
+      console.log(
+        `Price matched! New price for ${reportedProduct.name}: ₦${reportedPrice}`
+      );
+      // TODO: Call backend API to verify and apply discount
+    }
+    setIsReportModalOpen(false);
+    setReportedPrice("");
+    setReportedProduct(null);
   };
 
   if (error) {
@@ -115,7 +147,10 @@ export default function CategoriesInStore() {
     <section className="py-4 md:py-8">
       <div className="container mx-auto px-1">
         <div className="max-w-6xl mx-auto">
-          {/* Category Tabs */}
+          <h2 className="text-xl md:text-2xl font-medium text-[#292d32] mb-3 md:mb-6">
+            Explore Categories
+          </h2>
+
           {mounted && !isLoading && categories && (
             <CategoryTabs
               categories={categories}
@@ -123,21 +158,7 @@ export default function CategoriesInStore() {
               onTabChange={handleTabChange}
             />
           )}
-          <div className="flex flex-col md:flex-row items-start md:items-start space-y-4 md:space-y-0 md:space-x-4  mb-6">
-            <h2 className="text-xl md:text-2xl font-medium text-[#292d32]">
-              <Image
-                src="/special-offer-2.png"
-                alt="Best Deal"
-                width={100}
-                height={100}
-              />
-            </h2>
-            <div className="text-gray-500 pr-2 py-2 text-sm font-medium">
-              Click a category below to get the best deal
-            </div>
-          </div>
 
-          {/* Mobile Swiper */}
           <div className="md:hidden mx-1">
             <Swiper slidesPerView={2.5} spaceBetween={12} className="px-4">
               {mounted && !isLoading && activeCategory
@@ -170,7 +191,6 @@ export default function CategoriesInStore() {
             </Swiper>
           </div>
 
-          {/* Desktop Swiper */}
           <div className="hidden md:block mx-2">
             <Swiper slidesPerView={7.5} spaceBetween={16} className="px-4">
               {mounted && !isLoading && activeCategory
@@ -205,9 +225,9 @@ export default function CategoriesInStore() {
         </div>
       </div>
 
-      {/* Modal for Category Products */}
+      {/* Main Modal for Category Products */}
       <Modal
-        title={`Products in ${selectedCategory}`}
+        title={`Products in ${selectedCategory} - Price Match Guarantee`}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={null}
@@ -219,11 +239,20 @@ export default function CategoriesInStore() {
           <div>No products found for this category.</div>
         ) : (
           <div className="space-y-4">
+            {bestDeal && (
+              <div className="text-green-600 text-sm mb-2">
+                Best Deal: ₦
+                {parseFloat(bestDeal.price) +
+                  calculateDeliveryFee(bestDeal.business.city)}{" "}
+                at {bestDeal.business.name}
+              </div>
+            )}
             {products.map((product: Product) => {
               const deliveryFee = calculateDeliveryFee(product.business.city);
               const price = parseFloat(product.price);
               const totalCost = price + deliveryFee;
-              const businessId = getBusinessId(product.business.name); // Map name to ID
+              const businessId = getBusinessId(product.business.name);
+              const isBestDeal = bestDeal && bestDeal.id === product.id;
               return (
                 <div
                   key={product.id}
@@ -238,13 +267,29 @@ export default function CategoriesInStore() {
                       className="w-12 h-12 object-cover rounded"
                     />
                     <div>
-                      <p className="font-medium">{product.name}</p>
+                      <p className="font-medium">
+                        {product.name}{" "}
+                        {isBestDeal && (
+                          <span className="text-green-600 text-xs">
+                            (Best Deal)
+                          </span>
+                        )}
+                      </p>
                       <p className="text-sm text-gray-600">
                         {product.business.name}
                       </p>
                       <p className="text-sm">
                         ₦{price} + ₦{deliveryFee} Delivery = ₦{totalCost} Total
                       </p>
+                      <button
+                        className="text-[#FF6600] text-xs underline mt-1"
+                        onClick={() => {
+                          setReportedProduct(product);
+                          setIsReportModalOpen(true);
+                        }}
+                      >
+                        Found it cheaper? Report it!
+                      </button>
                     </div>
                   </div>
                   <Link
@@ -260,8 +305,38 @@ export default function CategoriesInStore() {
                 </div>
               );
             })}
+            <p className="text-xs text-gray-500 mt-2">
+              Price Match Guarantee: We’ll match any lower price you find on our
+              platform!
+            </p>
           </div>
         )}
+      </Modal>
+
+      {/* Price Report Modal */}
+      <Modal
+        title={`Report a Lower Price for ${reportedProduct?.name}`}
+        open={isReportModalOpen}
+        onOk={handlePriceReport}
+        onCancel={() => setIsReportModalOpen(false)}
+        okText="Submit"
+        cancelText="Cancel"
+      >
+        <p className="mb-2">
+          Enter the lower price you found (excluding delivery):
+        </p>
+        <Input
+          type="number"
+          value={reportedPrice}
+          onChange={(e) => setReportedPrice(e.target.value)}
+          placeholder="e.g., 500"
+          prefix="₦"
+          className="mb-2"
+        />
+        <p className="text-sm text-gray-600">
+          Current price: ₦
+          {reportedProduct ? parseFloat(reportedProduct.price) : "N/A"}
+        </p>
       </Modal>
     </section>
   );
