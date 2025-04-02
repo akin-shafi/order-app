@@ -302,7 +302,7 @@ export default function CategoriesInStore() {
                 No products found for this category.
               </div>
             ) : (
-              <div className="p-4 space-y-4">
+              <div className="py-4 space-y-4">
                 {/* Search Bar */}
                 <Input
                   placeholder="Search for restaurant"
