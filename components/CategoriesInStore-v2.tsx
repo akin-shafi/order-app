@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/hooks/useProducts";
+import { CategoryTabs } from "./CategoryTabs";
 import { useAddress } from "@/contexts/address-context";
 import { useBusiness } from "@/hooks/useBusiness";
 import { motion, AnimatePresence } from "framer-motion";
@@ -70,9 +71,9 @@ export default function CategoriesInStore() {
 
   const products = productsData?.products || [];
 
-  // const handleTabChange = (categoryName: string) => {
-  //   setActiveTab(categoryName);
-  // };
+  const handleTabChange = (categoryName: string) => {
+    setActiveTab(categoryName);
+  };
 
   const handleSubCategoryClick = (subCategoryName: string) => {
     setSelectedCategory(subCategoryName);
@@ -164,12 +165,32 @@ export default function CategoriesInStore() {
 
   return (
     <section className="py-4 md:py-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-1">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-medium text-[#292d32] mb-3 md:mb-6">
-            Explore Categories
-          </h2>
+          {/* Category Tabs */}
+          {mounted && !isLoading && categories && (
+            <CategoryTabs
+              categories={categories}
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+            />
+          )}
+          <div className="flex flex-row items-center space-x-4 mb-6">
+            <h2 className="text-xl md:text-2xl font-medium text-[#292d32] flex items-center">
+              <Image
+                src="/best-deal.png"
+                alt="Best Deal"
+                width={50}
+                height={50}
+                className="md:w-24 "
+              />
+            </h2>
+            <div className="text-gray-500 pr-2 py-2 text-sm font-medium">
+              Click a category below to get the best deal
+            </div>
+          </div>
 
+          {/* Mobile Swiper */}
           <div className="md:hidden mx-1">
             <Swiper slidesPerView={2.5} spaceBetween={12} className="px-4">
               {mounted && !isLoading && activeCategory
@@ -202,6 +223,7 @@ export default function CategoriesInStore() {
             </Swiper>
           </div>
 
+          {/* Desktop Swiper */}
           <div className="hidden md:block mx-2">
             <Swiper slidesPerView={7.5} spaceBetween={16} className="px-4">
               {mounted && !isLoading && activeCategory
