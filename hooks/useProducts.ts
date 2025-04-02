@@ -11,6 +11,8 @@ interface UseProductsProps {
   searchTerm?: string;
 }
 
+
+
 export const fetchProducts = async ({
   page,
   limit,
@@ -51,6 +53,8 @@ export const fetchProducts = async ({
   const data = await response.json();
   return { products: data.products, total: data.total };
 };
+
+
 
 export const useProducts = ({
   page,

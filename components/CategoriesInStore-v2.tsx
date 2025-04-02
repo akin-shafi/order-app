@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { Modal, Rate } from "antd";
+import { Modal, Rate, Input } from "antd";
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { useQuery } from "@tanstack/react-query";
@@ -13,17 +13,38 @@ import { CategoryTabs } from "./CategoryTabs";
 import { useAddress } from "@/contexts/address-context";
 import { useBusiness } from "@/hooks/useBusiness";
 
-// Custom CSS for left-slide animation
+// Custom CSS for left-slide animation on mobile
 const modalStyles = `
-  .slide-in-left .ant-modal {
-    left: -100%;
-    transition: left 0.3s ease-in-out;
+  @media (max-width: 640px) {
+    .slide-in-left .ant-modal {
+      left: -100%;
+      transition: left 0.3s ease-in-out;
+    }
+    .slide-in-left.ant-modal-open .ant-modal {
+      left: 0;
+    }
   }
-  .slide-in-left.ant-modal-open .ant-modal {
-    left: 0;
+  @media (min-width: 641px) {
+    .ant-modal {
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+    }
   }
   .ant-modal-mask {
     background-color: rgba(0, 0, 0, 0.5);
+  }
+  .ant-modal-content {
+    border-radius: 12px;
+  }
+  .ant-modal-header {
+    border-bottom: none;
+    padding: 16px 24px;
+  }
+  .ant-modal-body {
+    padding: 0 24px 24px;
+  }
+  .ant-modal-close-x {
+    color: #d1d5db;
   }
 `;
 
@@ -41,7 +62,11 @@ export default function CategoriesInStore() {
   const [mounted, setMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"fastest" | "lowest" | "rated">("fastest");
+  const [filter, setFilter] = useState<"fastest" | "lowest" | "rated">(
+    "fastest"
+  );
+  const [searchInput, setSearchInput] = useState<string>(""); // Local input state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Query trigger state
 
   const { businesses } = useBusiness({
     address: address || "",
@@ -58,7 +83,13 @@ export default function CategoriesInStore() {
   }, [categories, mounted]);
 
   const { data: productsData, isLoading: productsLoading } = useQuery({
-    queryKey: ["products", selectedCategory, locationDetails?.state, locationDetails?.localGovernment],
+    queryKey: [
+      "products",
+      selectedCategory,
+      locationDetails?.state,
+      locationDetails?.localGovernment,
+      searchTerm,
+    ],
     queryFn: () =>
       fetchProducts({
         page: 1,
@@ -66,7 +97,7 @@ export default function CategoriesInStore() {
         state: locationDetails?.state,
         city: locationDetails?.localGovernment,
         category: selectedCategory || "",
-        searchTerm: "",
+        searchTerm: searchTerm,
       }),
     enabled: isModalOpen && !!selectedCategory,
   });
@@ -92,15 +123,39 @@ export default function CategoriesInStore() {
     return business?.id || "";
   };
 
+  // Handle search on Enter key or button click
+  const handleSearch = () => {
+    setSearchTerm(searchInput.trim()); // Trigger query with trimmed input
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  // Filter products by search term (client-side fallback if backend doesn't filter)
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.business.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Sort products based on filter
-  const sortedProducts = [...products].sort((a, b) => {
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (filter === "fastest") {
-      const aTime = parseInt(a.business.deliveryTimeRange?.split("-")[0] || "999");
-      const bTime = parseInt(b.business.deliveryTimeRange?.split("-")[0] || "999");
+      const aTime = parseInt(
+        a.business.deliveryTimeRange?.split("-")[0] || "999"
+      );
+      const bTime = parseInt(
+        b.business.deliveryTimeRange?.split("-")[0] || "999"
+      );
       return aTime - bTime;
     } else if (filter === "lowest") {
-      const aTotal = parseFloat(a.price) + calculateDeliveryFee(a.business.city);
-      const bTotal = parseFloat(b.price) + calculateDeliveryFee(b.business.city);
+      const aTotal =
+        parseFloat(a.price) + calculateDeliveryFee(a.business.city);
+      const bTotal =
+        parseFloat(b.price) + calculateDeliveryFee(b.business.city);
       return aTotal - bTotal;
     } else if (filter === "rated") {
       const aRating = parseFloat(a.business.rating || "0");
@@ -111,19 +166,24 @@ export default function CategoriesInStore() {
   });
 
   const fastest = sortedProducts[0];
-  const lowest = products.reduce((min, p) => {
+  const lowest = filteredProducts.reduce((min, p) => {
     const pTotal = parseFloat(p.price) + calculateDeliveryFee(p.business.city);
-    const minTotal = parseFloat(min.price) + calculateDeliveryFee(min.business.city);
+    const minTotal =
+      parseFloat(min.price) + calculateDeliveryFee(min.business.city);
     return pTotal < minTotal ? p : min;
-  }, products[0] || { price: "9999", business: { city: "" } });
-  const mostRated = products.reduce((max, p) => {
+  }, filteredProducts[0] || { price: "9999", business: { city: "" } });
+  const mostRated = filteredProducts.reduce((max, p) => {
     const maxRating = parseFloat(max.business.rating || "0");
     const pRating = parseFloat(p.business.rating || "0");
     return pRating > maxRating ? p : max;
-  }, products[0] || { business: { rating: "0" } });
+  }, filteredProducts[0] || { business: { rating: "0" } });
 
   if (error) {
-    return <div className="text-red-500 text-center py-4">Error loading categories. Please try again later.</div>;
+    return (
+      <div className="text-red-500 text-center py-4">
+        Error loading categories. Please try again later.
+      </div>
+    );
   }
 
   const activeCategory = categories?.find((cat) => cat.name === activeTab);
@@ -155,7 +215,9 @@ export default function CategoriesInStore() {
                       <SwiperSlide key={index}>
                         <div
                           className="p-2 rounded-lg cursor-pointer flex flex-col items-center justify-center w-24 h-24 bg-gray-100 hover:bg-blue-100"
-                          onClick={() => handleSubCategoryClick(subcategory.name)}
+                          onClick={() =>
+                            handleSubCategoryClick(subcategory.name)
+                          }
                         >
                           <Image
                             src={subcategory.image || "/placeholder.svg"}
@@ -187,7 +249,9 @@ export default function CategoriesInStore() {
                       <SwiperSlide key={index}>
                         <div
                           className="p-2 rounded-lg cursor-pointer flex flex-col items-center justify-center w-28 h-28 bg-gray-100 hover:bg-blue-100"
-                          onClick={() => handleSubCategoryClick(subcategory.name)}
+                          onClick={() =>
+                            handleSubCategoryClick(subcategory.name)
+                          }
                         >
                           <Image
                             src={subcategory.image || "/placeholder.svg"}
@@ -216,111 +280,135 @@ export default function CategoriesInStore() {
 
         <Modal
           title={
-            <span className="text-lg md:text-xl font-bold text-[#292d32] block py-2 px-4 border-b">
+            <span className="text-lg md:text-xl font-bold text-[#1E3A8A]">
               Products in {selectedCategory}
             </span>
           }
           open={isModalOpen}
           onCancel={() => setIsModalOpen(false)}
           footer={null}
-          className="slide-in-left w-full max-w-md md:max-w-2xl rounded-r-lg shadow-xl" // Left slide and responsive width
-          style={{ top: 0, height: "100vh" }} // Full height from top
-          bodyStyle={{ padding: 0, height: "calc(100vh - 55px)", overflowY: "auto" }} // Adjust for title height
-          maskClosable={true} // Close on mask click
+          className="slide-in-left w-full max-w-md md:max-w-lg rounded-lg shadow-xl"
+          style={{ top: "50%", transform: "translateY(-50%)" }} // Centered on desktop
+          maskClosable={true}
           closable={true}
         >
-          {productsLoading ? (
-            <div className="text-center text-gray-500 py-4">Loading products...</div>
-          ) : products.length === 0 ? (
-            <div className="text-center text-gray-500 py-4">No products found for this category.</div>
-          ) : (
-            <div className="p-4 space-y-4">
-              {/* Filter Buttons */}
-              <div className="flex flex-col md:flex-row justify-center gap-2 md:gap-4 mb-4">
-                <button
-                  onClick={() => setFilter("fastest")}
-                  className={`w-full md:w-auto px-3 py-1.5 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 ${
-                    filter === "fastest"
-                      ? "bg-gradient-to-r from-[#FF6600] to-[#FF8C00] text-white shadow-lg"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  Fastest Delivery <span className="ml-1 text-xs">+10 Pts</span>
-                </button>
-                <button
-                  onClick={() => setFilter("lowest")}
-                  className={`w-full md:w-auto px-3 py-1.5 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 ${
-                    filter === "lowest"
-                      ? "bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] text-white shadow-lg"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  Lowest Price
-                </button>
-                <button
-                  onClick={() => setFilter("rated")}
-                  className={`w-full md:w-auto px-3 py-1.5 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 ${
-                    filter === "rated"
-                      ? "bg-gradient-to-r from-[#2196F3] to-[#42A5F5] text-white shadow-lg"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  Most Rated
-                </button>
+          <div className="p-0 max-h-[70vh] overflow-y-auto custom-scrollbar">
+            {productsLoading ? (
+              <div className="text-center text-gray-500 py-4">
+                Loading products...
               </div>
-
-              {/* Product List */}
-              <div className="space-y-3">
-                {sortedProducts.map((product) => {
-                  const deliveryFee = calculateDeliveryFee(product.business.city);
-                  const price = parseFloat(product.price);
-                  const totalCost = price + deliveryFee;
-                  const businessId = getBusinessId(product.business.name);
-                  const isFastest = filter === "fastest" && product === fastest;
-                  const isLowest = filter === "lowest" && product === lowest;
-                  const isMostRated = filter === "rated" && product === mostRated;
-
-                  return (
-                    <div
-                      key={product.id}
-                      className="flex flex-col md:flex-row items-start md:items-center justify-between p-3 bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-200"
+            ) : products.length === 0 ? (
+              <div className="text-center text-gray-500 py-4">
+                No products found for this category.
+              </div>
+            ) : (
+              <div className="p-4 space-y-4">
+                {/* Search Bar */}
+                <Input
+                  placeholder="Search for restaurant"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyUp={handleKeyPress}
+                  suffix={
+                    <button
+                      onClick={handleSearch}
+                      className="text-gray-400 hover:text-gray-600"
                     >
-                      <div className="flex items-start gap-3 w-full">
-                        <Image
-                          src={product.image || "/placeholder.svg"}
-                          alt={product.name}
-                          width={60}
-                          height={60}
-                          className="w-12 h-12 md:w-15 md:h-15 object-cover rounded-full border-2 border-gray-100 flex-shrink-0"
-                        />
-                        <div className="flex-1">
-                          <p className="font-semibold text-[#292d32] flex items-center gap-2 text-sm md:text-base">
-                            {product.name}
-                            {isFastest && (
-                              <span className="text-xs text-white bg-[#FF6600] px-2 py-1 rounded-full">
-                                Fastest
-                              </span>
-                            )}
-                            {isLowest && (
-                              <span className="text-xs text-white bg-[#4CAF50] px-2 py-1 rounded-full">
-                                Cheapest
-                              </span>
-                            )}
-                            {isMostRated && (
-                              <span className="text-xs text-white bg-[#2196F3] px-2 py-1 rounded-full">
-                                Top Rated
-                              </span>
-                            )}
-                          </p>
-                          <p className="text-xs md:text-sm text-gray-600">{product.business.name}</p>
-                          <p className="text-xs md:text-sm text-gray-700">
-                            ₦{price} + ₦{deliveryFee} Delivery ={" "}
-                            <span className="font-medium">₦{totalCost}</span>
-                          </p>
-                          <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 text-xs text-gray-500">
-                            <span>Delivery: {product.business.deliveryTimeRange || "N/A"}</span>
+                      🔍
+                    </button>
+                  }
+                  className="rounded-lg border-gray-300 text-sm"
+                />
+
+                {/* Filter Tabs */}
+                <div className="flex justify-start gap-2 overflow-x-auto">
+                  <button
+                    onClick={() => setFilter("fastest")}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 whitespace-nowrap ${
+                      filter === "fastest"
+                        ? "bg-[#FF6600] text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    Fastest Delivery +10pts
+                  </button>
+                  <button
+                    onClick={() => setFilter("lowest")}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 whitespace-nowrap ${
+                      filter === "lowest"
+                        ? "bg-[#4CAF50] text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    Lower price
+                  </button>
+                  <button
+                    onClick={() => setFilter("rated")}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 whitespace-nowrap ${
+                      filter === "rated"
+                        ? "bg-[#2196F3] text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    Most Rated
+                  </button>
+                </div>
+
+                {/* Product List */}
+                <div className="space-y-4">
+                  {sortedProducts.map((product) => {
+                    const deliveryFee = calculateDeliveryFee(
+                      product.business.city
+                    );
+                    const price = parseFloat(product.price);
+                    const totalCost = price + deliveryFee;
+                    const businessId = getBusinessId(product.business.name);
+                    const isFastest =
+                      filter === "fastest" && product === fastest;
+                    const isLowest = filter === "lowest" && product === lowest;
+                    const isMostRated =
+                      filter === "rated" && product === mostRated;
+
+                    return (
+                      <div
+                        key={product.id}
+                        className="flex items-center justify-between border-b border-gray-200 pb-4"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Image
+                            src={product.image || "/placeholder.svg"}
+                            alt={product.name}
+                            width={60}
+                            height={60}
+                            className="w-14 h-14 object-cover rounded-full"
+                          />
+                          <div>
+                            <p className="text-sm font-semibold text-[#292d32] flex items-center gap-2">
+                              {product.name}
+                              {isFastest && (
+                                <span className="text-xs text-white bg-[#FF6600] px-2 py-0.5 rounded-full">
+                                  Fastest
+                                </span>
+                              )}
+                              {isLowest && (
+                                <span className="text-xs text-white bg-[#4CAF50] px-2 py-0.5 rounded-full">
+                                  Cheapest
+                                </span>
+                              )}
+                              {isMostRated && (
+                                <span className="text-xs text-white bg-[#2196F3] px-2 py-0.5 rounded-full">
+                                  Top Rated
+                                </span>
+                              )}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {product.business.name}
+                            </p>
+                            <p className="text-xs font-medium text-[#292d32]">
+                              ₦{price} + ₦{deliveryFee} Delivery = ₦{totalCost}
+                            </p>
                             {product.business.rating && (
-                              <div className="flex items-center gap-1">
+                              <div className="flex items-center gap-1 text-xs text-gray-500">
                                 <Rate
                                   disabled
                                   value={
@@ -328,34 +416,28 @@ export default function CategoriesInStore() {
                                       ? 0
                                       : parseFloat(product.business.rating)
                                   }
-                                  style={{ fontSize: 12, color: "#FF6600" }}
+                                  style={{ fontSize: 9, color: "#FF6600" }}
                                 />
                                 <span>({product.business.rating})</span>
                               </div>
                             )}
                           </div>
                         </div>
+                        <Link
+                          href={businessId ? `/store/${businessId}` : "#"}
+                          className={`px-3 py-1 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200 ${
+                            !businessId && "cursor-not-allowed opacity-50"
+                          }`}
+                        >
+                          Order Now
+                        </Link>
                       </div>
-                      <Link
-                        href={businessId ? `/store/${businessId}` : "#"}
-                        className={`mt-2 md:mt-0 flex items-center justify-center gap-1 px-3 py-1.5 rounded-full text-xs md:text-sm font-medium transition-colors duration-200 w-full md:w-auto ${
-                          businessId
-                            ? "bg-[#FF6600] text-white hover:bg-[#e65c00]"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
-                      >
-                        Order Now {filter === "fastest" && "(+10 Pts)"}
-                      </Link>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-
-              <p className="text-xs text-gray-500 mt-4 text-center">
-                Fastest Delivery Guarantee: Earn 20 bonus points if we’re late!
-              </p>
-            </div>
-          )}
+            )}
+          </div>
         </Modal>
       </section>
     </>

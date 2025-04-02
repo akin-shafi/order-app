@@ -195,6 +195,15 @@ input[type="tel"]:-ms-input-placeholder {
 }
 /* Rest of your existing styles... */
 
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.custom-scrollbar {
+  -ms-overflow-style: none; /* Hide scrollbar for IE & Edge */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+
 .PhoneInput {
   display: flex;
   align-items: center;
