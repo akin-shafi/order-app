@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/ProductModal.tsx
+// components/ProductModal.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import {  Input, Tooltip } from "antd"; // Import Tooltip from antd
+import { Input, Tooltip } from "antd";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { X, Info } from "lucide-react";
@@ -43,6 +44,14 @@ export function ProductModal({
     "fastest"
   );
   const [searchInput, setSearchInput] = useState<string>("");
+  const [modalHeight, setModalHeight] = useState<number>(0);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Set the modal height to the initial viewport height when it opens
+      setModalHeight(window.innerHeight);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -119,7 +128,8 @@ export function ProductModal({
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="w-full max-w-[480px] bg-white h-full fixed top-0 left-0 md:w-[480px]"
+        className="w-full max-w-[480px] bg-white fixed top-0 left-0 md:w-[480px]"
+        style={{ height: modalHeight ? `${modalHeight}px` : "100vh" }} // Set fixed height
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -139,7 +149,12 @@ export function ProductModal({
           </button>
         </div>
 
-        <div className="p-4 h-[calc(100%-60px)] overflow-y-auto">
+        <div
+          className="p-4 overflow-y-auto"
+          style={{
+            height: modalHeight ? `${modalHeight - 60}px` : "calc(100% - 60px)",
+          }} // Adjust content height
+        >
           {productsLoading ? (
             <div className="text-center text-gray-500 py-4">
               Loading products...
@@ -272,11 +287,12 @@ export function ProductModal({
                       </div>
                       <Link
                         href={businessId ? `/store/${businessId}` : "#"}
-                        className={`px-3 py-1 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200 ${
+                        className={`px-3 py-1 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1A2E20] hover:text-white transition-colors duration-200 ${
                           !businessId && "cursor-not-allowed opacity-50"
                         }`}
                       >
-                        Order Now {isFastest && "(+10 Pts)"}
+                        Order Now
+                        {/* {isFastest && "(+10 Pts)"} */}
                       </Link>
                     </div>
                   );
