@@ -2,7 +2,7 @@
 
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
-import CategoriesInStore from "@/components/CategoriesInStore";
+import CategoriesInStore from "@/components/CategoriesInStore-v2";
 import FeaturedStore from "@/components/FeaturedStore";
 import RecomendationSection from "@/components/RecomendationSection";
 import { ErrorBoundary } from "@/components/ErrorBoundary";

@@ -1,19 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAuthToken } from "@/utils/auth";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: string;
-  image: string | null;
-  isAvailable: boolean;
-  business: {
-    name: string;
-    city: string;
-    state: string;
-  };
-}
+import { Product } from "@/types/product";
 
 interface UseProductsProps {
   page: number;
@@ -88,36 +75,3 @@ export const useProducts = ({
     error: query.error instanceof Error ? query.error.message : null,
   };
 };
-
-// src/hooks/useProducts.ts
-export const fetchProductCategories = async (isPredefined?: boolean) => {
-  try {
-    const token = getAuthToken();
-    const url = new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/product-categories/all`);
-    
-    // Add isPredefined query parameter if provided
-    if (isPredefined !== undefined) {
-      url.searchParams.append("isPredefined", isPredefined.toString());
-    }
-
-    const response = await fetch(url, {
-      headers: { 
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json", // Optional, for clarity
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch product categories.");
-    }
-
-    const data = await response.json();
-    return Array.isArray(data.categories) ? data.categories : [];
-  } catch (error) {
-    const err = error as Error;
-    throw new Error(err.message || "Error fetching product categories.");
-  }
-};
-
-

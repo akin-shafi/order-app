@@ -126,7 +126,7 @@ export default function CategoriesInStore() {
           <div className="flex flex-col md:flex-row items-start md:items-start space-y-4 md:space-y-0 md:space-x-4  mb-6">
             <h2 className="text-xl md:text-2xl font-medium text-[#292d32]">
               <Image
-                src="/special-offer-2.png"
+                src="/best-deal.png"
                 alt="Best Deal"
                 width={100}
                 height={100}
