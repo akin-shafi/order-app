@@ -9,6 +9,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { X, Info } from "lucide-react";
 import { Product } from "@/types/product";
+import ProductModalSkeleton from "@/components/skeletons/ProductModalSkeleton";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -154,9 +155,7 @@ export function ProductModal({
           }}
         >
           {productsLoading ? (
-            <div className="text-center text-gray-500 py-4">
-              Loading products...
-            </div>
+            <ProductModalSkeleton />
           ) : products.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No products found for this category.
@@ -288,7 +287,7 @@ export function ProductModal({
                           businessId
                             ? {
                                 pathname: `/store/${businessId}`,
-                                query: { productId: product.id }, // Add productId as query param
+                                query: { productId: product.id },
                               }
                             : "#"
                         }
