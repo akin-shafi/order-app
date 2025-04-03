@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { X, Calendar } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/auth-context";
 import { User } from "@/types/user"; // Adjust the path as needed
-import { Input } from "antd";
+import { Input, DatePicker, Button } from "antd";
+import type { InputRef } from "antd";
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -21,12 +24,14 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 }) => {
   const { edit } = useAuth(); // Destructure the edit function from useAuth
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = React.useState({
     fullName: user?.fullName || "",
     phoneNumber: user?.phoneNumber || "",
     email: user?.email || "",
     dateOfBirth: user?.dateOfBirth || "",
   });
+
+  const fullNameRef = useRef<InputRef>(null); // Use InputRef for antd Input
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -36,21 +41,31 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
+  useEffect(() => {
+    if (isOpen && fullNameRef.current) {
+      fullNameRef.current.focus(); // Auto-focus on the fullName input when modal opens
+    }
+  }, [isOpen]);
+
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleDateChange = (date: Dayjs | null, dateString: string | string[]) => {
+    // Since we're using a single DatePicker, dateString will be a string
+    const dateValue = typeof dateString === "string" ? dateString : dateString[0] || "";
+    setFormData((prev) => ({ ...prev, dateOfBirth: dateValue }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // Ensure page doesn't reload
     try {
       await edit(formData); // Call the edit function from AuthContext
       onClose(); // Close the modal after saving
@@ -124,12 +139,12 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       Account name
                     </label>
                     <Input
-                      type="text"
+                      ref={fullNameRef} // Auto-focus on this input
                       id="fullName"
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleInputChange}
-                      className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                      className="w-full text-[#292d32] font-medium"
                       placeholder="Enter your name"
                     />
                   </div>
@@ -143,12 +158,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       Phone number
                     </label>
                     <Input
-                      type="tel"
                       id="phoneNumber"
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleInputChange}
-                      className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                      className="w-full text-[#292d32] font-medium"
                       placeholder="Enter your phone number"
                     />
                   </div>
@@ -162,12 +176,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       Email
                     </label>
                     <Input
-                      type="email"
                       id="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                      className="w-full text-[#292d32] font-medium"
                       placeholder="Enter your email"
                     />
                   </div>
@@ -180,37 +193,32 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     >
                       Date of birth
                     </label>
-                    <div className="relative">
-                      <Input
-                        type="date"
-                        id="dateOfBirth"
-                        name="dateOfBirth"
-                        value={formData.dateOfBirth}
-                        onChange={handleInputChange}
-                        className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                      />
-                      <Calendar
-                        size={20}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                      />
-                    </div>
+                    <DatePicker
+                      value={formData.dateOfBirth ? dayjs(formData.dateOfBirth) : null}
+                      onChange={handleDateChange}
+                      className="w-full text-[#292d32] font-medium"
+                      placeholder="Select date"
+                      suffixIcon={<Calendar />}
+                    />
                   </div>
 
                   {/* Buttons */}
                   <div className="flex justify-end gap-3 mt-6">
-                    <button
-                      type="button"
+                    <Button
+                      type="default"
                       onClick={onClose}
-                      className="px-4 py-2 text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="text-gray-500 border border-gray-300 hover:bg-gray-100"
                     >
                       Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-4 py-2 bg-[#FF6600] text-white rounded-lg hover:bg-[#E65C00] transition-colors"
+                    </Button>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{ backgroundColor: "#FF6600", borderColor: "#FF6600" }}
+                      className="hover:bg-[#E65C00] transition-colors"
                     >
                       Save
-                    </button>
+                    </Button>
                   </div>
                 </form>
               </div>
