@@ -38,21 +38,30 @@ const SkeletonCard = () => (
   </div>
 );
 
-export default function RecomendationSection({ activeBusinessType, selectedSubCategory }: RecomendationSectionProps) {
+export default function RecomendationSection({
+  activeBusinessType,
+  selectedSubCategory,
+}: RecomendationSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: recommendations, isLoading, error } = useRecommendations(activeBusinessType);
+  const {
+    data: recommendations,
+    isLoading,
+    error,
+  } = useRecommendations(activeBusinessType);
   const { favorites, handleHeartClick } = useFavorites({
     onSaveToFavorite: saveToFavorite,
   });
 
   const filteredRecommendations = selectedSubCategory
-    ? recommendations?.filter(business => 
+    ? recommendations?.filter((business) =>
         business.productCategories.includes(selectedSubCategory)
       ) || []
     : recommendations || [];
 
   const getBusinessKey = (business: { name: string; businessType: string }) =>
-    `${business.name.toLowerCase().replace(/\s+/g, "-")}-${business.businessType.toLowerCase()}`;
+    `${business.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")}-${business.businessType.toLowerCase()}`;
 
   const handleBusinessClick = (e: React.MouseEvent, isOpen: boolean) => {
     if (!isOpen) {
@@ -95,7 +104,8 @@ export default function RecomendationSection({ activeBusinessType, selectedSubCa
             ) : (
               <div className="relative">
                 <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-                  {filteredRecommendations.slice(0, 3).map((business) => {
+                  {/* {filteredRecommendations.slice(0, 3).map((business) => { */}
+                  {filteredRecommendations.map((business) => {
                     const businessKey = getBusinessKey(business);
                     const isOpen = business.status === "open";
                     return (
