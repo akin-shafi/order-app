@@ -33,6 +33,18 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
   const fullNameRef = useRef<InputRef>(null); // Use InputRef for antd Input
 
+  // Update formData when user prop changes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        fullName: user.fullName || "",
+        phoneNumber: user.phoneNumber || "",
+        email: user.email || "",
+        dateOfBirth: user.dateOfBirth || "",
+      });
+    }
+  }, [user]);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
