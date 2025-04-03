@@ -27,8 +27,12 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     dateOfBirth: user?.dateOfBirth || "",
   });
 
-  // Ref to track if the modal has just opened
-  const isInitialMount = useRef(true);
+  const [error, setError] = useState<string | null>(null);
+  // Correctly typed refs
+  const fullNameInputRef = useRef<HTMLInputElement>(null);
+  const phoneNumberInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const dateOfBirthInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -38,16 +42,22 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  // Prevent autofocus on mobile by ensuring no input is focused on mount
+  // Blur any active element when the modal opens to prevent autofocus
   useEffect(() => {
-    if (isOpen && isInitialMount.current) {
+    if (isOpen) {
       // Blur any active element to prevent autofocus
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
       }
-      isInitialMount.current = false;
+      // Blur inputs if there's an error
+      if (error) {
+        if (fullNameInputRef.current) fullNameInputRef.current.blur();
+        if (phoneNumberInputRef.current) phoneNumberInputRef.current.blur();
+        if (emailInputRef.current) emailInputRef.current.blur();
+        if (dateOfBirthInputRef.current) dateOfBirthInputRef.current.blur();
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, error]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -60,17 +70,41 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setError(null); // Clear error on input change
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Ensure form submission doesn't cause a page reload
+    e.preventDefault(); // Prevent form submission from causing a reload
+    e.stopPropagation(); // Stop event bubbling
     try {
       await edit(formData); // Call the edit function from AuthContext
-      onClose(); // Close the modal after saving
+      // Blur all inputs before closing
+      if (fullNameInputRef.current) fullNameInputRef.current.blur();
+      if (phoneNumberInputRef.current) phoneNumberInputRef.current.blur();
+      if (emailInputRef.current) emailInputRef.current.blur();
+      if (dateOfBirthInputRef.current) dateOfBirthInputRef.current.blur();
+      // Small delay to ensure blur happens before modal transition
+      setTimeout(() => {
+        onClose();
+      }, 50);
     } catch (error) {
       console.error("Failed to update profile:", error);
-      alert("Failed to update profile. Please try again.");
+      setError("Failed to update profile. Please try again.");
     }
+  };
+
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent any unintended form submission
+    e.stopPropagation(); // Stop event bubbling
+    // Blur all inputs before closing
+    if (fullNameInputRef.current) fullNameInputRef.current.blur();
+    if (phoneNumberInputRef.current) phoneNumberInputRef.current.blur();
+    if (emailInputRef.current) emailInputRef.current.blur();
+    if (dateOfBirthInputRef.current) dateOfBirthInputRef.current.blur();
+    // Small delay to ensure blur happens before modal transition
+    setTimeout(() => {
+      onClose();
+    }, 50);
   };
 
   const modalVariants = {
@@ -115,7 +149,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                 </h2>
                 <button
                   className="group relative cursor-pointer w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
-                  onClick={onClose}
+                  onClick={handleCancel}
                   aria-label="Close modal"
                 >
                   <X
@@ -137,17 +171,27 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     >
                       Account name
                     </label>
-                    <input
-                      type="text"
-                      id="fullName"
-                      name="fullName"
-                      value={formData.fullName}
-                      onChange={handleInputChange}
-                      className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                      placeholder="Enter your name"
-                      // Explicitly disable autofocus
-                      autoFocus={false}
-                    />
+                    <div
+                      className="relative"
+                      onClick={() => {
+                        if (fullNameInputRef.current) {
+                          fullNameInputRef.current.focus();
+                        }
+                      }}
+                    >
+                      <input
+                        ref={fullNameInputRef}
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleInputChange}
+                        className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                        placeholder="Enter your name"
+                        autoComplete="off"
+                        autoFocus={false} // Explicitly disable autofocus
+                      />
+                    </div>
                   </div>
 
                   {/* Phone Number */}
@@ -158,16 +202,27 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     >
                       Phone number
                     </label>
-                    <input
-                      type="tel"
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      value={formData.phoneNumber}
-                      onChange={handleInputChange}
-                      className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                      placeholder="Enter your phone number"
-                      autoFocus={false}
-                    />
+                    <div
+                      className="relative"
+                      onClick={() => {
+                        if (phoneNumberInputRef.current) {
+                          phoneNumberInputRef.current.focus();
+                        }
+                      }}
+                    >
+                      <input
+                        ref={phoneNumberInputRef}
+                        type="tel"
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={handleInputChange}
+                        className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                        placeholder="Enter your phone number"
+                        autoComplete="off"
+                        autoFocus={false}
+                      />
+                    </div>
                   </div>
 
                   {/* Email */}
@@ -178,16 +233,27 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     >
                       Email
                     </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                      placeholder="Enter your email"
-                      autoFocus={false}
-                    />
+                    <div
+                      className="relative"
+                      onClick={() => {
+                        if (emailInputRef.current) {
+                          emailInputRef.current.focus();
+                        }
+                      }}
+                    >
+                      <input
+                        ref={emailInputRef}
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                        placeholder="Enter your email"
+                        autoComplete="off"
+                        autoFocus={false}
+                      />
+                    </div>
                   </div>
 
                   {/* Date of Birth */}
@@ -198,14 +264,23 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     >
                       Date of birth
                     </label>
-                    <div className="relative">
+                    <div
+                      className="relative"
+                      onClick={() => {
+                        if (dateOfBirthInputRef.current) {
+                          dateOfBirthInputRef.current.focus();
+                        }
+                      }}
+                    >
                       <input
+                        ref={dateOfBirthInputRef}
                         type="date"
                         id="dateOfBirth"
                         name="dateOfBirth"
                         value={formData.dateOfBirth}
                         onChange={handleInputChange}
                         className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                        autoComplete="off"
                         autoFocus={false}
                       />
                       <Calendar
@@ -215,11 +290,18 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     </div>
                   </div>
 
+                  {/* Error Message */}
+                  {error && (
+                    <div className="text-red-500 text-sm text-center">
+                      {error}
+                    </div>
+                  )}
+
                   {/* Buttons */}
                   <div className="flex justify-end gap-3 mt-6">
                     <button
-                      type="button"
-                      onClick={onClose}
+                      type="button" // Explicitly set to prevent form submission
+                      onClick={handleCancel}
                       className="px-4 py-2 text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       Cancel
