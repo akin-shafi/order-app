@@ -1,7 +1,6 @@
-// store/[id]/page.tsx
 "use client";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation"; // Add useSearchParams
 import { AnimatePresence } from "framer-motion";
 import HeaderStore from "@/components/HeaderStore";
 import FooterStore from "@/components/FooterStore";
@@ -17,6 +16,7 @@ import { fetchBusinessById } from "@/services/useBusiness";
 import { groupProductsByCategory } from "@/utils/groupProductsByCategory";
 import { useBusinessStore } from "@/stores/business-store";
 import { useCart, CartItem } from "@/contexts/cart-context";
+import StoreDetailsSkeleton from "@/components/skeletons/StoreDetailsSkeleton";
 
 type MenuItem = {
   id: string;
@@ -49,7 +49,9 @@ type BusinessDetails = {
 
 export default function StoreDetailsPage() {
   const params = useParams();
+  const searchParams = useSearchParams(); // Add this to read query params
   const id = params?.id as string;
+  const productId = searchParams?.get("productId"); // Get productId from URL
 
   const [categories, setCategories] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("");
@@ -100,6 +102,16 @@ export default function StoreDetailsPage() {
         const categoryList = Object.keys(grouped);
         setCategories(categoryList);
         if (categoryList.length > 0) setActiveCategory(categoryList[0]);
+
+        // Check for productId and set selectedItem
+        if (productId && response.business.products) {
+          const selected = response.business.products.find(
+            (item: { id: string }) => item.id === productId
+          );
+          if (selected) {
+            setSelectedItem(selected);
+          }
+        }
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to fetch business"
@@ -110,7 +122,7 @@ export default function StoreDetailsPage() {
       }
     };
     if (id) getBusiness();
-  }, [id, setBusinessInfo]);
+  }, [id, productId, setBusinessInfo]); // Add productId to dependencies
 
   const getCategoryCounts = () =>
     Object.fromEntries(
@@ -172,8 +184,15 @@ export default function StoreDetailsPage() {
   };
 
   if (isLoading) {
-    // Skeleton UI remains unchanged
-    return <div>{/* Existing skeleton code */}</div>;
+    return (
+      <div className="min-h-screen bg-white">
+        <HeaderStore />
+        <main className="max-w-6xl mx-auto px-4 py-6">
+          <StoreDetailsSkeleton />
+        </main>
+        <FooterStore />
+      </div>
+    );
   }
 
   if (error || !business) return <div>{error || "Business not found"}</div>;

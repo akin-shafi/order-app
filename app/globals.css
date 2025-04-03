@@ -30,6 +30,12 @@ body {
   font-family: 'DM Sans', Arial, Helvetica, sans-serif; /* Changed to DM Sans with fallbacks */
 }
 
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
 .text-dark {
   color: #292d32 !important;
 }

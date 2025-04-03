@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/ProductModal.tsx
-// components/ProductModal.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -48,7 +47,6 @@ export function ProductModal({
 
   useEffect(() => {
     if (isOpen) {
-      // Set the modal height to the initial viewport height when it opens
       setModalHeight(window.innerHeight);
     }
   }, [isOpen]);
@@ -129,7 +127,7 @@ export function ProductModal({
         animate="visible"
         exit="exit"
         className="w-full max-w-[480px] bg-white fixed top-0 left-0 md:w-[480px]"
-        style={{ height: modalHeight ? `${modalHeight}px` : "100vh" }} // Set fixed height
+        style={{ height: modalHeight ? `${modalHeight}px` : "100vh" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -153,7 +151,7 @@ export function ProductModal({
           className="p-4 overflow-y-auto"
           style={{
             height: modalHeight ? `${modalHeight - 60}px` : "calc(100% - 60px)",
-          }} // Adjust content height
+          }}
         >
           {productsLoading ? (
             <div className="text-center text-gray-500 py-4">
@@ -286,13 +284,19 @@ export function ProductModal({
                         </div>
                       </div>
                       <Link
-                        href={businessId ? `/store/${businessId}` : "#"}
+                        href={
+                          businessId
+                            ? {
+                                pathname: `/store/${businessId}`,
+                                query: { productId: product.id }, // Add productId as query param
+                              }
+                            : "#"
+                        }
                         className={`px-3 py-1 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1A2E20] hover:text-white transition-colors duration-200 ${
                           !businessId && "cursor-not-allowed opacity-50"
                         }`}
                       >
                         Order Now
-                        {/* {isFastest && "(+10 Pts)"} */}
                       </Link>
                     </div>
                   );

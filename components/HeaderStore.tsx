@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import { useAuth } from "@/contexts/auth-context";
 import { toast } from "react-toastify";
-import { useHeaderStore } from "@/stores/header-store"; // Import header store
+import { useHeaderStore } from "@/stores/header-store";
 
 const HeaderStore: React.FC = () => {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
@@ -24,7 +24,7 @@ const HeaderStore: React.FC = () => {
   const [undeliverableAddress, setUndeliverableAddress] = useState("");
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  const { setCartOpen } = useHeaderStore(); // Use header store
+  const { setCartOpen } = useHeaderStore();
 
   const {
     address: contextAddress,
@@ -61,7 +61,7 @@ const HeaderStore: React.FC = () => {
     toast.success("Logout successful");
   };
 
-  const toggleCart = () => setCartOpen(true); // Simplified to open only
+  const toggleCart = () => setCartOpen(true);
 
   const renderAddressText = () => {
     if (isLoading) return "Getting your location...";
@@ -100,6 +100,27 @@ const HeaderStore: React.FC = () => {
     return "Set your location";
   };
 
+  // Skeleton Loader for Header
+  if (isLoading) {
+    return (
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3 animate-pulse">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-[40px] h-[40px] md:w-[45px] md:h-[45px] bg-gray-200 rounded-lg" />
+            <div className="flex items-center">
+              <div className="h-4 w-32 md:w-40 bg-gray-200 rounded" />
+              <div className="h-4 w-4 ml-1 bg-gray-200 rounded-full" />
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-[40px] h-[40px] md:w-[45px] md:h-[45px] bg-gray-200 rounded-full" />
+            <div className="w-[40px] h-[40px] md:w-[45px] md:h-[45px] bg-gray-200 rounded-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
@@ -108,7 +129,6 @@ const HeaderStore: React.FC = () => {
             <Link href="/" className="rounded-lg">
               <Image
                 src="/icons/betaday-icon.svg"
-                // src="/betaday-logo.png"
                 alt="betaday logo"
                 width={30}
                 height={30}
@@ -146,7 +166,6 @@ const HeaderStore: React.FC = () => {
                 <ShoppingCart size={20} />
                 <CartBadge />
               </button>
-              {/* Remove CartModal from here */}
             </div>
 
             <div className="relative">
