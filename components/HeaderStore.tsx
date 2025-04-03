@@ -10,6 +10,7 @@ import LoginModal from "./auth/login-modal";
 import CartBadge from "./cart/cart-badge";
 import AddressSearchModal from "./modal/address-search-modal";
 import JoinWaitlistModal from "./modal/join-waitlist-modal";
+import ProfileDetailsModal from "./modal/ProfileDetailsModal"; // Import the new modal
 import Link from "next/link";
 import { useAddress } from "@/contexts/address-context";
 import { useAuth } from "@/contexts/auth-context";
@@ -21,8 +22,8 @@ const HeaderStore: React.FC = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false); // New state for ProfileDetailsModal
   const [undeliverableAddress, setUndeliverableAddress] = useState("");
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const { setCartOpen } = useHeaderStore();
 
@@ -38,18 +39,16 @@ const HeaderStore: React.FC = () => {
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
     setIsSignupModalOpen(true);
-    setIsProfileDropdownOpen(false);
   };
 
   const openLoginModal = () => {
     setIsSignupModalOpen(false);
     setIsLoginModalOpen(true);
-    setIsProfileDropdownOpen(false);
   };
 
   const handleProfileClick = () => {
     if (isAuthenticated) {
-      setIsProfileDropdownOpen(!isProfileDropdownOpen);
+      setIsProfileModalOpen(true); // Open the ProfileDetailsModal
     } else {
       openLoginModal();
     }
@@ -57,7 +56,7 @@ const HeaderStore: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    setIsProfileDropdownOpen(false);
+    setIsProfileModalOpen(false); // Close the modal on logout
     toast.success("Logout successful");
   };
 
@@ -75,7 +74,7 @@ const HeaderStore: React.FC = () => {
             stroke="gray"
             viewBox="0 0 24 24"
           >
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            <path d="M12 2C8.13 2 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
           </svg>
         ),
         currentLocation: "📍",
@@ -86,7 +85,7 @@ const HeaderStore: React.FC = () => {
             stroke="black"
             viewBox="0 0 24 24"
           >
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            <path d="M12 2C8.13 2 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
           </svg>
         ),
         none: "⚪",
@@ -179,18 +178,6 @@ const HeaderStore: React.FC = () => {
                   <span className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
                 )}
               </button>
-
-              {isAuthenticated && isProfileDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-                  <button
-                    type="button"
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -223,6 +210,12 @@ const HeaderStore: React.FC = () => {
           setUndeliverableAddress("");
         }}
         address={undeliverableAddress}
+      />
+
+      <ProfileDetailsModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        onLogout={() => handleLogout()}
       />
     </>
   );

@@ -11,14 +11,15 @@ import {
 } from "react";
 import { getAuthToken, setAuthToken, removeAuthToken } from "@/utils/auth";
 import { jwtDecode } from "jwt-decode";
+import { User } from "@/types/user"; // Adjust the path as needed
 
-interface User {
-  id: string;
-  fullName?: string;
-  email?: string;
-  phoneNumber: string;
-  role?: string;
-}
+// interface User {
+//   id: string;
+//   fullName?: string;
+//   email?: string;
+//   phoneNumber: string;
+//   role?: string;
+// }
 
 interface SignupData {
   fullName: string;
