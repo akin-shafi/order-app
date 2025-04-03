@@ -174,7 +174,7 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                                 setIsEditModalOpen(true); // Open edit modal
                                 onClose(); // Close ProfileDetailsModal
                               }}
-                              className="text-[#FF6600] text-sm font-medium"
+                              className="text-[#FF6600] text-sm font-medium cursor-pointer"
                             >
                               Edit
                             </button>

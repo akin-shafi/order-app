@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { X, Calendar } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/auth-context";
@@ -27,6 +27,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     dateOfBirth: user?.dateOfBirth || "",
   });
 
+  // Ref to track if the modal has just opened
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -34,6 +37,17 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
+
+  // Prevent autofocus on mobile by ensuring no input is focused on mount
+  useEffect(() => {
+    if (isOpen && isInitialMount.current) {
+      // Blur any active element to prevent autofocus
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      isInitialMount.current = false;
+    }
+  }, [isOpen]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -49,12 +63,13 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // Ensure form submission doesn't cause a page reload
     try {
       await edit(formData); // Call the edit function from AuthContext
       onClose(); // Close the modal after saving
     } catch (error) {
       console.error("Failed to update profile:", error);
+      alert("Failed to update profile. Please try again.");
     }
   };
 
@@ -130,6 +145,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       onChange={handleInputChange}
                       className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                       placeholder="Enter your name"
+                      // Explicitly disable autofocus
+                      autoFocus={false}
                     />
                   </div>
 
@@ -149,6 +166,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       onChange={handleInputChange}
                       className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                       placeholder="Enter your phone number"
+                      autoFocus={false}
                     />
                   </div>
 
@@ -168,6 +186,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       onChange={handleInputChange}
                       className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                       placeholder="Enter your email"
+                      autoFocus={false}
                     />
                   </div>
 
@@ -187,6 +206,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                         value={formData.dateOfBirth}
                         onChange={handleInputChange}
                         className="w-full p-3 bg-gray-100 rounded-lg text-[#292d32] font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                        autoFocus={false}
                       />
                       <Calendar
                         size={20}
