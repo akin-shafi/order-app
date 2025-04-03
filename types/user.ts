@@ -4,6 +4,7 @@ export interface User {
     fullName: string; // Changed from 'name' to match AuthContext
     email?: string;
     phoneNumber: string;
+    dateOfBirth?:string;
     role?: string;
     avatar?: string; // Added for ProfileDetailsModal
     wallet_balance?: number; // Added for ProfileDetailsModal
