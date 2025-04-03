@@ -13,20 +13,19 @@ import { getAuthToken, setAuthToken, removeAuthToken } from "@/utils/auth";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/types/user"; // Adjust the path as needed
 
-// interface User {
-//   id: string;
-//   fullName?: string;
-//   email?: string;
-//   phoneNumber: string;
-//   role?: string;
-// }
-
 interface SignupData {
   fullName: string;
   email: string;
   phoneNumber: string;
   referralCode?: string;
   role?: string;
+}
+
+interface EditUserData {
+  fullName?: string;
+  email?: string;
+  phoneNumber?: string;
+  dateOfBirth?: string;
 }
 
 interface AuthContextType {
@@ -42,6 +41,7 @@ interface AuthContextType {
   ) => Promise<void>;
   resendOTP: (phoneNumber: string, source: "login" | "signup") => Promise<void>;
   logout: () => void;
+  edit: (data: EditUserData) => Promise<void>; // Add edit function
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -164,7 +164,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const resendOTP = async (phoneNumber: string, source: "login" | "signup") => {
     try {
       if (source === "login") {
-        // For login, reuse the login endpoint without OTP to resend
         const response = await fetch(`${baseUrl}/users/login/phone`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -175,7 +174,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           throw new Error(errorData.message || "Failed to resend OTP");
         }
       } else if (source === "signup") {
-        // For signup, call a new endpoint to resend OTP
         const response = await fetch(`${baseUrl}/users/resend-otp`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -196,6 +194,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const edit = async (data: EditUserData) => {
+    try {
+      const token = getAuthToken();
+      if (!token) throw new Error("No auth token found");
+
+      const response = await fetch(`${baseUrl}/users/me`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update user");
+      }
+
+      const updatedUser: User = await response.json();
+      setUser(updatedUser); // Update the user state in the context
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     isLoading,
@@ -205,6 +230,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     verifyOTP,
     resendOTP,
     logout,
+    edit, // Add edit to the context value
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

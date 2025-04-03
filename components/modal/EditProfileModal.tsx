@@ -4,8 +4,8 @@
 import React, { useEffect, useState } from "react";
 import { X, Calendar } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/auth-context";
 import { User } from "@/types/user"; // Adjust the path as needed
-import { getAuthToken } from "@/utils/auth";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -18,9 +18,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onClose,
   user,
 }) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const token = getAuthToken();
-  
+  const { edit } = useAuth(); // Destructure the edit function from useAuth
+
   const [formData, setFormData] = useState({
     fullName: user?.fullName || "",
     phoneNumber: user?.phoneNumber || "",
@@ -52,21 +51,10 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${baseUrl}/users/me`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) throw new Error("Failed to update user");
-      const updatedUser = await response.json();
-      // Update AuthContext user state (you'll need to expose setUser in AuthContext)
-      // setUser(updatedUser);
-      onClose();
+      await edit(formData); // Call the edit function from AuthContext
+      onClose(); // Close the modal after saving
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Failed to update profile:", error);
     }
   };
 
