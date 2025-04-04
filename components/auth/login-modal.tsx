@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import SlidingModalWrapper from "../SlidingModalWrapper";
 
 interface LoginModalProps {
-  isOpen: boolean;
+  isOpen: boolean; 
   onClose: () => void;
 }
 

@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { User } from "@/types/user"; // Adjust the path as needed
 import EditProfileModal from "@/components/modal/EditProfileModal"; // Adjust the path as needed
 import WalletModal from "@/components/modal/WalletModal"; // Adjust the path as needed
+import ReferralModal from "@/components/modal/ReferralModal"; // Adjust the path as needed
 
 interface ProfileDetailsModalProps {
   isOpen: boolean;
@@ -24,7 +25,8 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAccountDetailsOpen, setIsAccountDetailsOpen] = useState(false);
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false); // State for WalletModal
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [isReferralModalOpen, setIsReferralModalOpen] = useState(false); // State for ReferralModal
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -249,8 +251,8 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                     </li>
                     <li
                       onClick={() => {
-                        setIsWalletModalOpen(true); // Open WalletModal
-                        onClose(); // Close ProfileDetailsModal
+                        setIsWalletModalOpen(true);
+                        onClose();
                       }}
                       className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer"
                     >
@@ -269,7 +271,13 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                     Services
                   </h4>
                   <ul className="space-y-2">
-                    <li className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer">
+                    <li
+                      onClick={() => {
+                        setIsReferralModalOpen(true); // Open ReferralModal
+                        onClose(); // Close ProfileDetailsModal
+                      }}
+                      className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer"
+                    >
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">🎁</span>
                         <span>Referrals</span>
@@ -310,6 +318,12 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
       <WalletModal
         isOpen={isWalletModalOpen}
         onClose={() => setIsWalletModalOpen(false)}
+      />
+
+      {/* Referral Modal */}
+      <ReferralModal
+        isOpen={isReferralModalOpen}
+        onClose={() => setIsReferralModalOpen(false)}
       />
     </>
   );
