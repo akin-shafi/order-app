@@ -79,7 +79,7 @@ export default function OTPModal({
                   {[0, 1, 2, 3].map((index) => (
                     <input
                       key={index}
-                      type="text"
+                      type="number"
                       maxLength={1}
                       className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                       value={value?.[index] || ""}
