@@ -168,7 +168,7 @@ const ReferralModal: React.FC<ReferralModalProps> = ({ isOpen, onClose }) => {
                       </div>
                       <div>
                         <p className="text-[#1A2E20] font-semibold">₦200</p>
-                        <p className="text-sm text-gray-200">
+                        <p className="text-sm text-gray-500">
                           After their first order
                         </p>
                       </div>
@@ -178,7 +178,7 @@ const ReferralModal: React.FC<ReferralModalProps> = ({ isOpen, onClose }) => {
                       <span className="w-4 h-4 bg-[#FF6600] rounded-sm transform rotate-45"></span>
                       <div>
                         <p className="text-[#1A2E20] font-semibold">₦200</p>
-                        <p className="text-sm text-gray-200">
+                        <p className="text-sm text-gray-500">
                           After their second order
                         </p>
                       </div>
@@ -192,7 +192,7 @@ const ReferralModal: React.FC<ReferralModalProps> = ({ isOpen, onClose }) => {
                     <span className="w-4 h-4 bg-[#FF6600] rounded-sm transform rotate-45"></span>
                     <div>
                       <p className="text-[#1A2E20] font-semibold">₦200</p>
-                      <p className="text-sm text-gray-200">
+                      <p className="text-sm text-gray-500">
                         On their first order
                       </p>
                     </div>
