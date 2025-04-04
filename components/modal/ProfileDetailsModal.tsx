@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useAuth } from "@/contexts/auth-context";
 import { User } from "@/types/user"; // Adjust the path as needed
 import EditProfileModal from "@/components/modal/EditProfileModal"; // Adjust the path as needed
+import WalletModal from "@/components/modal/WalletModal"; // Adjust the path as needed
 
 interface ProfileDetailsModalProps {
   isOpen: boolean;
@@ -21,8 +22,9 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
   onClose,
   onLogout,
 }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal
-  const [isAccountDetailsOpen, setIsAccountDetailsOpen] = useState(false); // State for account details visibility
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAccountDetailsOpen, setIsAccountDetailsOpen] = useState(false);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false); // State for WalletModal
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -155,7 +157,6 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                       </div>
                       <ChevronRight size={20} className="text-gray-500" />
                     </li>
-                    {/* Account Details Section (Toggles on Profile Details Click) */}
                     <AnimatePresence>
                       {isAccountDetailsOpen && (
                         <motion.div
@@ -171,8 +172,8 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                             </h3>
                             <button
                               onClick={() => {
-                                setIsEditModalOpen(true); // Open edit modal
-                                onClose(); // Close ProfileDetailsModal
+                                setIsEditModalOpen(true);
+                                onClose();
                               }}
                               className="text-[#FF6600] text-sm font-medium cursor-pointer"
                             >
@@ -180,7 +181,6 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                             </button>
                           </div>
                           <div className="space-y-4">
-                            {/* Account Name */}
                             <div className="bg-gray-100 p-4 rounded-lg">
                               <p className="text-sm text-gray-500">
                                 Account name
@@ -189,7 +189,6 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                                 {user?.fullName || "Shafi Akinropo"}
                               </p>
                             </div>
-                            {/* Phone Number */}
                             <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
                               <div>
                                 <p className="text-sm text-gray-500">
@@ -203,7 +202,6 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                                 <VerifiedIcon />
                               </span>
                             </div>
-                            {/* Email */}
                             <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
                               <div>
                                 <p className="text-sm text-gray-500">Email</p>
@@ -215,7 +213,6 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                                 <VerifiedIcon />
                               </span>
                             </div>
-                            {/* Date of Birth */}
                             <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
                               <div>
                                 <p className="text-sm text-gray-500">
@@ -238,7 +235,7 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="bg-[#FF6600] text-white rounded-full px-2 py-0.5 text-xs">
-                          2
+                          1
                         </span>
                         <ChevronRight size={20} className="text-gray-500" />
                       </div>
@@ -246,11 +243,17 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                     <li className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer">
                       <div className="flex items-center gap-2">
                         <span className="text-[#6666FF]">✦</span>
-                        <span>Chowpass</span>
+                        <span>Beta Bonus</span>
                       </div>
                       <ChevronRight size={20} className="text-gray-500" />
                     </li>
-                    <li className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer">
+                    <li
+                      onClick={() => {
+                        setIsWalletModalOpen(true); // Open WalletModal
+                        onClose(); // Close ProfileDetailsModal
+                      }}
+                      className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer"
+                    >
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">💳</span>
                         <span>Wallet</span>
@@ -301,6 +304,12 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         user={user}
+      />
+
+      {/* Wallet Modal */}
+      <WalletModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
       />
     </>
   );
