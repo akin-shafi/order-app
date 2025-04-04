@@ -246,7 +246,7 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                     <li className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer">
                       <div className="flex items-center gap-2">
                         <span className="text-[#6666FF]">✦</span>
-                        <span>Chowpass</span>
+                        <span>Betapass</span>
                       </div>
                       <ChevronRight size={20} className="text-gray-500" />
                     </li>

@@ -13,6 +13,6 @@ export interface User {
   referralCode?: string;
   referralEarnings?: {
     cash: number; // Total cash earned from referrals
-    betascore: number; // Total chowscore points earned from referrals
+    betascore: number; // Total Betascore points earned from referrals
   }; // Added for ReferralHistoryModal
 }

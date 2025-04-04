@@ -48,10 +48,10 @@ export default function ReferralHistoryModal({
           </p>
         </div>
 
-        {/* Total Chowscore Earned */}
+        {/* Total Betascore Earned */}
         <div className="mb-6">
           <p className="text-sm font-medium text-gray-500 uppercase">
-            Total Chowscore Earned
+            Total Betascore Earned
           </p>
           <p className="text-3xl font-bold text-[#FF6600]">
             {totalBetascoreEarned}

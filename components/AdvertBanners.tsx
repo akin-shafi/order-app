@@ -26,10 +26,10 @@ const AdvertBanners = () => {
   const banners = [
     {
       imageUrl: "/images/advert-2.png",
-      alt: "Chow Combo Offer",
+      alt: "Beta Combo Offer",
       href: "/offers/special",
       bgColor: "bg-green-800",
-      title: "Chow Combo Offer",
+      title: "Beta Combo Offer",
       description: "Get 20% off on combo meals this weekend!",
     },
     {
