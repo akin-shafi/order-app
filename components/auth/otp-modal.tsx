@@ -37,7 +37,9 @@ export default function OTPModal({
   const onSubmit = async (data: OTPFormValues) => {
     try {
       await verifyOTP(phoneNumber, data.otp, source);
-      toast.success(`${source === "login" ? "Logged in" : "Signed up"} successfully!`);
+      toast.success(
+        `${source === "login" ? "Logged in" : "Signed up"} successfully!`
+      );
       onClose();
     } catch (error) {
       toast.error("Invalid OTP. Please try again.");
@@ -63,8 +65,12 @@ export default function OTPModal({
         <X size={20} />
       </button>
       <div className="p-6 mt-10">
-        <h2 className="text-2xl font-bold text-center mb-2 text-black">Enter OTP</h2>
-        <p className="text-black text-center mb-6">Enter the OTP sent to your phone</p>
+        <h2 className="text-2xl font-bold text-center mb-2 text-black">
+          Enter OTP
+        </h2>
+        <p className="text-black text-center mb-6">
+          Enter the OTP sent to your phone
+        </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <Controller
@@ -72,14 +78,17 @@ export default function OTPModal({
               control={control}
               rules={{
                 required: "OTP is required",
-                pattern: { value: /^\d{4}$/, message: "Please enter a valid 4-digit OTP" },
+                pattern: {
+                  value: /^\d{4}$/,
+                  message: "Please enter a valid 4-digit OTP",
+                },
               }}
               render={({ field: { onChange, value } }) => (
                 <div className="flex gap-2 justify-center">
                   {[0, 1, 2, 3].map((index) => (
                     <input
                       key={index}
-                      type="number"
+                      type="tel"
                       maxLength={1}
                       className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                       value={value?.[index] || ""}
@@ -98,7 +107,11 @@ export default function OTPModal({
                         onChange(newOtp.join(""));
                       }}
                       onKeyDown={(e) => {
-                        if (e.key === "Backspace" && !value?.[index] && index > 0) {
+                        if (
+                          e.key === "Backspace" &&
+                          !value?.[index] &&
+                          index > 0
+                        ) {
                           const prevInput = document.querySelector(
                             `input[name="otp-${index - 1}"]`
                           ) as HTMLInputElement;
