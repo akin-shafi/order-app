@@ -11,6 +11,7 @@ import { User } from "@/types/user"; // Adjust the path as needed
 import EditProfileModal from "@/components/modal/EditProfileModal"; // Adjust the path as needed
 import WalletModal from "@/components/modal/WalletModal"; // Adjust the path as needed
 import ReferralModal from "@/components/modal/ReferralModal"; // Adjust the path as needed
+import OrdersModal from "@/components/modal/OrdersModal"; // Adjust the path as needed
 
 interface ProfileDetailsModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
   const [isAccountDetailsOpen, setIsAccountDetailsOpen] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isReferralModalOpen, setIsReferralModalOpen] = useState(false); // State for ReferralModal
+  const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false); // New state for OrdersModal
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -242,6 +244,19 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                         <ChevronRight size={20} className="text-gray-500" />
                       </div>
                     </li>
+                    <li
+                      onClick={() => {
+                        setIsOrdersModalOpen(true); // Open OrdersModal
+                        onClose(); // Close ProfileDetailsModal
+                      }}
+                      className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500">📦</span>
+                        <span>My Orders</span>
+                      </div>
+                      <ChevronRight size={20} className="text-gray-500" />
+                    </li>
                     <li className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer">
                       <div className="flex items-center gap-2">
                         <span className="text-[#6666FF]">✦</span>
@@ -324,6 +339,15 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
       <ReferralModal
         isOpen={isReferralModalOpen}
         onClose={() => setIsReferralModalOpen(false)}
+      />
+
+      <OrdersModal
+        isOpen={isOrdersModalOpen}
+        onClose={() => setIsOrdersModalOpen(false)}
+        onBack={() => {
+          setIsOrdersModalOpen(false); // Close OrdersModal
+          onClose(); // Reopen ProfileDetailsModal (handled by parent)
+        }}
       />
     </>
   );
