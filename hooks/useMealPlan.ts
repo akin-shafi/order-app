@@ -56,6 +56,21 @@ interface ActivateScheduleResponse {
   success: boolean;
 }
 
+interface SaveMealPlanRequest {
+  mealPlan: { breakfast: DailyMeal[]; lunch: DailyMeal[] };
+  totalCost: { breakfast: number; lunch: number };
+  deliveryFees: { breakfast: number; lunch: number };
+  deliveryAddress: string;
+  startDate: string;
+}
+
+interface SaveMealPlanResponse {
+  statusCode: number;
+  message: string;
+  success: boolean;
+  savedPlanId: string;
+}
+
 const generateMealPlan = async (data: GenerateMealPlanRequest): Promise<GenerateMealPlanResponse> => {
   const token = getAuthToken();
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/meal-plan/generate`, {
@@ -113,6 +128,25 @@ const activateSchedule = async (data: ActivateScheduleRequest): Promise<Activate
   return response.json();
 };
 
+const saveMealPlan = async (data: SaveMealPlanRequest): Promise<SaveMealPlanResponse> => {
+  const token = getAuthToken();
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/meal-plan/save`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to save meal plan");
+  }
+
+  return response.json();
+};
+
 export const useMealPlan = () => {
   const generateMutation = useMutation<GenerateMealPlanResponse, Error, GenerateMealPlanRequest>({
     mutationFn: generateMealPlan,
@@ -126,19 +160,25 @@ export const useMealPlan = () => {
     mutationFn: activateSchedule,
   });
 
+  const saveMutation = useMutation<SaveMealPlanResponse, Error, SaveMealPlanRequest>({
+    mutationFn: saveMealPlan,
+  });
+
   return {
     generateMealPlan: generateMutation.mutateAsync,
     calculateCost: calculateCostMutation.mutateAsync,
     activateSchedule: activateMutation.mutateAsync,
-    // Use isPending instead of isLoading for mutations in React Query v4+
+    saveMealPlan: saveMutation.mutateAsync,
     loading:
       generateMutation.isPending ||
       calculateCostMutation.isPending ||
-      activateMutation.isPending,
+      activateMutation.isPending ||
+      saveMutation.isPending,
     error:
       generateMutation.error?.message ||
       calculateCostMutation.error?.message ||
       activateMutation.error?.message ||
+      saveMutation.error?.message ||
       null,
   };
 };

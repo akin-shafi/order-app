@@ -16,6 +16,7 @@ interface ActivateScheduleModalProps {
   deliveryFees: { breakfast: number; lunch: number };
   deliveryAddress: string;
   startDate: string;
+  onReset: () => void; // Add the onReset prop
 }
 
 const ActivateScheduleModal: React.FC<ActivateScheduleModalProps> = ({
@@ -27,6 +28,7 @@ const ActivateScheduleModal: React.FC<ActivateScheduleModalProps> = ({
   deliveryFees,
   deliveryAddress,
   startDate,
+  onReset,
 }) => {
   const [selectedPlans, setSelectedPlans] = useState<{
     breakfast: boolean;
@@ -73,7 +75,8 @@ const ActivateScheduleModal: React.FC<ActivateScheduleModalProps> = ({
       paymentMethod: paymentMethod || "wallet",
     });
     if (response) {
-      onClose();
+      onReset(); // Reset the parent modal fields
+      onClose(); // Close the modal
     }
   };
 

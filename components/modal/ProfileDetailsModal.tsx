@@ -12,7 +12,8 @@ import EditProfileModal from "@/components/modal/EditProfileModal"; // Adjust th
 import WalletModal from "@/components/modal/WalletModal"; // Adjust the path as needed
 import ReferralModal from "@/components/modal/ReferralModal"; // Adjust the path as needed
 import OrdersModal from "@/components/modal/OrdersModal"; // Adjust the path as needed
-import WeeklyMealPlanModal from "./WeeklyMealPlanModal";
+import WeeklyMealPlanModal from "@/components/modal/WeeklyMealPlanModal";
+import SavedMealPlansModal from "@/components/modal/SavedMealPlansModal"; // Import the new modal
 
 interface ProfileDetailsModalProps {
   isOpen: boolean;
@@ -30,7 +31,10 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isReferralModalOpen, setIsReferralModalOpen] = useState(false); // State for ReferralModal
   const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false); // New state for OrdersModal
+
   const [isWeeklyMealPlanModalOpen, setIsWeeklyMealPlanModalOpen] =
+    useState(false);
+  const [isSavedMealPlansModalOpen, setIsSavedMealPlansModalOpen] =
     useState(false);
 
   useEffect(() => {
@@ -273,6 +277,19 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                       </div>
                       <ChevronRight size={20} className="text-gray-500" />
                     </li>
+                    <li
+                      onClick={() => {
+                        setIsSavedMealPlansModalOpen(true);
+                        onClose();
+                      }}
+                      className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500">💾</span>
+                        <span>Saved Meal Plans</span>
+                      </div>
+                      <ChevronRight size={20} className="text-gray-500" />
+                    </li>
                     <li className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer">
                       <div className="flex items-center gap-2">
                         <span className="text-[#6666FF]">✦</span>
@@ -371,6 +388,14 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
         onClose={() => setIsWeeklyMealPlanModalOpen(false)}
         onBack={() => {
           setIsWeeklyMealPlanModalOpen(false);
+          onClose();
+        }}
+      />
+      <SavedMealPlansModal
+        isOpen={isSavedMealPlansModalOpen}
+        onClose={() => setIsSavedMealPlansModalOpen(false)}
+        onBack={() => {
+          setIsSavedMealPlansModalOpen(false);
           onClose();
         }}
       />
