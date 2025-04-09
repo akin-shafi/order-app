@@ -35,6 +35,15 @@ body.modal-open {
   position: fixed;
   width: 100%;
 }
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #FF6600 !important;
+  color: white !important;
+}
+.react-datepicker__day--disabled {
+  color: #ccc !important;
+  cursor: not-allowed !important;
+}
 
 .text-dark {
   color: #292d32 !important;

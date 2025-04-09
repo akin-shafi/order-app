@@ -5,6 +5,7 @@ import GoogleMapsScript from "@/components/google-maps-script";
 import Providers from "./providers";
 import ClientLayout from "./ClientLayout"; // Import the new Client Component
 import "react-toastify/dist/ReactToastify.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "./globals.css";
 
 const dmSans = DMSans({

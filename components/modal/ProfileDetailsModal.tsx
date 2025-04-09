@@ -12,6 +12,7 @@ import EditProfileModal from "@/components/modal/EditProfileModal"; // Adjust th
 import WalletModal from "@/components/modal/WalletModal"; // Adjust the path as needed
 import ReferralModal from "@/components/modal/ReferralModal"; // Adjust the path as needed
 import OrdersModal from "@/components/modal/OrdersModal"; // Adjust the path as needed
+import WeeklyMealPlanModal from "./WeeklyMealPlanModal";
 
 interface ProfileDetailsModalProps {
   isOpen: boolean;
@@ -29,6 +30,8 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isReferralModalOpen, setIsReferralModalOpen] = useState(false); // State for ReferralModal
   const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false); // New state for OrdersModal
+  const [isWeeklyMealPlanModalOpen, setIsWeeklyMealPlanModalOpen] =
+    useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -39,7 +42,7 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
   }, [onClose]);
 
   const { user, logout } = useAuth();
-  console.log("user", user);
+  // console.log("user", user);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -257,6 +260,19 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                       </div>
                       <ChevronRight size={20} className="text-gray-500" />
                     </li>
+                    <li
+                      onClick={() => {
+                        setIsWeeklyMealPlanModalOpen(true);
+                        onClose();
+                      }}
+                      className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500">📅</span>
+                        <span>Weekly Meal Plan</span>
+                      </div>
+                      <ChevronRight size={20} className="text-gray-500" />
+                    </li>
                     <li className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer">
                       <div className="flex items-center gap-2">
                         <span className="text-[#6666FF]">✦</span>
@@ -347,6 +363,15 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
         onBack={() => {
           setIsOrdersModalOpen(false); // Close OrdersModal
           onClose(); // Reopen ProfileDetailsModal (handled by parent)
+        }}
+      />
+
+      <WeeklyMealPlanModal
+        isOpen={isWeeklyMealPlanModalOpen}
+        onClose={() => setIsWeeklyMealPlanModalOpen(false)}
+        onBack={() => {
+          setIsWeeklyMealPlanModalOpen(false);
+          onClose();
         }}
       />
     </>
