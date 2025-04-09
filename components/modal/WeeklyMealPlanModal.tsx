@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { X, ChevronLeft, Calendar, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {Input} from "antd";
+import { Input } from "antd";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useMealPlan } from "@/hooks/useMealPlan";
@@ -40,18 +40,33 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
   onClose,
   onBack,
 }) => {
-  const [activeTab, setActiveTab] = useState<"Breakfast" | "Lunch">("Breakfast");
+  const [activeTab, setActiveTab] = useState<"Breakfast" | "Lunch">(
+    "Breakfast"
+  );
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
   const [mealPlan, setMealPlan] = useState<MealPlan | null>(null);
-  const [costs, setCosts] = useState<{ breakfast: number; lunch: number }>({ breakfast: 0, lunch: 0 });
-  const [deliveryFees, setDeliveryFees] = useState<{ breakfast: number; lunch: number }>({ breakfast: 0, lunch: 0 });
+  const [costs, setCosts] = useState<{ breakfast: number; lunch: number }>({
+    breakfast: 0,
+    lunch: 0,
+  });
+  const [deliveryFees, setDeliveryFees] = useState<{
+    breakfast: number;
+    lunch: number;
+  }>({ breakfast: 0, lunch: 0 });
   const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
 
-  const { generateMealPlan, calculateCost, saveMealPlan, loading, error } = useMealPlan();
-  const { input, setInput, suggestions, loading: addressLoading, error: addressError } = useAddressAutocomplete();
+  const { generateMealPlan, calculateCost, saveMealPlan, loading, error } =
+    useMealPlan();
+  const {
+    input,
+    setInput,
+    suggestions,
+    loading: addressLoading,
+    error: addressError,
+  } = useAddressAutocomplete();
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -69,13 +84,20 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
 
   const modalVariants = {
     hidden: { x: "100%", opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 30 } },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 30 },
+    },
     exit: { x: "100%", opacity: 0, transition: { duration: 0.2 } },
   };
 
   const handleGenerateMealPlan = async () => {
     if (!startDate || !deliveryAddress) return;
-    const response = await generateMealPlan({ startDate: startDate.toISOString(), deliveryAddress });
+    const response = await generateMealPlan({
+      startDate: startDate.toISOString(),
+      deliveryAddress,
+    });
     if (response) {
       setMealPlan(response.mealPlan);
     }
@@ -83,7 +105,10 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
 
   const handleCalculateCost = async (type: "breakfast" | "lunch") => {
     if (!mealPlan || !deliveryAddress) return;
-    const response = await calculateCost({ mealPlan: mealPlan[type], deliveryAddress });
+    const response = await calculateCost({
+      mealPlan: mealPlan[type],
+      deliveryAddress,
+    });
     if (response) {
       setCosts((prev) => ({ ...prev, [type]: response.totalCost }));
       setDeliveryFees((prev) => ({ ...prev, [type]: response.deliveryFee }));
@@ -92,7 +117,9 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
 
   const handleSwapMeal = async (type: "breakfast" | "lunch", index: number) => {
     if (!mealPlan || !mealPlan[type] || !mealPlan[type][index]) {
-      console.error("Cannot swap meal: mealPlan is not defined or invalid index");
+      console.error(
+        "Cannot swap meal: mealPlan is not defined or invalid index"
+      );
       return;
     }
 
@@ -135,7 +162,12 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+    return date.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   const getWeekDates = (start: Date) => {
@@ -153,8 +185,12 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
 
   const weekDates = startDate ? getWeekDates(startDate) : [];
 
-  const handleSelectAddress = (suggestion: { description: string; details: { formattedAddress: string } | null }) => {
-    const address = suggestion.details?.formattedAddress || suggestion.description;
+  const handleSelectAddress = (suggestion: {
+    description: string;
+    details: { formattedAddress: string } | null;
+  }) => {
+    const address =
+      suggestion.details?.formattedAddress || suggestion.description;
     setDeliveryAddress(address);
     setInput(address);
     setIsAddressFormOpen(false);
@@ -204,16 +240,24 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                     onClick={onBack}
                     aria-label="Back to profile"
                   >
-                    <ChevronLeft size={24} className="transition-transform group-hover:scale-110" />
+                    <ChevronLeft
+                      size={24}
+                      className="transition-transform group-hover:scale-110"
+                    />
                     <span className="absolute inset-0 rounded-full bg-gray-200 opacity-0 group-hover:opacity-20 transition-opacity"></span>
                   </button>
-                  <h2 className="text-lg font-semibold text-[#292d32]">Weekly Meal Plan</h2>
+                  <h2 className="text-lg font-semibold text-[#292d32]">
+                    Weekly Meal Plan
+                  </h2>
                   <button
                     className="group relative cursor-pointer w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
                     onClick={onClose}
                     aria-label="Close modal"
                   >
-                    <X size={24} className="transition-transform group-hover:scale-110" />
+                    <X
+                      size={24}
+                      className="transition-transform group-hover:scale-110"
+                    />
                     <span className="absolute inset-0 rounded-full bg-gray-200 opacity-0 group-hover:opacity-20 transition-opacity"></span>
                   </button>
                 </div>
@@ -224,10 +268,12 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                     Your Perfect Weekly Meal Plan Awaits! 🍽️
                   </h3>
                   <p className="text-sm text-[#292d32]">
-                    Say goodbye to meal planning stress! With our Weekly Meal Plan, you get a delicious, 
-                    hassle-free menu for breakfast and lunch, tailored just for you. Pick your start date, 
-                    set your delivery address, and we’ll deliver fresh meals straight to your door—saving 
-                    you time and effort. Customize, save for later, or activate your plan today!
+                    Say goodbye to meal planning stress! With our Weekly Meal
+                    Plan, you get a delicious, hassle-free menu for breakfast
+                    and lunch, tailored just for you. Pick your start date, set
+                    your delivery address, and we’ll deliver fresh meals
+                    straight to your door—saving you time and effort. Customize,
+                    save for later, or activate your plan today!
                   </p>
                 </div>
 
@@ -235,7 +281,9 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                 <div className="flex border-b border-gray-200">
                   <button
                     className={`flex-1 py-3 text-center text-sm font-medium ${
-                      activeTab === "Breakfast" ? "bg-[#1A3C34] text-white" : "bg-gray-100 text-gray-500"
+                      activeTab === "Breakfast"
+                        ? "bg-[#1A3C34] text-white"
+                        : "bg-gray-100 text-gray-500"
                     }`}
                     onClick={() => setActiveTab("Breakfast")}
                   >
@@ -243,7 +291,9 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                   </button>
                   <button
                     className={`flex-1 py-3 text-center text-sm font-medium ${
-                      activeTab === "Lunch" ? "bg-[#1A3C34] text-white" : "bg-gray-100 text-gray-500"
+                      activeTab === "Lunch"
+                        ? "bg-[#1A3C34] text-white"
+                        : "bg-gray-100 text-gray-500"
                     }`}
                     onClick={() => setActiveTab("Lunch")}
                   >
@@ -256,7 +306,9 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                   {/* Start Date Selection */}
                   <div className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-[#292d32]">Start Date</span>
+                      <span className="text-sm font-semibold text-[#292d32]">
+                        Start Date
+                      </span>
                       <button
                         className="flex items-center gap-2 text-[#FF6600]"
                         onClick={() => setIsDatePickerOpen(true)}
@@ -267,7 +319,9 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                       </button>
                     </div>
                     {startDate && (
-                      <p className="mt-2 text-sm text-[#292d32]">{formatDate(startDate)}</p>
+                      <p className="mt-2 text-sm text-[#292d32]">
+                        {formatDate(startDate)}
+                      </p>
                     )}
                     {isDatePickerOpen && (
                       <div className="mt-2">
@@ -290,17 +344,23 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                   {/* Delivery Address with Autocomplete */}
                   <div className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-[#292d32]">Delivery Address</span>
+                      <span className="text-sm font-semibold text-[#292d32]">
+                        Delivery Address
+                      </span>
                       <button
                         className="flex items-center gap-2 text-[#FF6600]"
                         onClick={() => setIsAddressFormOpen(true)}
                       >
                         <MapPin size={20} />
-                        <span>{deliveryAddress ? "Change Address" : "Add Address"}</span>
+                        <span>
+                          {deliveryAddress ? "Change Address" : "Add Address"}
+                        </span>
                       </button>
                     </div>
                     {deliveryAddress && (
-                      <p className="mt-2 text-sm text-[#292d32]">{deliveryAddress}</p>
+                      <p className="mt-2 text-sm text-[#292d32]">
+                        {deliveryAddress}
+                      </p>
                     )}
                     {isAddressFormOpen && (
                       <div className="mt-4 space-y-2 relative">
@@ -326,13 +386,17 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                           </ul>
                         )}
                         {addressLoading && (
-                          <p className="text-sm text-gray-500 mt-2">Loading suggestions...</p>
+                          <p className="text-sm text-gray-500 mt-2">
+                            Loading suggestions...
+                          </p>
                         )}
                         {addressError && (
-                          <p className="text-sm text-red-500 mt-2">{addressError}</p>
+                          <p className="text-sm text-red-500 mt-2">
+                            {addressError}
+                          </p>
                         )}
                         <button
-                          className="w-full py-2 bg-[#FF6600] text-white rounded-lg"
+                          className="w-full py-2 bg-[#FF6600] text-white rounded-lg mt-4"
                           onClick={() => {
                             if (!deliveryAddress && input) {
                               setDeliveryAddress(input);
@@ -351,7 +415,9 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                   {!mealPlan && (
                     <button
                       className={`w-full py-3 rounded-lg text-white ${
-                        startDate && deliveryAddress ? "bg-[#FF6600]" : "bg-gray-300 cursor-not-allowed"
+                        startDate && deliveryAddress
+                          ? "bg-[#FF6600]"
+                          : "bg-gray-300 cursor-not-allowed"
                       }`}
                       onClick={handleGenerateMealPlan}
                       disabled={!startDate || !deliveryAddress || loading}
@@ -373,12 +439,24 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                           </tr>
                         </thead>
                         <tbody>
-                          {(activeTab === "Breakfast" ? mealPlan.breakfast : mealPlan.lunch).map((dailyMeal, index) => (
-                            <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                              <td className="p-2 text-sm text-[#292d32]">{dailyMeal.day}</td>
+                          {(activeTab === "Breakfast"
+                            ? mealPlan.breakfast
+                            : mealPlan.lunch
+                          ).map((dailyMeal, index) => (
+                            <tr
+                              key={index}
+                              className="border-b border-gray-200 hover:bg-gray-50"
+                            >
                               <td className="p-2 text-sm text-[#292d32]">
-                                <p className="font-medium">{dailyMeal.meal.name}</p>
-                                <p className="text-gray-500">{dailyMeal.meal.description}</p>
+                                {dailyMeal.day}
+                              </td>
+                              <td className="p-2 text-sm text-[#292d32]">
+                                <p className="font-medium">
+                                  {dailyMeal.meal.name}
+                                </p>
+                                <p className="text-gray-500">
+                                  {dailyMeal.meal.description}
+                                </p>
                               </td>
                               <td className="p-2 text-sm text-[#292d32]">
                                 ₦{dailyMeal.meal.price.toLocaleString()}
@@ -386,7 +464,14 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                               <td className="p-2">
                                 <button
                                   className="text-[#FF6600] text-sm hover:underline"
-                                  onClick={() => handleSwapMeal(activeTab.toLowerCase() as "breakfast" | "lunch", index)}
+                                  onClick={() =>
+                                    handleSwapMeal(
+                                      activeTab.toLowerCase() as
+                                        | "breakfast"
+                                        | "lunch",
+                                      index
+                                    )
+                                  }
                                 >
                                   Swap Meal
                                 </button>
@@ -406,32 +491,52 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                           Total for {activeTab}
                         </span>
                         <span className="text-sm text-[#292d32]">
-                          {costs[activeTab.toLowerCase() as "breakfast" | "lunch"] > 0
-                            ? `₦${costs[activeTab.toLowerCase() as "breakfast" | "lunch"].toLocaleString()}`
+                          {costs[
+                            activeTab.toLowerCase() as "breakfast" | "lunch"
+                          ] > 0
+                            ? `₦${costs[
+                                activeTab.toLowerCase() as "breakfast" | "lunch"
+                              ].toLocaleString()}`
                             : "Not Calculated"}
                         </span>
                       </div>
-                      {costs[activeTab.toLowerCase() as "breakfast" | "lunch"] > 0 && (
+                      {costs[activeTab.toLowerCase() as "breakfast" | "lunch"] >
+                        0 && (
                         <>
                           <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm text-gray-500">Delivery Fee</span>
+                            <span className="text-sm text-gray-500">
+                              Delivery Fee
+                            </span>
                             <span className="text-sm text-[#292d32]">
-                              ₦{deliveryFees[activeTab.toLowerCase() as "breakfast" | "lunch"].toLocaleString()}
+                              ₦
+                              {deliveryFees[
+                                activeTab.toLowerCase() as "breakfast" | "lunch"
+                              ].toLocaleString()}
                             </span>
                           </div>
                           <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm text-gray-500">Delivery Time</span>
+                            <span className="text-sm text-gray-500">
+                              Delivery Time
+                            </span>
                             <span className="text-sm text-[#292d32]">
-                              {activeTab === "Breakfast" ? "8:00 AM - 11:00 AM" : "12:00 PM - 3:00 PM"}
+                              {activeTab === "Breakfast"
+                                ? "8:00 AM - 11:00 AM"
+                                : "12:00 PM - 3:00 PM"}
                             </span>
                           </div>
                         </>
                       )}
                       <button
                         className={`w-full py-3 rounded-lg text-white ${
-                          deliveryAddress && mealPlan ? "bg-[#FF6600]" : "bg-gray-300 cursor-not-allowed"
+                          deliveryAddress && mealPlan
+                            ? "bg-[#FF6600]"
+                            : "bg-gray-300 cursor-not-allowed"
                         }`}
-                        onClick={() => handleCalculateCost(activeTab.toLowerCase() as "breakfast" | "lunch")}
+                        onClick={() =>
+                          handleCalculateCost(
+                            activeTab.toLowerCase() as "breakfast" | "lunch"
+                          )
+                        }
                         disabled={!deliveryAddress || !mealPlan || loading}
                       >
                         {loading ? "Calculating..." : "Generate Cost"}
