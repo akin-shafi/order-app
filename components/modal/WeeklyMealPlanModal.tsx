@@ -307,7 +307,7 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
                         <Input
                           type="text"
                           placeholder="Enter delivery address"
-                          className="w-full p-2 border border-gray-200 rounded-lg"
+                          className="w-full py-4 border border-gray-200 mb-4 rounded-lg"
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
                           aria-label="Enter delivery address"
