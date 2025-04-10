@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/hooks/useMealPlan.ts
 import { useMutation } from "@tanstack/react-query";
 import { getAuthToken } from "@/utils/auth";
 
-interface Meal {
+export interface Meal {
   name: string;
   description: string;
   price: number;
+  image?: string;
 }
 
-interface DailyMeal {
+export interface DailyMeal {
   date: string;
   day: string;
   meal: Meal;
 }
 
-interface MealPlan {
+export interface MealPlan {
   breakfast: DailyMeal[];
   lunch: DailyMeal[];
 }
@@ -45,6 +45,7 @@ interface CalculateCostResponse {
 }
 
 interface ActivateScheduleRequest {
+  userId: string; // Added userId
   mealPlan: { breakfast: DailyMeal[]; lunch: DailyMeal[] };
   totalCost: number;
   deliveryAddress: string;
@@ -61,6 +62,7 @@ interface ActivateScheduleResponse {
 }
 
 interface SaveMealPlanRequest {
+  userId: string; // Added userId
   mealPlan: { breakfast: DailyMeal[]; lunch: DailyMeal[] };
   totalCost: { breakfast: number; lunch: number };
   deliveryFees: { breakfast: number; lunch: number };
@@ -79,13 +81,13 @@ interface SaveMealPlanResponse {
 interface AvailableMealsResponse {
   statusCode: number;
   message: string;
-  availableMeals: Meal[]; // Adjusted to use Meal interface directly
+  availableMeals: Meal[];
 }
 
 const getAvailableMeals = async (type: "breakfast" | "lunch"): Promise<AvailableMealsResponse> => {
   const token = getAuthToken();
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/meals/available-meals?type=${type}`, // Updated endpoint
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/meals/available-meals?type=${type}`,
     {
       method: "GET",
       headers: {
@@ -105,7 +107,7 @@ const getAvailableMeals = async (type: "breakfast" | "lunch"): Promise<Available
     name: meal.name,
     description: meal.description,
     price: Number(meal.price),
-    image: meal.image, // Include image field
+    image: meal.image,
   }));
 
   return {
@@ -223,13 +225,13 @@ export const useMealPlan = () => {
       calculateCostMutation.isPending ||
       activateMutation.isPending ||
       saveMutation.isPending ||
-      availableMealsMutation.isPending, // Include new mutation loading state
+      availableMealsMutation.isPending,
     error:
       generateMutation.error?.message ||
       calculateCostMutation.error?.message ||
       activateMutation.error?.message ||
       saveMutation.error?.message ||
-      availableMealsMutation.error?.message || // Include new mutation error
+      availableMealsMutation.error?.message ||
       null,
   };
 };

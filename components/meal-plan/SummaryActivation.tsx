@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import LoginModal from "@/components/auth/login-modal";
+import { useAuth } from "@/contexts/auth-context";
 
 interface DailyMeal {
   date: string;
@@ -26,8 +28,8 @@ interface SummaryActivationProps {
   deliveryAddress: string;
   startDate: Date | null;
   endDate: Date | null;
-  handleSaveForLater: () => Promise<void>;
-  handleActivate: () => Promise<void>;
+  handleSaveForLater: (userId: string) => Promise<void>;
+  handleActivate: (userId: string) => Promise<void>;
   setStep: (step: number) => void;
   loading: boolean;
 }
@@ -50,6 +52,25 @@ const SummaryActivation: React.FC<SummaryActivationProps> = ({
   setStep,
   loading,
 }) => {
+  const { isAuthenticated, user } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const handleSaveClick = () => {
+    if (!isAuthenticated || !user) {
+      setIsLoginModalOpen(true);
+    } else {
+      handleSaveForLater(user.id);
+    }
+  };
+
+  const handleActivateClick = () => {
+    if (!isAuthenticated || !user) {
+      setIsLoginModalOpen(true);
+    } else {
+      handleActivate(user.id);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold text-[#292d32] mb-4">
@@ -69,7 +90,7 @@ const SummaryActivation: React.FC<SummaryActivationProps> = ({
               onChange={() =>
                 setSelectedPlans((prev) => ({
                   ...prev,
-                  breakfast: !prev.breakfast, // Fixed typo: 'Receipts' -> 'breakfast'
+                  breakfast: !prev.breakfast,
                 }))
               }
             />
@@ -152,7 +173,7 @@ const SummaryActivation: React.FC<SummaryActivationProps> = ({
               ((selectedPlans.breakfast
                 ? costs.breakfast + deliveryFees.breakfast
                 : 0) +
-                ( selectedPlans.lunch ? costs.lunch + deliveryFees.lunch : 0)) *
+                (selectedPlans.lunch ? costs.lunch + deliveryFees.lunch : 0)) *
               numberOfPlates
             ).toLocaleString()}
           </span>
@@ -244,25 +265,25 @@ const SummaryActivation: React.FC<SummaryActivationProps> = ({
       {/* Navigation */}
       <div className="flex gap-2">
         <button
-          className="flex-1 py-3 bg-gray-500 text-white rounded-lg"
+          className="flex-1 py-3 bg-gray-500 text-white cursor-pointer rounded-lg transition duration-200 hover:bg-gray-600 hover:shadow-md"
           onClick={() => setStep(2)}
         >
           Back
         </button>
         <button
-          className="flex-1 py-3 bg-gray-500 text-white rounded-lg"
-          onClick={handleSaveForLater}
+          className="flex-1 py-3 bg-[#1A2E20] text-white cursor-pointer rounded-lg transition duration-200 hover:bg-[#2A4A34] hover:shadow-md disabled:opacity-50"
+          onClick={handleSaveClick}
           disabled={loading}
         >
           {loading ? "Saving..." : "Save for Later"}
         </button>
         <button
-          className={`flex-1 py-3 rounded-lg text-white ${
+          className={`flex-1 py-3 rounded-lg text-white cursor-pointer transition duration-200 ${
             (selectedPlans.breakfast || selectedPlans.lunch) && paymentMethod
-              ? "bg-[#FF6600]"
+              ? "bg-[#FF6600] hover:bg-[#E65C00] hover:shadow-md"
               : "bg-gray-300 cursor-not-allowed"
           }`}
-          onClick={handleActivate}
+          onClick={handleActivateClick}
           disabled={
             !(selectedPlans.breakfast || selectedPlans.lunch) ||
             !paymentMethod ||
@@ -272,6 +293,11 @@ const SummaryActivation: React.FC<SummaryActivationProps> = ({
           {loading ? "Activating..." : "Confirm Payment"}
         </button>
       </div>
+
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </div>
   );
 };

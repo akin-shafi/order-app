@@ -1,17 +1,7 @@
-// src/components/meal-plan/MealSelection.tsx
 import React, { useState } from "react";
 import MealSwapModal from "@/components/modal/MealSwapModal";
-
-interface DailyMeal {
-  date: string;
-  day: string;
-  meal: { name: string; description: string; price: number };
-}
-
-interface MealPlan {
-  breakfast: DailyMeal[];
-  lunch: DailyMeal[];
-}
+import Image from "next/image";
+import { Meal, MealPlan } from "@/hooks/useMealPlan";
 
 interface MealSelectionProps {
   activeTab: "Breakfast" | "Lunch";
@@ -24,10 +14,11 @@ interface MealSelectionProps {
   handleSwapMeal: (
     type: "breakfast" | "lunch",
     index: number,
-    newMeal: { name: string; description: string; price: number }
+    newMeal: Meal
   ) => Promise<void>;
   setStep: (step: number) => void;
   loading: boolean;
+  handleNextToSummary: () => Promise<void>;
 }
 
 const MealSelection: React.FC<MealSelectionProps> = ({
@@ -41,11 +32,10 @@ const MealSelection: React.FC<MealSelectionProps> = ({
   handleSwapMeal,
   setStep,
   loading,
+  handleNextToSummary,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMealIndex, setSelectedMealIndex] = useState<number | null>(
-    null
-  );
+  const [selectedMealIndex, setSelectedMealIndex] = useState<number | null>(null);
 
   const openModal = (index: number) => {
     setSelectedMealIndex(index);
@@ -57,11 +47,7 @@ const MealSelection: React.FC<MealSelectionProps> = ({
     setSelectedMealIndex(null);
   };
 
-  const onSelectMeal = async (newMeal: {
-    name: string;
-    description: string;
-    price: number;
-  }) => {
+  const onSelectMeal = async (newMeal: Meal) => {
     if (selectedMealIndex !== null) {
       await handleSwapMeal(
         activeTab.toLowerCase() as "breakfast" | "lunch",
@@ -115,36 +101,50 @@ const MealSelection: React.FC<MealSelectionProps> = ({
               </tr>
             </thead>
             <tbody>
-              {(activeTab === "Breakfast"
-                ? mealPlan.breakfast
-                : mealPlan.lunch
-              ).map((dailyMeal, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-200 hover:bg-gray-50"
-                >
-                  <td className="p-2 text-sm text-[#292d32]">
-                    {dailyMeal.day}
-                  </td>
-                  <td className="p-2 text-sm text-[#292d32]">
-                    <p className="font-medium">{dailyMeal.meal.name}</p>
-                    <p className="text-gray-500">
-                      {dailyMeal.meal.description}
-                    </p>
-                  </td>
-                  <td className="p-2 text-sm text-[#292d32]">
-                    ₦{dailyMeal.meal.price.toLocaleString()}
-                  </td>
-                  <td className="p-2">
-                    <button
-                      className="text-[#FF6600] text-sm hover:underline"
-                      onClick={() => openModal(index)}
-                    >
-                      Swap Meal
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {(activeTab === "Breakfast" ? mealPlan.breakfast : mealPlan.lunch).map(
+                (dailyMeal, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-200 hover:bg-gray-50"
+                  >
+                    <td className="p-2 text-sm text-[#292d32]">{dailyMeal.day}</td>
+                    <td className="p-2 text-sm text-[#292d32]">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gray-200 rounded flex-shrink-0">
+                          {dailyMeal.meal.image ? (
+                            <Image
+                              src={dailyMeal.meal.image || "/product-placeholder.png"}
+                              alt={dailyMeal.meal.name}
+                              width={60}
+                              height={60}
+                              className="w-14 h-14 object-cover rounded-full"
+                            />
+                          ) : (
+                            <span className="text-gray-500 text-sm flex items-center justify-center h-full">
+                              No Image
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium text-[#292d32]">{dailyMeal.meal.name}</p>
+                          <p className="text-sm text-gray-500">{dailyMeal.meal.description}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-2 text-sm text-[#292d32]">
+                      ₦{dailyMeal.meal.price.toLocaleString()}
+                    </td>
+                    <td className="p-2">
+                      <button
+                        className="text-[#FF6600] cursor-pointer text-sm hover:underline"
+                        onClick={() => openModal(index)}
+                      >
+                        Swap Meal
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         </div>
@@ -159,9 +159,7 @@ const MealSelection: React.FC<MealSelectionProps> = ({
             </span>
             <span className="text-sm text-[#292d32]">
               {costs[activeTab.toLowerCase() as "breakfast" | "lunch"] > 0
-                ? `₦${costs[
-                    activeTab.toLowerCase() as "breakfast" | "lunch"
-                  ].toLocaleString()}`
+                ? `₦${costs[activeTab.toLowerCase() as "breakfast" | "lunch"].toLocaleString()}`
                 : "Not Calculated"}
             </span>
           </div>
@@ -170,32 +168,23 @@ const MealSelection: React.FC<MealSelectionProps> = ({
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-500">Delivery Fee</span>
                 <span className="text-sm text-[#292d32]">
-                  ₦
-                  {deliveryFees[
-                    activeTab.toLowerCase() as "breakfast" | "lunch"
-                  ].toLocaleString()}
+                  ₦{deliveryFees[activeTab.toLowerCase() as "breakfast" | "lunch"].toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-500">Delivery Time</span>
                 <span className="text-sm text-[#292d32]">
-                  {activeTab === "Breakfast"
-                    ? "8:00 AM - 11:00 AM"
-                    : "12:00 PM - 3:00 PM"}
+                  {activeTab === "Breakfast" ? "8:00 AM - 11:00 AM" : "12:00 PM - 3:00 PM"}
                 </span>
               </div>
             </>
           )}
           <button
             className={`w-full py-3 rounded-lg text-white ${
-              deliveryAddress && mealPlan
-                ? "bg-[#FF6600]"
-                : "bg-gray-300 cursor-not-allowed"
+              deliveryAddress && mealPlan ? "bg-[#FF6600]" : "bg-gray-300 cursor-not-allowed"
             }`}
             onClick={() =>
-              handleCalculateCost(
-                activeTab.toLowerCase() as "breakfast" | "lunch"
-              )
+              handleCalculateCost(activeTab.toLowerCase() as "breakfast" | "lunch")
             }
             disabled={!deliveryAddress || !mealPlan || loading}
           >
@@ -214,14 +203,12 @@ const MealSelection: React.FC<MealSelectionProps> = ({
         </button>
         <button
           className={`flex-1 py-3 rounded-lg text-white ${
-            costs.breakfast > 0 || costs.lunch > 0
-              ? "bg-[#FF6600]"
-              : "bg-gray-300 cursor-not-allowed"
+            costs.breakfast > 0 || costs.lunch > 0 ? "bg-[#FF6600]" : "bg-gray-300 cursor-not-allowed"
           }`}
-          onClick={() => setStep(3)}
+          onClick={handleNextToSummary}
           disabled={!(costs.breakfast > 0 || costs.lunch > 0) || loading}
         >
-          Next
+          {loading ? "Loading..." : "Next"}
         </button>
       </div>
 

@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+/* eslint-disable react/no-unescaped-entities */
+import React, { useState, useEffect } from "react";
 import { Calendar, MapPin } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useAddressVerification } from "@/hooks/useAddressVerification";
+import Image from "next/image";
+import JoinWaitlistModal from "@/components/modal/join-waitlist-modal"; // Adjust the import path as needed
 
 interface PlanSetupProps {
   startDate: Date | null;
@@ -14,13 +18,18 @@ interface PlanSetupProps {
   setInput: (input: string) => void;
   suggestions: {
     description: string;
-    details: { formattedAddress: string } | null;
+    details: {
+      formattedAddress: string;
+      state?: string;
+      localGovernment?: string;
+      locality?: string;
+    } | null;
   }[];
   addressLoading: boolean;
   addressError: string | null;
   handleGenerateMealPlan: () => Promise<void>;
   loading: boolean;
-  router: { push: (path: string) => void }; // Minimal type for the router prop
+  router: { push: (path: string) => void };
 }
 
 const PlanSetup: React.FC<PlanSetupProps> = ({
@@ -42,6 +51,20 @@ const PlanSetup: React.FC<PlanSetupProps> = ({
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
   const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [selectedAddressDetails, setSelectedAddressDetails] = useState<{
+    formattedAddress: string;
+    state?: string;
+    localGovernment?: string;
+    locality?: string;
+  } | null>(null);
+  const {
+    isDeliverable,
+    error: verificationError,
+    isVerifying,
+    verifyAddress,
+    reset,
+  } = useAddressVerification();
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
@@ -61,14 +84,68 @@ const PlanSetup: React.FC<PlanSetupProps> = ({
 
   const handleSelectAddress = (suggestion: {
     description: string;
-    details: { formattedAddress: string } | null;
+    details: {
+      formattedAddress: string;
+      state?: string;
+      localGovernment?: string;
+      locality?: string;
+    } | null;
   }) => {
     const address =
       suggestion.details?.formattedAddress || suggestion.description;
-    setDeliveryAddress(address);
+    setDeliveryAddress(address); // Set address immediately
+    setSelectedAddressDetails(
+      suggestion.details || { formattedAddress: address }
+    ); // Store details
     setInput(address);
     setIsAddressFormOpen(false);
   };
+
+  const handleNextClick = async () => {
+    if (!startDate || !endDate || !deliveryAddress || loading) return;
+
+    // Verify address with stored details
+    await verifyAddress(deliveryAddress, selectedAddressDetails || undefined);
+    // If deliverable, handleGenerateMealPlan will be called automatically via useEffect
+  };
+
+  const handleJoinWaitlistClick = () => {
+    setIsWaitlistModalOpen(true);
+  };
+
+  const handleCloseWaitlistModal = () => {
+    setIsWaitlistModalOpen(false);
+  };
+
+  const handleOpenAddressForm = () => {
+    reset(); // Clear verification error when opening the form
+    setIsAddressFormOpen(true);
+  };
+
+  // Automatically generate meal plan and move to next stage if verification succeeds
+  useEffect(() => {
+    const proceedToMealPlan = async () => {
+      if (
+        isDeliverable &&
+        !isVerifying &&
+        !loading &&
+        startDate &&
+        endDate &&
+        deliveryAddress
+      ) {
+        await handleGenerateMealPlan();
+      }
+    };
+    proceedToMealPlan();
+  }, [
+    isDeliverable,
+    isVerifying,
+    loading,
+    startDate,
+    endDate,
+    deliveryAddress,
+    handleGenerateMealPlan,
+  ]);
 
   return (
     <div className="space-y-4">
@@ -160,7 +237,7 @@ const PlanSetup: React.FC<PlanSetupProps> = ({
           </span>
           <button
             className="flex items-center gap-2 text-[#FF6600]"
-            onClick={() => setIsAddressFormOpen(true)}
+            onClick={handleOpenAddressForm} // Updated to reset error
           >
             <MapPin size={20} />
             <span>{deliveryAddress ? "Change Address" : "Add Address"}</span>
@@ -202,12 +279,45 @@ const PlanSetup: React.FC<PlanSetupProps> = ({
             <button
               className="w-full py-2 bg-[#FF6600] text-white rounded-lg"
               onClick={() => {
-                if (!deliveryAddress && input) setDeliveryAddress(input);
+                if (!deliveryAddress && input) {
+                  setDeliveryAddress(input); // Set address immediately
+                  setSelectedAddressDetails({ formattedAddress: input }); // Store minimal details
+                }
                 setIsAddressFormOpen(false);
               }}
               disabled={!input}
             >
               Save Address
+            </button>
+          </div>
+        )}
+        {isVerifying && (
+          <p className="text-sm text-gray-500 mt-2">Verifying address...</p>
+        )}
+        {verificationError && !isVerifying && (
+          <div className="flex flex-col items-center justify-center text-center my-4">
+            <div className="relative w-32 h-30 mb-6 rounded bg-gray-100 flex items-center justify-center">
+              <Image
+                src="/icons/empty_box.png"
+                alt="Delivery unavailable"
+                width={64}
+                height={64}
+                className="object-contain"
+              />
+            </div>
+            <h3 className="text-2xl font-bold text-black mb-2">
+              We don't deliver to that location yet
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              You can get notified when we are live in your city by joining our
+              waitlist
+            </p>
+            <button
+              type="button"
+              onClick={handleJoinWaitlistClick}
+              className="bg-[#f15736] text-white px-6 py-2 rounded-full hover:bg-[#d8432c] transition-colors"
+            >
+              Join the waitlist
             </button>
           </div>
         )}
@@ -227,12 +337,21 @@ const PlanSetup: React.FC<PlanSetupProps> = ({
               ? "bg-[#FF6600]"
               : "bg-gray-300 cursor-not-allowed"
           }`}
-          onClick={handleGenerateMealPlan}
-          disabled={!startDate || !endDate || !deliveryAddress || loading}
+          onClick={handleNextClick}
+          disabled={
+            !startDate || !endDate || !deliveryAddress || loading || isVerifying
+          }
         >
-          {loading ? "Generating..." : "Next"}
+          {loading || isVerifying ? "Processing..." : "Next"}
         </button>
       </div>
+
+      {/* Waitlist Modal */}
+      <JoinWaitlistModal
+        isOpen={isWaitlistModalOpen}
+        onClose={handleCloseWaitlistModal}
+        address={deliveryAddress}
+      />
     </div>
   );
 };

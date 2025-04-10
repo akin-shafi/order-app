@@ -6,33 +6,16 @@ import Footer from "@/components/Footer";
 import PlanSetup from "@/components/meal-plan/PlanSetup";
 import MealSelection from "@/components/meal-plan/MealSelection";
 import SummaryActivation from "@/components/meal-plan/SummaryActivation";
-import { useMealPlan } from "@/hooks/useMealPlan";
+import { useMealPlan, Meal, MealPlan } from "@/hooks/useMealPlan";
 import { useAddressAutocomplete } from "@/hooks/useAddressAutocomplete";
-// import { getAuthToken } from "@/utils/auth";
-
-interface Meal {
-  name: string;
-  description: string;
-  price: number;
-}
-
-interface DailyMeal {
-  date: string;
-  day: string;
-  meal: Meal;
-}
-
-interface MealPlan {
-  breakfast: DailyMeal[];
-  lunch: DailyMeal[];
-}
+import { useAuth } from "@/contexts/auth-context";
+import LoginModal from "@/components/auth/login-modal";
 
 const MealPlanPage: React.FC = () => {
   const router = useRouter();
+  const { isAuthenticated, user } = useAuth();
   const [step, setStep] = useState<number>(1);
-  const [activeTab, setActiveTab] = useState<"Breakfast" | "Lunch">(
-    "Breakfast"
-  );
+  const [activeTab, setActiveTab] = useState<"Breakfast" | "Lunch">("Breakfast");
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
@@ -50,9 +33,8 @@ const MealPlanPage: React.FC = () => {
     lunch: boolean;
   }>({ breakfast: false, lunch: false });
   const [numberOfPlates, setNumberOfPlates] = useState<number>(1);
-  const [paymentMethod, setPaymentMethod] = useState<
-    "wallet" | "online" | null
-  >(null);
+  const [paymentMethod, setPaymentMethod] = useState<"wallet" | "online" | null>(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const {
     generateMealPlan,
@@ -69,11 +51,6 @@ const MealPlanPage: React.FC = () => {
     loading: addressLoading,
     error: addressError,
   } = useAddressAutocomplete();
-
-  //   useEffect(() => {
-  //     const token = getAuthToken();
-  //     if (!token) router.push("/login");
-  //   }, [router]);
 
   const handleGenerateMealPlan = async () => {
     if (!startDate || !endDate || !deliveryAddress) return;
@@ -106,7 +83,7 @@ const MealPlanPage: React.FC = () => {
   const handleSwapMeal = async (
     type: "breakfast" | "lunch",
     index: number,
-    newMeal: { name: string; description: string; price: number }
+    newMeal: Meal
   ) => {
     if (!mealPlan || !mealPlan[type] || !mealPlan[type][index]) return;
     const updatedPlan: MealPlan = {
@@ -118,9 +95,35 @@ const MealPlanPage: React.FC = () => {
     if (costs[type] > 0) await handleCalculateCost(type);
   };
 
-  const handleSaveForLater = async () => {
+  const handleNextToSummary = async () => {
+    if (!mealPlan || !deliveryAddress) return;
+
+    // Calculate costs for both breakfast and lunch if not already done
+    if (costs.breakfast === 0 && mealPlan.breakfast.length > 0) {
+      await handleCalculateCost("breakfast");
+    }
+    if (costs.lunch === 0 && mealPlan.lunch.length > 0) {
+      await handleCalculateCost("lunch");
+    }
+
+    // Only proceed if at least one cost is calculated
+    if (costs.breakfast > 0 || costs.lunch > 0) {
+      if (!isAuthenticated) {
+        setIsLoginModalOpen(true); // Show login modal if not authenticated
+      } else {
+        setStep(3); // Proceed to step 3 if authenticated
+      }
+    }
+  };
+
+  const handleSaveForLater = async (userId: string) => {
+    if (!isAuthenticated || !user) {
+      setIsLoginModalOpen(true);
+      return;
+    }
     if (!mealPlan || !startDate || !endDate || !deliveryAddress) return;
     const response = await saveMealPlan({
+      userId,
       mealPlan,
       totalCost: costs,
       deliveryFees,
@@ -134,13 +137,18 @@ const MealPlanPage: React.FC = () => {
     }
   };
 
-  const handleActivate = async () => {
+  const handleActivate = async (userId: string) => {
+    if (!isAuthenticated || !user) {
+      setIsLoginModalOpen(true);
+      return;
+    }
     if (!selectedPlans.breakfast && !selectedPlans.lunch) return;
     const baseTotalCost: number =
       (selectedPlans.breakfast ? costs.breakfast + deliveryFees.breakfast : 0) +
       (selectedPlans.lunch ? costs.lunch + deliveryFees.lunch : 0);
     const totalCost: number = baseTotalCost * numberOfPlates;
     const response = await activateSchedule({
+      userId,
       mealPlan: {
         breakfast: selectedPlans.breakfast ? mealPlan!.breakfast : [],
         lunch: selectedPlans.lunch ? mealPlan!.lunch : [],
@@ -154,7 +162,7 @@ const MealPlanPage: React.FC = () => {
     });
     if (response) {
       resetFields();
-      // router.push("/profile");
+      router.push("/profile");
     }
   };
 
@@ -176,7 +184,6 @@ const MealPlanPage: React.FC = () => {
     <div className="relative z-10">
       <Header />
       <main className="max-w-6xl mx-auto px-4 py-12 pt-32">
-        {/* Introduction Section */}
         <div className="p-4 bg-[#FF6600]/10 border-b border-gray-200 mb-4">
           <h3 className="text-lg font-semibold text-[#1A3C34] mb-2">
             Your Perfect Weekly Meal Plan Awaits! 🍽️
@@ -190,7 +197,6 @@ const MealPlanPage: React.FC = () => {
           </p>
         </div>
         <div className="min-h-screen bg-gray-100 p-4">
-          {/* Step Indicator */}
           <div className="max-w-3xl mx-auto mb-6">
             <div className="flex justify-between items-center">
               {["Plan Setup", "Meal Selection", "Summary & Activation"].map(
@@ -221,7 +227,6 @@ const MealPlanPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Content */}
           <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
             {step === 1 && (
               <PlanSetup
@@ -250,9 +255,10 @@ const MealPlanPage: React.FC = () => {
                 deliveryFees={deliveryFees}
                 deliveryAddress={deliveryAddress}
                 handleCalculateCost={handleCalculateCost}
-                handleSwapMeal={handleSwapMeal} // Updated to accept newMeal
+                handleSwapMeal={handleSwapMeal}
                 setStep={setStep}
                 loading={loading}
+                handleNextToSummary={handleNextToSummary}
               />
             )}
             {step === 3 && (
@@ -280,6 +286,10 @@ const MealPlanPage: React.FC = () => {
         </div>
       </main>
       <Footer />
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </div>
   );
 };
