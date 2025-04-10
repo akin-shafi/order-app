@@ -105,7 +105,7 @@ export default function CategoriesInStore() {
               />
             </h2>
             <div className="text-gray-500 pr-2 py-2 text-sm font-medium">
-              Click a category below to get the best deal
+              Click a treat below to get the best deal
             </div>
           </div>
 
