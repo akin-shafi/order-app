@@ -89,6 +89,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
             />
           </svg>
         </button>
+        
         <div className="flex flex-col">
           <div className="relative w-full h-48">
             <Image

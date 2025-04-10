@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/hooks/useMealPlan.ts
 import { useMutation } from "@tanstack/react-query";
 import { getAuthToken } from "@/utils/auth";
@@ -21,6 +22,7 @@ interface MealPlan {
 
 interface GenerateMealPlanRequest {
   startDate: string;
+  endDate: string;
   deliveryAddress: string;
 }
 
@@ -47,7 +49,9 @@ interface ActivateScheduleRequest {
   totalCost: number;
   deliveryAddress: string;
   startDate: string;
+  endDate: string;
   paymentMethod: "wallet" | "online";
+  numberOfPlates: number;
 }
 
 interface ActivateScheduleResponse {
@@ -62,6 +66,7 @@ interface SaveMealPlanRequest {
   deliveryFees: { breakfast: number; lunch: number };
   deliveryAddress: string;
   startDate: string;
+  endDate: string;
 }
 
 interface SaveMealPlanResponse {
@@ -70,6 +75,45 @@ interface SaveMealPlanResponse {
   success: boolean;
   savedPlanId: string;
 }
+
+interface AvailableMealsResponse {
+  statusCode: number;
+  message: string;
+  availableMeals: Meal[]; // Adjusted to use Meal interface directly
+}
+
+const getAvailableMeals = async (type: "breakfast" | "lunch"): Promise<AvailableMealsResponse> => {
+  const token = getAuthToken();
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/meals/available-meals?type=${type}`, // Updated endpoint
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to fetch available meals");
+  }
+
+  const data = await response.json();
+  const transformedMeals = data.availableMeals.map((meal: any) => ({
+    name: meal.name,
+    description: meal.description,
+    price: Number(meal.price),
+    image: meal.image, // Include image field
+  }));
+
+  return {
+    statusCode: data.statusCode,
+    message: data.message,
+    availableMeals: transformedMeals,
+  };
+};
 
 const generateMealPlan = async (data: GenerateMealPlanRequest): Promise<GenerateMealPlanResponse> => {
   const token = getAuthToken();
@@ -164,21 +208,28 @@ export const useMealPlan = () => {
     mutationFn: saveMealPlan,
   });
 
+  const availableMealsMutation = useMutation<AvailableMealsResponse, Error, "breakfast" | "lunch">({
+    mutationFn: getAvailableMeals,
+  });
+
   return {
     generateMealPlan: generateMutation.mutateAsync,
     calculateCost: calculateCostMutation.mutateAsync,
     activateSchedule: activateMutation.mutateAsync,
     saveMealPlan: saveMutation.mutateAsync,
+    getAvailableMeals: availableMealsMutation.mutateAsync,
     loading:
       generateMutation.isPending ||
       calculateCostMutation.isPending ||
       activateMutation.isPending ||
-      saveMutation.isPending,
+      saveMutation.isPending ||
+      availableMealsMutation.isPending, // Include new mutation loading state
     error:
       generateMutation.error?.message ||
       calculateCostMutation.error?.message ||
       activateMutation.error?.message ||
       saveMutation.error?.message ||
+      availableMealsMutation.error?.message || // Include new mutation error
       null,
   };
 };

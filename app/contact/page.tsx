@@ -67,8 +67,8 @@ export default function ContactPage() {
                 </span>
               </h1>
               <p className="text-[#5c4437] max-w-2xl mx-auto text-lg">
-                Have questions or need assistance? We&apos;re here to help. Reach out
-                to our team through any of the channels below.
+                Have questions or need assistance? We&apos;re here to help.
+                Reach out to our team through any of the channels below.
               </p>
             </motion.div>
           </div>

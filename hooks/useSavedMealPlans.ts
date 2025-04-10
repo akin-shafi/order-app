@@ -26,7 +26,9 @@ interface SavedMealPlan {
   deliveryFees: { breakfast: number; lunch: number };
   deliveryAddress: string;
   startDate: string;
+  endDate: string; // Add endDate
   status: "active" | "inactive";
+  numberOfPlates: number; // Add numberOfPlates
 }
 
 interface SavedMealPlansResponse {

@@ -38,7 +38,9 @@ interface SavedMealPlan {
   deliveryFees: { breakfast: number; lunch: number };
   deliveryAddress: string;
   startDate: string;
+  endDate: string;
   status: "active" | "inactive";
+  numberOfPlates: number;
 }
 
 const SavedMealPlansModal: React.FC<SavedMealPlansModalProps> = ({
@@ -52,8 +54,7 @@ const SavedMealPlansModal: React.FC<SavedMealPlansModalProps> = ({
   const [selectedPlan, setSelectedPlan] = useState<SavedMealPlan | null>(null);
   const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
 
-  const { savedPlans, loading, error, refetch, activateSavedPlan } =
-    useSavedMealPlans();
+  const { savedPlans, loading, error, refetch } = useSavedMealPlans();
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -81,20 +82,6 @@ const SavedMealPlansModal: React.FC<SavedMealPlansModalProps> = ({
 
   const handleSelectPlan = (plan: SavedMealPlan) => {
     setSelectedPlan(plan);
-  };
-
-  const handleActivateSavedPlan = async (
-    paymentMethod: "wallet" | "online"
-  ) => {
-    if (!selectedPlan) return;
-    const response = await activateSavedPlan({
-      planId: selectedPlan.id,
-      paymentMethod,
-    });
-    if (response) {
-      refetch(); // Refresh the saved plans
-      setIsActivateModalOpen(false);
-    }
   };
 
   const formatDate = (date: string) => {
@@ -183,7 +170,8 @@ const SavedMealPlansModal: React.FC<SavedMealPlansModalProps> = ({
                         >
                           <div className="flex justify-between items-center">
                             <span className="text-sm font-semibold text-[#292d32]">
-                              Start Date: {formatDate(plan.startDate)}
+                              {formatDate(plan.startDate)} -{" "}
+                              {formatDate(plan.endDate)}
                             </span>
                             <span
                               className={`text-sm ${
@@ -345,6 +333,7 @@ const SavedMealPlansModal: React.FC<SavedMealPlansModalProps> = ({
           deliveryFees={selectedPlan.deliveryFees}
           deliveryAddress={selectedPlan.deliveryAddress}
           startDate={selectedPlan.startDate}
+          endDate={selectedPlan.endDate} // Pass endDate
           onReset={() => {
             refetch(); // Refresh the saved plans
             setIsActivateModalOpen(false);

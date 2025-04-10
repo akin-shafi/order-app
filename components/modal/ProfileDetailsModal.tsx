@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { X, ChevronRight, LogOut, Calendar } from "lucide-react";
 import { VerifiedIcon } from "@/components/icons";
 import { motion, AnimatePresence } from "framer-motion";
@@ -264,7 +265,7 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                       </div>
                       <ChevronRight size={20} className="text-gray-500" />
                     </li>
-                    <li
+                    {/* <li
                       onClick={() => {
                         setIsWeeklyMealPlanModalOpen(true);
                         onClose();
@@ -276,7 +277,15 @@ const ProfileDetailsModal: React.FC<ProfileDetailsModalProps> = ({
                         <span>Weekly Meal Plan</span>
                       </div>
                       <ChevronRight size={20} className="text-gray-500" />
-                    </li>
+                    </li> */}
+                    <Link
+                      href="/meal-plan"
+                      className="flex items-center justify-between p-2 border-b border-gray-200 hover:bg-[#FF6600]/10 cursor-pointer"
+                    >
+                      {/* <button className="py-2 px-4 bg-[#FF6600] text-white rounded-lg"> */}
+                      Create Weekly Meal Plan
+                      {/* </button> */}
+                    </Link>
                     <li
                       onClick={() => {
                         setIsSavedMealPlansModalOpen(true);

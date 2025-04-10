@@ -53,6 +53,34 @@ body.modal-open {
   color: #6b7280 !important;
 }
 
+@media (max-width: 480px) {
+  table {
+    display: block;
+  }
+  thead {
+    display: none;
+  }
+  tbody, tr {
+    display: block;
+  }
+  tr {
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+  }
+  td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border: none;
+  }
+  td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #292d32;
+  }
+}
 .bg-custom-white { background-color: #FFFFFF; }
 .ring-custom-gray-1 { border-color: #E0E0E0; }
 .bg-custom-ghost-white { background-color: #F8F8FF; }
