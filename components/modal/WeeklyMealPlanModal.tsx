@@ -132,7 +132,8 @@ const WeeklyMealPlanModal: React.FC<WeeklyMealPlanModalProps> = ({
       deliveryFees,
       deliveryAddress,
       startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(), // Include endDate in saved data
+      endDate: endDate.toISOString(),
+      userId: ""
     });
     if (response) {
       resetFields();
