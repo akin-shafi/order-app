@@ -206,7 +206,7 @@ export function ProductModal({
                 <Tooltip
                   title="Choose 'Fastest Delivery' and earn 10 points instantly! If your order arrives later than the estimated time, you’ll get an additional 20 bonus points as compensation. Points can be redeemed for discounts on future orders."
                   placement="topLeft"
-                  overlayStyle={{ maxWidth: "300px" }}
+                  style={{ maxWidth: "300px" }}
                 >
                   <span className="text-xs text-gray-500 mb-4 flex items-center gap-1 cursor-pointer">
                     Fastest Delivery Guarantee: Earn 20 bonus points if we’re

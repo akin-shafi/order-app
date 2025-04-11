@@ -47,7 +47,7 @@ type BusinessDetails = {
   businessType: string;
 };
 
-export default function StoreDetailsPage() {
+export default function StoreItem() {
   const params = useParams();
   const searchParams = useSearchParams(); // Add this to read query params
   const id = params?.id as string;

@@ -1,12 +1,13 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { AddressProvider } from "@/contexts/address-context";
 import { CartProvider } from "@/contexts/cart-context";
 import { ShoppingListProvider } from "@/contexts/shopping-list-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ModalProvider } from "@/contexts/modal-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+
 
 // Create a QueryClient instance
 const queryClient = new QueryClient({

@@ -116,6 +116,7 @@ export default function Header() {
           { name: "Know Us", href: "/know-us" },
           { name: "FAQs", href: "/faqs" },
           { name: "Contact Us", href: "/contact" },
+          { name: "Meal Planner", href: "/meal-plan" },
         ].map((item) => (
           <Link
             key={item.name}

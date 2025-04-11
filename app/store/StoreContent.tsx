@@ -9,7 +9,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Suspense } from "react";
 import { useState } from "react";
 
-export default function StoreContent() {
+export default function StoreItem() {
   const [activeBusinessType] = useState<string>("Restaurants"); // Default business type
   const [selectedSubCategory] = useState<string | null>(null);
 
