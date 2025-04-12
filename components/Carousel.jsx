@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 // Placeholder images (replace with actual image URLs or assets)
 const foodImage = "/images/advert-2.png"; // Replace with actual food image
@@ -53,7 +54,7 @@ const Carousel = () => {
                   {slide.text}
                 </div>
                 <div className="w-1/2 flex justify-end">
-                  <img
+                  <Image
                     src={slide.image}
                     alt="Food Package"
                     className="w-32 h-32 object-cover rounded-full"
